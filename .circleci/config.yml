@@ -1,0 +1,22 @@
+version: 2.1
+jobs:
+  compile:
+   docker:
+      - image: zycromerz/kerneldocker:latest
+   steps:
+      - run:
+          command: |
+            check=$(ls /usr/lib/x86_64-linux-gnu | grep libisl.so -m1)
+            if [ ! -z "$check" ]; then if [ "$check" != "libisl.so.15" ]; then cp -af /usr/lib/x86_64-linux-gnu/$check /usr/lib/x86_64-linux-gnu/libisl.so.15; fi; fi
+            check=$(ls /usr/lib/x86_64-linux-gnu | grep libz3.so -m1)
+            if [ ! -z "$check" ]; then if [ "$check" != "libz3.so.4.8" ]; then cp -af /usr/lib/x86_64-linux-gnu/$check /usr/lib/x86_64-linux-gnu/libz3.so.4.8; fi; fi
+            branch=master
+            git clone https://$githubKey@github.com/Zero-NEET-Alfa/builder-x01bd.git -b $branch builder_kernel
+            cd builder_kernel
+            source do-main.sh
+          no_output_timeout : 5h
+workflows:
+  version: 2.1
+  cooking:
+    jobs:
+      - compile

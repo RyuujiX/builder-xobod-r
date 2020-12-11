@@ -1,0 +1,48 @@
+#! /bin/bash
+if [ ! -z "$1" ];then
+    TAGS="$1"
+else
+    TAGS=""
+fi
+function update_file() {
+    if [ ! -z "$1" ] && [ ! -z "$2" ] && [ ! -z "$3" ];then
+        GetValue="$(cat "$3" | grep "$1")"
+        GetPath=${3/"./"/"/"}
+        [ "$GetValue" != "$2" ] && \
+        sed -i "s/$1.*/$2"'"'"/g" "$3"
+        [ ! -z "$(git status | grep "modified" )" ] && \
+        git add "$3" && \
+        git commit -m "update builder $2"
+    fi
+}
+function make_changes() {
+    git checkout master && git checkout -b $1-$2
+    git checkout $1-$2 && update_file 'branch=master' "branch=$1.sh" './.circleci/config.yml' && update_file 'do-main.sh' "$1.sh" './.circleci/config.yml' && update_file "00000" "$2" "./$1.sh"
+}
+
+ListBranch=""
+for Files in do-main
+do
+    if [ "$TAGS" == "all" ];then
+        if [[ -e ${Files}.sh ]];then
+            for Types in clang dtc gcc
+            do
+                git branch -D $Files-$Types
+                make_changes $Files $Types
+                ListBranch="$ListBranch $Files-$Types"
+                git checkout master
+            done 
+        fi
+    else
+        if [[ -e ${Files}.sh ]];then
+            if [ "$TAGS" == "gcc" ] || [ "$TAGS" == "clang" ] || [ "$TAGS" == "dtc" ];then
+                git branch -D $Files-$TAGS
+                make_changes $Files $TAGS
+                ListBranch="$ListBranch $Files-$TAGS"
+                git checkout master
+            fi
+        fi
+    fi
+done
+
+git push -f dark $ListBranch
