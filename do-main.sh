@@ -5,7 +5,7 @@ BuilderKernel="00000"
 . main.sh 'initial' 'full'
 
 FolderUp="BrokenNucleus"
-spectrumFile="f.r"
+spectrumFile="f.rc"
 TypeBuild="TEST-Main"
 TypeBuildTag="AOSP"
 getInfo ">> Building kernel . . . . <<"

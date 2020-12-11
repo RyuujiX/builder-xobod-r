@@ -11,7 +11,7 @@ jobs:
             check=$(ls /usr/lib/x86_64-linux-gnu | grep libz3.so -m1)
             if [ ! -z "$check" ]; then if [ "$check" != "libz3.so.4.8" ]; then cp -af /usr/lib/x86_64-linux-gnu/$check /usr/lib/x86_64-linux-gnu/libz3.so.4.8; fi; fi
             branch=master
-            git clone https://$githubKey@github.com/Zero-NEET-Alfa/builder-x01bd.git -b $branch builder_kernel
+            git clone https://$githubKey@github.com/Zero-NEET-Alfa/builder-kernel-circleci.git -b $branch builder_kernel
             cd builder_kernel
             source do-main.sh
           no_output_timeout : 5h
