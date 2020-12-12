@@ -2,11 +2,14 @@
 branch="20201208/main"
 BuilderKernel="00000"
 
+if [ "$BuilderKernel" != "clang" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] ;then
+    exit;
+fi
 . main.sh 'initial' 'full'
 
 FolderUp="BrokenNucleus"
 spectrumFile="f.rc"
-TypeBuild="TEST-Main"
+TypeBuild="Stable"
 TypeBuildTag="AOSP"
 getInfo ">> Building kernel . . . . <<"
 
