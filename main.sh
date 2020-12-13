@@ -47,6 +47,7 @@ SpectrumDir=$mainDir/Spectrum
 
 GdriveDir=$mainDir/Gdrive-Uploader
 
+useGdrive='Y'
 
 if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 
@@ -68,26 +69,28 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     fi
     # if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
-        git clone https://github.com/$GIT_USERNAME/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
+        git clone https://github.com/ZyCromerZ/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
         getInfo ">> cloning gcc32 . . . <<"
-        git clone https://github.com/$GIT_USERNAME/arm-linux-androideabi-4.9/ -b android-10.0.0_r47 $gcc32Dir --depth=1
+        git clone https://github.com/ZyCromerZ/arm-linux-androideabi-4.9/ -b android-10.0.0_r47 $gcc32Dir --depth=1
         for64=aarch64-linux-android
         for32=arm-linux-androideabi
     # else
     #     getInfo ">> cloning gcc64 . . . <<"
-    #     git clone https://github.com/$GIT_USERNAME/aarch64-linux-gnu-1 -b stable-gcc $gcc64Dir --depth=1
+    #     git clone https://github.com/ZyCromerZ/aarch64-linux-gnu-1 -b stable-gcc $gcc64Dir --depth=1
     #     getInfo ">> cloning gcc32 . . . <<"
-    #     git clone https://github.com/$GIT_USERNAME/arm-linux-gnueabi -b stable-gcc $gcc32Dir --depth=1
+    #     git clone https://github.com/ZyCromerZ/arm-linux-gnueabi -b stable-gcc $gcc32Dir --depth=1
     #     for64=aarch64-linux-gnu
     #     for32=arm-linux-gnueabi
     # fi
 
     getInfo ">> cloning Anykernel . . . <<"
-    git clone https://github.com/$GIT_USERNAME/AnyKernel3 -b master $AnykernelDir --depth=1
+    git clone https://github.com/ZyCromerZ/AnyKernel3 -b master $AnykernelDir --depth=1
     getInfo ">> cloning Spectrum . . . <<"
-    git clone https://github.com/$GIT_USERNAME/Spectrum -b master $SpectrumDir --depth=1
-    getInfo ">> cloning Gdrive Uploader . . . <<"
-    git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/gdrive_uploader -b master $GdriveDir --depth=1 
+    git clone https://github.com/ZyCromerZ/Spectrum -b master $SpectrumDir --depth=1
+    if [ "$useGdrive" == "Y" ];then
+        getInfo ">> cloning Gdrive Uploader . . . <<"
+        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/gdrive_uploader -b master $GdriveDir --depth=1 
+    fi
     
     DEVICE="Asus Max Pro M2"
     CODENAME="X01BD"
@@ -161,23 +164,26 @@ tg_send_files(){
 <b>Zip Name</b> 
 - <code>$ZipName</code>"
 
-	# curl --progress-bar -F document=@"$KernelFiles" "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
-	# -F chat_id="$SaveChatID"  \
-	# -F "disable_web_page_preview=true" \
-	# -F "parse_mode=html" \
-	# -F caption="$MSG"
+	curl --progress-bar -F document=@"$KernelFiles" "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
+	-F chat_id="$SaveChatID"  \
+	-F "disable_web_page_preview=true" \
+	-F "parse_mode=html" \
+	-F caption="$MSG"
 
-    currentFolder="$(pwd)"
-    cd $GdriveDir
-    chmod +x run.sh
-    . run.sh "$KernelFiles" "x01bd" "$(date +"%m-%d-%Y")" "$FolderUp"
-    cd $currentFolder
+    if [ "$useGdrive" == "Y" ];then
+        currentFolder="$(pwd)"
+        cd $GdriveDir
+        chmod +x run.sh
+        . run.sh "$KernelFiles" "x01bd" "$(date +"%m-%d-%Y")" "$FolderUp"
+        cd $currentFolder
+    else
+        if [ ! -z "$1" ];then
+            tg_send_info "$MSG" "$1"
+        else
+            tg_send_info "$MSG"
+        fi
+    fi
 
-    # if [ ! -z "$1" ];then
-    #     tg_send_info "$MSG" "$1"
-    # else
-    #     tg_send_info "$MSG"
-    # fi
     # remove files after build done
     rm -rf $KernelFiles
 }
