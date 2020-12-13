@@ -164,11 +164,6 @@ tg_send_files(){
 <b>Zip Name</b> 
 - <code>$ZipName</code>"
 
-	curl --progress-bar -F document=@"$KernelFiles" "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
-	-F chat_id="$SaveChatID"  \
-	-F "disable_web_page_preview=true" \
-	-F "parse_mode=html" \
-	-F caption="$MSG"
 
     if [ "$useGdrive" == "Y" ];then
         currentFolder="$(pwd)"
@@ -177,6 +172,11 @@ tg_send_files(){
         . run.sh "$KernelFiles" "x01bd" "$(date +"%m-%d-%Y")" "$FolderUp"
         cd $currentFolder
     else
+        curl --progress-bar -F document=@"$KernelFiles" "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
+        -F chat_id="$SaveChatID"  \
+        -F "disable_web_page_preview=true" \
+        -F "parse_mode=html" \
+        -F caption="$MSG"
         if [ ! -z "$1" ];then
             tg_send_info "$MSG" "$1"
         else
