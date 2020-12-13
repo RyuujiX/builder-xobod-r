@@ -19,10 +19,10 @@ CompileKernel "65"
 # CompileKernel "71"
 # CompileKernel "72"
 
-FixPieWifi
+# FixPieWifi
 
-CompileKernel
-CompileKernel "65"
+# CompileKernel
+# CompileKernel "65"
 # CompileKernel "68"
 # CompileKernel "71"
 # CompileKernel "72"
