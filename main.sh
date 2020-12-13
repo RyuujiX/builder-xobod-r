@@ -47,16 +47,16 @@ SpectrumDir=$mainDir/Spectrum
 
 GdriveDir=$mainDir/Gdrive-Uploader
 
-useGdrive='Y'
+useGdrive='N'
 
 if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 
     if [ ! -z "$2" ] && [ "$2" == 'full' ];then
         getInfo ">> cloning kernel full . . . <<"
-        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/X01BD_kernel -b "$branch" $kernelDir
+        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/kernel-x01bd -b "$branch" $kernelDir
     else
         getInfo ">> cloning kernel . . . <<"
-        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/X01BD_kernel -b "$branch" $kernelDir --depth=1 
+        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/kernel-x01bd -b "$branch" $kernelDir --depth=1 
     fi
     [ -z "$BuilderKernel" ] && BuilderKernel="clang"
     if [ "$BuilderKernel" == "clang" ];then
@@ -108,7 +108,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     SetTag="LA.UM.8.2.r1"
     SetLastTag="sdm660.0"
     FolderUp=""
-    export KBUILD_BUILD_USER="Zero-NEET-Alfa"
+    export KBUILD_BUILD_USER="RyuujiX"
     export KBUILD_BUILD_HOST="Circleci-server"
     if [ "$BuilderKernel" == "gcc" ];then
         ClangType="$($gcc64Dir/bin/$for64-gcc --version | head -n 1)"
@@ -245,7 +245,7 @@ CompileKernel(){
     LastHeadCommitId=$(git log --pretty=format:'%h' -n1)
     TAGKENEL="$(git log | grep "${SetTag}" | head -n 1 | awk -F '\\'${SetLastTag}'' '{print $1"'${SetLastTag}'"}' | awk -F '\\'${SetTag}'' '{print "'${SetTag}'"$2}')"
     if [ ! -z "$TAGKENEL" ];then
-        export KBUILD_BUILD_HOST="DroneCI-server-$TAGKENEL"
+        export KBUILD_BUILD_HOST="CircleCI-server-$TAGKENEL"
     fi
     make -j${TotalCores}  O=out ARCH="$ARCH" "$DEFFCONFIG"
     if [ "$BuilderKernel" == "gcc" ];then
