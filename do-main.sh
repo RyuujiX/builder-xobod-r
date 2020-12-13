@@ -13,15 +13,15 @@ TypeBuild="Stable"
 TypeBuildTag="AOSP"
 getInfo ">> Building kernel . . . . <<"
 
-CompileKernel
-CompileKernel "65"
+# CompileKernel
+# CompileKernel "65"
 # CompileKernel "68"
 # CompileKernel "71"
 # CompileKernel "72"
 
-# FixPieWifi
+FixPieWifi
 
-# CompileKernel
+CompileKernel
 # CompileKernel "65"
 # CompileKernel "68"
 # CompileKernel "71"
