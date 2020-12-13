@@ -13,7 +13,7 @@ TypeBuild="Stable"
 TypeBuildTag="AOSP"
 getInfo ">> Building kernel . . . . <<"
 
-# CompileKernel
+CompileKernel
 # CompileKernel "65"
 # CompileKernel "68"
 # CompileKernel "71"
