@@ -94,7 +94,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     
     DEVICE="Asus Max Pro M2"
     CODENAME="X01BD"
-    SaveChatID="-1001426291932"
+    SaveChatID="-275630226"
     ARCH="arm64"
     TypeBuild="Stable"
     DEFFCONFIG="X01BD_defconfig"
@@ -155,7 +155,7 @@ tg_send_info(){
 tg_send_files(){
     KernelFiles="$(pwd)/$RealZipName"
 	MD5CHECK=$(md5sum "$KernelFiles" | cut -d' ' -f1)
-    MSG="✅ <b>Build Success</b> 
+    MSG="✅ <b>Build Dah Kelar Tod</b> 
 - <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s) </code> 
 
 <b>MD5 Checksum</b>
@@ -297,7 +297,7 @@ CompileKernel(){
             MakeZip
         fi
     else
-        MSG="<b>❌ Build failed</b>%0A- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s)</code>%0A%0ASad Boy"
+        MSG="<b>❌ Build Gagal Tod</b>%0A- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s)</code>%0A%0ASad Boy"
         if [ ! -z "$2" ];then
             tg_send_info "$MSG" "$2"
         else
