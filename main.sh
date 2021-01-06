@@ -145,7 +145,7 @@ tg_send_info(){
         -d "parse_mode=html" \
         -d text="$1"
     else
-        curl -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" -d chat_id="-1001426291932" \
+        curl -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" -d chat_id="-275630226" \
         -d "disable_web_page_preview=true" \
         -d "parse_mode=html" \
         -d text="$1"
