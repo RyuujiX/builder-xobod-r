@@ -9,7 +9,7 @@ fi
 
 FolderUp="BrokenNucleus"
 spectrumFile="f.rc"
-TypeBuild="Stable"
+TypeBuild="Stable-Test"
 TypeBuildTag="Anu"
 getInfo ">> Building kernel . . . . <<"
 
