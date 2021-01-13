@@ -105,11 +105,11 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     KernelFor='Q'
     SendInfo='belum'
     RefreshRate="60"
-    SetTag="LA.UM.8.2.r1"
+    SetTag="LA.UM.8.2.r2"
     SetLastTag="sdm660.0"
     FolderUp=""
     export KBUILD_BUILD_USER="RyuujiX"
-    export KBUILD_BUILD_HOST="Circleci-server"
+    export KBUILD_BUILD_HOST="DirumahAja"
     if [ "$BuilderKernel" == "gcc" ];then
         ClangType="$($gcc64Dir/bin/$for64-gcc --version | head -n 1)"
     else
