@@ -67,6 +67,10 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         getInfo ">> cloning DragonTC clang 10 . . . <<"
         git clone https://github.com/NusantaraDevs/DragonTC -b 10.0 $clangDir --depth=1
     fi
+	if [ "$BuilderKernel" == "storm" ];then
+        getInfo ">> cloning StormBreaker clang 11 . . . <<"
+        git clone https://github.com/stormbreaker-project/stormbreaker-clang -b 11.x $clangDir --depth=1
+    fi
     # if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
         git clone https://github.com/ZyCromerZ/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
@@ -284,6 +288,7 @@ CompileKernel(){
         [[ "$BuilderKernel" == "gcc" ]] && TypeBuilder="GCC"
         [[ "$BuilderKernel" == "clang" ]] && TypeBuilder="Clang"
         [[ "$BuilderKernel" == "dtc" ]] && TypeBuilder="DTC"
+		[[ "$BuilderKernel" == "storm" ]] && TypeBuilder="Stormbreaker"
         if [ $TypeBuild == "Stable" ];then
             ZipName="[$GetBD][$TypeBuilder][${RefreshRate}Hz][$KernelFor][$CODENAME]$KVer-$KName-$LastHeadCommitId.zip"
         else

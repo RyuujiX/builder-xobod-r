@@ -36,7 +36,7 @@ for Files in do-main
 do
     if [ "$TAGS" == "all" ];then
         if [[ -e ${Files}.sh ]];then
-            for Types in clang dtc gcc
+            for Types in clang dtc gcc storm
             do
                 git branch -D $Files-$Types
                 make_changes $Files $Types
@@ -46,7 +46,7 @@ do
         fi
     else
         if [[ -e ${Files}.sh ]];then
-            if [ "$TAGS" == "gcc" ] || [ "$TAGS" == "clang" ] || [ "$TAGS" == "dtc" ];then
+            if [ "$TAGS" == "gcc" ] || [ "$TAGS" == "clang" ] || [ "$TAGS" == "dtc" ] || [ "$TAGS" == "storm" ];then
                 git branch -D $Files-$TAGS
                 make_changes $Files $TAGS
                 ListBranch="$ListBranch $Files-$TAGS"
