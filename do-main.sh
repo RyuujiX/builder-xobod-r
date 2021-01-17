@@ -2,7 +2,7 @@
 branch="lynx"
 BuilderKernel="00000"
 
-if [ "$BuilderKernel" != "clang" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] ;then
+if [ "$BuilderKernel" != "clang" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] && [ "$BuilderKernel" != "storm" ] ;then
     exit;
 fi
 . main.sh 'initial' 'full'
