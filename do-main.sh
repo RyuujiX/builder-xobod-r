@@ -1,5 +1,5 @@
 #! /bin/bash
-branch="20201208/main"
+branch="lynx"
 BuilderKernel="00000"
 
 if [ "$BuilderKernel" != "clang" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] ;then
