@@ -47,7 +47,7 @@ SpectrumDir=$mainDir/Spectrum
 
 GdriveDir=$mainDir/Gdrive-Uploader
 
-useGdrive='N'
+useGdrive='Y'
 
 if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 
@@ -97,7 +97,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     git clone https://github.com/ZyCromerZ/Spectrum -b master $SpectrumDir --depth=1
     if [ "$useGdrive" == "Y" ];then
         getInfo ">> cloning Gdrive Uploader . . . <<"
-        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/gdrive_uploader -b master $GdriveDir --depth=1 
+        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/gdrive -b master $GdriveDir --depth=1 
     fi
     
     DEVICE="Asus Max Pro M2"
