@@ -78,8 +78,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	if [ "$BuilderKernel" == "mystic" ];then
         getInfo ">> cloning Mystic clang 12 . . . <<"
         git clone https://github.com/okta-10/mystic-clang -b Mystic-12.0.0 $clangDir --depth=1
-		allFromClang='N'
-        SimpleClang="Y"
+		allFromClang='Y'
 	fi
     if [ "$allFromClang" == "N" ];then
         getInfo ">> cloning gcc64 . . . <<"
