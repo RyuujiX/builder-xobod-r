@@ -47,10 +47,10 @@ SpectrumDir=$mainDir/Spectrum
 
 GdriveDir=$mainDir/Gdrive-Uploader
 
-useGdrive='Y'
+useGdrive='N'
 
 if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
-
+	allFromClang='N'
     if [ ! -z "$2" ] && [ "$2" == 'full' ];then
         getInfo ">> cloning kernel full . . . <<"
         git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/kernel-x01bd -b "$branch" $kernelDir
@@ -62,34 +62,38 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     if [ "$BuilderKernel" == "clang" ];then
         getInfo ">> cloning proton clang 12 . . . <<"
         git clone https://github.com/kdrag0n/proton-clang -b master $clangDir --depth=1
-    fi
+		allFromClang='N'
+	fi
     if [ "$BuilderKernel" == "dtc" ];then
         getInfo ">> cloning DragonTC clang 10 . . . <<"
         git clone https://github.com/NusantaraDevs/DragonTC -b 10.0 $clangDir --depth=1
+		allFromClang='N'
     fi
 	if [ "$BuilderKernel" == "storm" ];then
         getInfo ">> cloning StormBreaker clang 11 . . . <<"
         git clone https://github.com/stormbreaker-project/stormbreaker-clang -b 11.x $clangDir --depth=1
-    fi
+		allFromClang='N'
+        SimpleClang="Y"
+	fi
 	if [ "$BuilderKernel" == "mystic" ];then
         getInfo ">> cloning Mystic clang 12 . . . <<"
         git clone https://github.com/okta-10/mystic-clang -b Mystic-12.0.0 $clangDir --depth=1
-    fi
-    # if [ "$BuilderKernel" == "gcc" ];then
+		allFromClang='N'
+        SimpleClang="Y"
+	fi
+    if [ "$allFromClang" == "N" ];then
         getInfo ">> cloning gcc64 . . . <<"
         git clone https://github.com/ZyCromerZ/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
         getInfo ">> cloning gcc32 . . . <<"
         git clone https://github.com/ZyCromerZ/arm-linux-androideabi-4.9/ -b android-10.0.0_r47 $gcc32Dir --depth=1
         for64=aarch64-linux-android
         for32=arm-linux-androideabi
-    # else
-    #     getInfo ">> cloning gcc64 . . . <<"
-    #     git clone https://github.com/ZyCromerZ/aarch64-linux-gnu-1 -b stable-gcc $gcc64Dir --depth=1
-    #     getInfo ">> cloning gcc32 . . . <<"
-    #     git clone https://github.com/ZyCromerZ/arm-linux-gnueabi -b stable-gcc $gcc32Dir --depth=1
-    #     for64=aarch64-linux-gnu
-    #     for32=arm-linux-gnueabi
-    # fi
+    else
+        gcc64Dir=$clangDir
+        gcc32Dir=$clangDir
+        for64=aarch64-linux-gnu
+        for32=arm-linux-gnueabi
+    fi
 
     getInfo ">> cloning Anykernel . . . <<"
     git clone https://github.com/ZyCromerZ/AnyKernel3 -b master $AnykernelDir --depth=1
@@ -97,7 +101,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     git clone https://github.com/ZyCromerZ/Spectrum -b master $SpectrumDir --depth=1
     if [ "$useGdrive" == "Y" ];then
         getInfo ">> cloning Gdrive Uploader . . . <<"
-        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/gdrive -b master $GdriveDir --depth=1 
+        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/gdrive-uploader -b master $GdriveDir --depth=1 
     fi
     
     DEVICE="Asus Max Pro M2"
@@ -179,17 +183,17 @@ tg_send_files(){
         chmod +x run.sh
         . run.sh "$KernelFiles" "x01bd" "$(date +"%m-%d-%Y")" "$FolderUp"
         cd $currentFolder
+		if [ ! -z "$1" ];then
+            tg_send_info "$MSG" "$1"
+        else
+            tg_send_info "$MSG"
+        fi
     else
         curl --progress-bar -F document=@"$KernelFiles" "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
         -F chat_id="$SaveChatID"  \
         -F "disable_web_page_preview=true" \
         -F "parse_mode=html" \
         -F caption="$MSG"
-        if [ ! -z "$1" ];then
-            tg_send_info "$MSG" "$1"
-        else
-            tg_send_info "$MSG"
-        fi
     fi
 
     # remove files after build done
@@ -208,26 +212,60 @@ CompileKernel(){
                 CROSS_COMPILE_ARM32=arm-linux-androideabi-
         )
     else
-        MAKE+=(
+        if [ "$allFromClang" == "Y" ];then
+            MAKE+=(
                 ARCH=$ARCH \
                 SUBARCH=$ARCH \
-                PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+                PATH=$clangDir/bin:${PATH} \
                 CC=clang \
                 CROSS_COMPILE=$for64- \
                 CROSS_COMPILE_ARM32=$for32- \
                 AR=llvm-ar \
-                AS=llvm-as \
                 NM=llvm-nm \
-                STRIP=llvm-strip \
                 OBJCOPY=llvm-objcopy \
                 OBJDUMP=llvm-objdump \
-                OBJSIZE=llvm-size \
-                READELF=llvm-readelf \
-                HOSTCC=clang \
-                HOSTCXX=clang++ \
-                HOSTAR=llvm-ar \
+                STRIP=llvm-strip \
                 CLANG_TRIPLE=aarch64-linux-gnu-
-        )
+            )
+        else
+            if [ "$SimpleClang" == "Y" ];then
+                MAKE+=(
+                    ARCH=$ARCH \
+                    SUBARCH=$ARCH \
+                    PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+                    CC=clang \
+                    CROSS_COMPILE=$for64- \
+                    CROSS_COMPILE_ARM32=$for32- \
+                    AR=llvm-ar \
+                    NM=llvm-nm \
+                    OBJCOPY=llvm-objcopy \
+                    OBJDUMP=llvm-objdump \
+                    STRIP=llvm-strip \
+                    CLANG_TRIPLE=aarch64-linux-gnu-
+                )
+			else
+				MAKE+=(
+						ARCH=$ARCH \
+						SUBARCH=$ARCH \
+						PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+						CC=clang \
+						CROSS_COMPILE=$for64- \
+						CROSS_COMPILE_ARM32=$for32- \
+						AR=llvm-ar \
+						AS=llvm-as \
+						NM=llvm-nm \
+						STRIP=llvm-strip \
+						OBJCOPY=llvm-objcopy \
+						OBJDUMP=llvm-objdump \
+						OBJSIZE=llvm-size \
+						READELF=llvm-readelf \
+						HOSTCC=clang \
+						HOSTCXX=clang++ \
+						HOSTAR=llvm-ar \
+						CLANG_TRIPLE=aarch64-linux-gnu-
+					)
+			fi
+		fi
     fi
     # rm -rf out # always remove out directory :V
     BUILD_START=$(date +"%s")
@@ -263,26 +301,58 @@ CompileKernel(){
             PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
             CROSS_COMPILE=aarch64-linux-android- \
             CROSS_COMPILE_ARM32=arm-linux-androideabi-
-    else
-        make -j${TotalCores}  O=out \
-            ARCH=$ARCH \
-            SUBARCH=$ARCH \
-            PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
-            CC=clang \
-            CROSS_COMPILE=$for64- \
-            CROSS_COMPILE_ARM32=$for32- \
-            AR=llvm-ar \
-            AS=llvm-as \
-            NM=llvm-nm \
-            STRIP=llvm-strip \
-            OBJCOPY=llvm-objcopy \
-            OBJDUMP=llvm-objdump \
-            OBJSIZE=llvm-size \
-            READELF=llvm-readelf \
-            HOSTCC=clang \
-            HOSTCXX=clang++ \
-            HOSTAR=llvm-ar \
-            CLANG_TRIPLE=aarch64-linux-gnu-
+	else
+        if [ "$allFromClang" == "Y" ];then
+            make -j${TotalCores}  O=out \
+                ARCH=$ARCH \
+                SUBARCH=$ARCH \
+                PATH=$clangDir/bin:${PATH} \
+                CC=clang \
+                CROSS_COMPILE=$for64- \
+                CROSS_COMPILE_ARM32=$for32- \
+                AR=llvm-ar \
+                NM=llvm-nm \
+                OBJCOPY=llvm-objcopy \
+                OBJDUMP=llvm-objdump \
+                STRIP=llvm-strip \
+                CLANG_TRIPLE=aarch64-linux-gnu-
+        else
+            if [ "$SimpleClang" == "Y" ];then
+                make -j${TotalCores}  O=out \
+                    ARCH=$ARCH \
+                    SUBARCH=$ARCH \
+                    PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+                    CC=clang \
+                    CROSS_COMPILE=$for64- \
+                    CROSS_COMPILE_ARM32=$for32- \
+                    AR=llvm-ar \
+                    NM=llvm-nm \
+                    OBJCOPY=llvm-objcopy \
+                    OBJDUMP=llvm-objdump \
+                    STRIP=llvm-strip \
+                    CLANG_TRIPLE=aarch64-linux-gnu-
+			else
+				make -j${TotalCores}  O=out \
+					ARCH=$ARCH \
+					SUBARCH=$ARCH \
+					PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+					CC=clang \
+					CROSS_COMPILE=$for64- \
+					CROSS_COMPILE_ARM32=$for32- \
+					AR=llvm-ar \
+					AS=llvm-as \
+					NM=llvm-nm \
+					STRIP=llvm-strip \
+					OBJCOPY=llvm-objcopy \
+					OBJDUMP=llvm-objdump \
+					OBJSIZE=llvm-size \
+					READELF=llvm-readelf \
+					HOSTCC=clang \
+					HOSTCXX=clang++ \
+					HOSTAR=llvm-ar \
+					CLANG_TRIPLE=aarch64-linux-gnu-
+			fi
+		fi
     fi
     BUILD_END=$(date +"%s")
     DIFF=$((BUILD_END - BUILD_START))
@@ -292,7 +362,8 @@ CompileKernel(){
         [[ "$BuilderKernel" == "gcc" ]] && TypeBuilder="GCC"
         [[ "$BuilderKernel" == "clang" ]] && TypeBuilder="Clang"
         [[ "$BuilderKernel" == "dtc" ]] && TypeBuilder="DTC"
-		[[ "$BuilderKernel" == "storm" ]] && TypeBuilder="Stormbreaker"
+		[[ "$BuilderKernel" == "storm" ]] && TypeBuilder="StormBreaker"
+		[[ "$BuilderKernel" == "mystic" ]] && TypeBuilder="Mystic"
         if [ $TypeBuild == "Stable" ];then
             ZipName="[$GetBD][$TypeBuilder][${RefreshRate}Hz][$KernelFor][$CODENAME]$KVer-$KName-$LastHeadCommitId.zip"
         else
