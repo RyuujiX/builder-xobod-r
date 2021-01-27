@@ -67,7 +67,6 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     if [ "$BuilderKernel" == "dtc" ];then
         getInfo ">> cloning DragonTC clang 10 . . . <<"
         git clone https://github.com/NusantaraDevs/DragonTC -b 10.0 $clangDir --depth=1
-		allFromClang='N'
     fi
 	if [ "$BuilderKernel" == "storm" ];then
         getInfo ">> cloning StormBreaker clang 11 . . . <<"
