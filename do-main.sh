@@ -1,5 +1,5 @@
 #! /bin/bash
-branch="lynx-uc"
+branch="lynx-uvc"
 BuilderKernel="00000"
 
 if [ "$BuilderKernel" != "clang" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] && [ "$BuilderKernel" != "storm" ] && [ "$BuilderKernel" != "mystic" ] ;then
