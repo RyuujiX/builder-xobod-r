@@ -46,7 +46,7 @@ do
         fi
     else
         if [[ -e ${Files}.sh ]];then
-            if [ "$TAGS" == "gcc" ] || [ "$TAGS" == "clang" ] || [ "$TAGS" == "dtc" ] || [ "$TAGS" == "storm" ] || [ "$TAGS" == "mystic" ] ;then
+            if [ "$TAGS" == "gcc" ] || [ "$TAGS" == "clang" ] || [ "$TAGS" == "dtc" ] || [ "$TAGS" == "storm" ] || [ "$TAGS" == "mystic" ] || [ "$TAGS" == "lonte" ] ;then
                 git branch -D $Files-$TAGS
                 make_changes $Files $TAGS
                 ListBranch="$ListBranch $Files-$TAGS"

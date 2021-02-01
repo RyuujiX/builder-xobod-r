@@ -68,6 +68,11 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         getInfo ">> cloning DragonTC clang 10 . . . <<"
         git clone https://github.com/NusantaraDevs/DragonTC -b 10.0 $clangDir --depth=1
     fi
+	if [ "$BuilderKernel" == "lonte" ];then
+        getInfo ">> cloning SiLonT clang . . . <<"
+        git clone https://github.com/silont-project/silont-clang -b master $clangDir --depth=1
+		allFromClang='Y'
+    fi
 	if [ "$BuilderKernel" == "storm" ];then
         getInfo ">> cloning StormBreaker clang 11 . . . <<"
         git clone https://github.com/stormbreaker-project/stormbreaker-clang -b 11.x $clangDir --depth=1
@@ -361,6 +366,7 @@ CompileKernel(){
         [[ "$BuilderKernel" == "clang" ]] && TypeBuilder="Clang"
         [[ "$BuilderKernel" == "dtc" ]] && TypeBuilder="DTC"
 		[[ "$BuilderKernel" == "storm" ]] && TypeBuilder="StormBreaker"
+		[[ "$BuilderKernel" == "lonte" ]] && TypeBuilder="SiLonT"
 		[[ "$BuilderKernel" == "mystic" ]] && TypeBuilder="Mystic"
         if [ $TypeBuild == "Stable" ];then
             ZipName="[$GetBD][$TypeBuilder][${RefreshRate}Hz][$KernelFor][$CODENAME]$KVer-$KName-$LastHeadCommitId.zip"
