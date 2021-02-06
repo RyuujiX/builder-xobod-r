@@ -81,11 +81,11 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	fi
     if [ "$allFromClang" == "N" ];then
         getInfo ">> cloning gcc64 . . . <<"
-        git clone https://github.com/RyuujiX/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
+        git clone https://github.com/RyuujiX/aarch64-linux-gnu -b master $gcc64Dir --depth=1
         getInfo ">> cloning gcc32 . . . <<"
-        git clone https://github.com/RyuujiX/arm-linux-androideabi-4.9/ -b android-10.0.0_r47 $gcc32Dir --depth=1
-        for64=aarch64-linux-android
-        for32=arm-linux-androideabi
+        git clone https://github.com/RyuujiX/arm-linux-gnueabi -b master $gcc32Dir --depth=1
+        for64=aarch64-linux-gnu
+        for32=arm-linux-gnueabi
     else
         gcc64Dir=$clangDir
         gcc32Dir=$clangDir
@@ -206,8 +206,8 @@ CompileKernel(){
                 ARCH=$ARCH \
                 SUBARCH=$ARCH \
                 PATH=$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
-                CROSS_COMPILE=aarch64-linux-android- \
-                CROSS_COMPILE_ARM32=arm-linux-androideabi-
+                CROSS_COMPILE=aarch64-linux-gnu- \
+                CROSS_COMPILE_ARM32=arm-linux-gnueabi-
         )
     else
         if [ "$allFromClang" == "Y" ];then
@@ -289,7 +289,7 @@ CompileKernel(){
     LastHeadCommitId=$(git log --pretty=format:'%h' -n1)
     TAGKENEL="$(git log | grep "${SetTag}" | head -n 1 | awk -F '\\'${SetLastTag}'' '{print $1"'${SetLastTag}'"}' | awk -F '\\'${SetTag}'' '{print "'${SetTag}'"$2}')"
     if [ ! -z "$TAGKENEL" ];then
-        export KBUILD_BUILD_HOST="CircleCI-server-$TAGKENEL"
+        export KBUILD_BUILD_HOST="StaySafe-$TAGKENEL"
     fi
     make -j${TotalCores}  O=out ARCH="$ARCH" "$DEFFCONFIG"
     if [ "$BuilderKernel" == "gcc" ];then
@@ -297,8 +297,8 @@ CompileKernel(){
             ARCH=$ARCH \
             SUBARCH=$ARCH \
             PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
-            CROSS_COMPILE=aarch64-linux-android- \
-            CROSS_COMPILE_ARM32=arm-linux-androideabi-
+            CROSS_COMPILE=aarch64-linux-gnu- \
+            CROSS_COMPILE_ARM32=arm-linux-gnueabi-
 	else
         if [ "$allFromClang" == "Y" ];then
             make -j${TotalCores}  O=out \
@@ -363,9 +363,9 @@ CompileKernel(){
 		[[ "$BuilderKernel" == "storm" ]] && TypeBuilder="StormBreaker"
 		[[ "$BuilderKernel" == "mystic" ]] && TypeBuilder="Mystic"
         if [ $TypeBuild == "Stable" ];then
-            ZipName="[$GetBD][$TypeBuilder][${RefreshRate}Hz][$KernelFor][$CODENAME]$KVer-$KName-$LastHeadCommitId.zip"
+            ZipName="[$GetBD]$KName-$KVer[$CODENAME][$KernelFor][$TypeBuilder][${RefreshRate}Hz].zip"
         else
-            ZipName="[$GetBD][$TypeBuilder][${RefreshRate}Hz][$KernelFor][$TypeBuild][$CODENAME]$KVer-$KName-$LastHeadCommitId.zip"
+            ZipName="[$GetBD][$TypeBuild]$KName-$KVer[$CODENAME][$KernelFor][$TypeBuilder][${RefreshRate}Hz].zip"
         fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
