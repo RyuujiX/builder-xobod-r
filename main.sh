@@ -81,11 +81,11 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	fi
     if [ "$allFromClang" == "N" ];then
         getInfo ">> cloning gcc64 . . . <<"
-        git clone https://github.com/RyuujiX/aarch64-linux-gnu -b stable-gcc $gcc64Dir --depth=1
+        git clone https://github.com/RyuujiX/aarch64-linux-android-5.4 -b master $gcc64Dir --depth=1
         getInfo ">> cloning gcc32 . . . <<"
-        git clone https://github.com/RyuujiX/arm-linux-gnueabi -b stable-gcc $gcc32Dir --depth=1
-        for64=aarch64-linux-gnu
-        for32=arm-linux-gnueabi
+        git clone https://github.com/RyuujiX/arm-linux-androideabi-5.2 -b master $gcc32Dir --depth=1
+        for64=aarch64-linux-android
+        for32=arm-linux-androideabi
     else
         gcc64Dir=$clangDir
         gcc32Dir=$clangDir
@@ -206,8 +206,8 @@ CompileKernel(){
                 ARCH=$ARCH \
                 SUBARCH=$ARCH \
                 PATH=$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
-                CROSS_COMPILE=aarch64-linux-gnu- \
-                CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+                CROSS_COMPILE=aarch64-linux-android- \
+                CROSS_COMPILE_ARM32=arm-linux-androideabi-
         )
     else
         if [ "$allFromClang" == "Y" ];then
@@ -297,8 +297,8 @@ CompileKernel(){
             ARCH=$ARCH \
             SUBARCH=$ARCH \
             PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
-            CROSS_COMPILE=aarch64-linux-gnu- \
-            CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+            CROSS_COMPILE=aarch64-linux-android- \
+            CROSS_COMPILE_ARM32=arm-linux-androideabi-
 	else
         if [ "$allFromClang" == "Y" ];then
             make -j${TotalCores}  O=out \
