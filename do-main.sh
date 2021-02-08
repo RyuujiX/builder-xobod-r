@@ -22,9 +22,9 @@ CompileKernel "71"
 FixPieWifi
 
 CompileKernel
-CompileKernel "65"
-CompileKernel "68"
-CompileKernel "71"
+# CompileKernel "65"
+# CompileKernel "68"
+# CompileKernel "71"
 # CompileKernel "72"
 
 tg_send_info "Semua $GetKernelName $BuilderKernel dah selesai dibuild tod :v"
