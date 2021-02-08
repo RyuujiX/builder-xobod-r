@@ -81,9 +81,9 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	fi
     if [ "$allFromClang" == "N" ];then
         getInfo ">> cloning gcc64 . . . <<"
-        git clone https://github.com/RyuujiX/aarch64-linux-android-5.4 -b master $gcc64Dir --depth=1
+        git clone https://github.com/RyuujiX/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
         getInfo ">> cloning gcc32 . . . <<"
-        git clone https://github.com/RyuujiX/arm-linux-androideabi-5.2 -b master $gcc32Dir --depth=1
+        git clone https://github.com/RyuujiX/arm-linux-androideabi-4.9/ -b android-10.0.0_r47 $gcc32Dir --depth=1
         for64=aarch64-linux-android
         for32=arm-linux-androideabi
     else
