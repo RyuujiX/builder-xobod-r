@@ -118,6 +118,19 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     SetTag="LA.UM.8.2.r2"
     SetLastTag="sdm660.0"
     FolderUp=""
+	if [ "$branch" == "lynx-uc" ];then
+		Variant="Saitama"
+	else
+	if [ "$branch" == "lynx" ];then
+		Variant="Ryuu"
+	else
+	if [ "$branch" == "lynx-uvc" ];then
+		Variant="Ishigami"
+	else
+		Variant="XOBOD"
+	fi
+	fi
+	fi
     export KBUILD_BUILD_USER="RyuujiX"
     export KBUILD_BUILD_HOST="DirumahAja"
     if [ "$BuilderKernel" == "gcc" ];then
@@ -391,7 +404,7 @@ MakeZip(){
     if [ ! -z "$spectrumFile" ];then
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
-    cp -af anykernel-real.sh anykernel.sh && sed -i "s/kernel.string=.*/kernel.string=$KName by Ryuuji/g" anykernel.sh
+    cp -af anykernel-real.sh anykernel.sh && sed -i "s/kernel.string=.*/kernel.string=LynX-$Variant by Ryuuji/g" anykernel.sh
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
     if [ ! -z "$1" ];then
