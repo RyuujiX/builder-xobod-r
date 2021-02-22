@@ -371,7 +371,7 @@ CompileKernel(){
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
         KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
         [[ "$BuilderKernel" == "gcc" ]] && TypeBuilder="GCC"
-        [[ "$BuilderKernel" == "clang" ]] && TypeBuilder="Clang"
+        [[ "$BuilderKernel" == "clang" ]] && TypeBuilder="Proton"
         [[ "$BuilderKernel" == "dtc" ]] && TypeBuilder="DTC"
 		[[ "$BuilderKernel" == "storm" ]] && TypeBuilder="StormBreaker"
 		[[ "$BuilderKernel" == "mystic" ]] && TypeBuilder="Mystic"
