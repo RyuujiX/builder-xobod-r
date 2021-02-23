@@ -50,7 +50,7 @@ GdriveDir=$mainDir/Gdrive-Uploader
 useGdrive='N'
 
 if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
-	allFromClang='N'
+	
     if [ ! -z "$2" ] && [ "$2" == 'full' ];then
         getInfo ">> cloning kernel full . . . <<"
         git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/kernel-x01bd -b "$branch" $kernelDir
@@ -62,16 +62,17 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     if [ "$BuilderKernel" == "clang" ];then
         getInfo ">> cloning proton clang 12 . . . <<"
         git clone https://github.com/kdrag0n/proton-clang -b master $clangDir --depth=1
-		allFromClang='N'
+		gcc10="Y"
 	fi
     if [ "$BuilderKernel" == "dtc" ];then
         getInfo ">> cloning DragonTC clang 10 . . . <<"
         git clone https://github.com/NusantaraDevs/DragonTC -b 10.0 $clangDir --depth=1
+		gcc10="Y"
     fi
 	if [ "$BuilderKernel" == "storm" ];then
         getInfo ">> cloning StormBreaker clang 11 . . . <<"
         git clone https://github.com/stormbreaker-project/stormbreaker-clang -b 11.x $clangDir --depth=1
-		allFromClang='N'
+		gcc10="Y"
         SimpleClang="Y"
 	fi
 	if [ "$BuilderKernel" == "mystic" ];then
@@ -79,7 +80,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         git clone https://github.com/okta-10/mystic-clang -b Mystic-12.0.0 $clangDir --depth=1
 		allFromClang='Y'
 	fi
-    if [ "$allFromClang" == "N" ];then
+    if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
         git clone https://github.com/RyuujiX/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
         getInfo ">> cloning gcc32 . . . <<"
@@ -87,11 +88,20 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         for64=aarch64-linux-android
         for32=arm-linux-androideabi
     else
+	if [ "$gcc10" == "Y" ];then
+	getInfo ">> cloning gcc64 10.2.0 . . . <<"
+        git clone https://github.com/RyuujiX/aarch64-linux-gnu -b stable-gcc $gcc64Dir --depth=1
+        getInfo ">> cloning gcc32 10.2.0 . . . <<"
+        git clone https://github.com/RyuujiX/arm-linux-gnueabi -b stable-gcc $gcc32Dir --depth=1
+        for64=aarch64-linux-gnu
+        for32=arm-linux-gnueabi
+	else
         gcc64Dir=$clangDir
         gcc32Dir=$clangDir
         for64=aarch64-linux-gnu
         for32=arm-linux-gnueabi
     fi
+	fi
 
     getInfo ">> cloning Anykernel . . . <<"
     git clone https://github.com/RyuujiX/AnyKernel3 -b master $AnykernelDir --depth=1
