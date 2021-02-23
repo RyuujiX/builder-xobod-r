@@ -112,7 +112,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     GetCBD=$(date +"%Y-%m-%d")
     TotalCores=$(nproc --all)
     TypeBuildTag="AOSP"
-    KernelFor='Q][R'
+    KernelFor='XR'
     SendInfo='belum'
     RefreshRate="60"
     SetTag="LA.UM.8.2.r2"
@@ -376,9 +376,9 @@ CompileKernel(){
 		[[ "$BuilderKernel" == "storm" ]] && TypeBuilder="StormBreaker"
 		[[ "$BuilderKernel" == "mystic" ]] && TypeBuilder="Mystic"
         if [ $TypeBuild == "Stable" ];then
-            ZipName="[$GetBD]$KName-$KVer[$CODENAME][$KernelFor][$TypeBuilder][${RefreshRate}Hz].zip"
+            ZipName="[$GetBD][$KernelFor]$KName-$KVer[$TypeBuilder][${RefreshRate}Hz].zip"
         else
-            ZipName="[$GetBD][$TypeBuild]$KName-$KVer[$CODENAME][$KernelFor][$TypeBuilder][${RefreshRate}Hz].zip"
+            ZipName="[$GetBD][$KernelFor][$TypeBuild]$KName-$KVer[$TypeBuilder][${RefreshRate}Hz].zip"
         fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
