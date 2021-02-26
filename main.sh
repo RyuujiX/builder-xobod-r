@@ -128,14 +128,14 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     SetTag="LA.UM.9.2.r1"
     SetLastTag="SDMxx0.0"
     FolderUp=""
-	if [ "$branch" == "lynx-uc" ];then
-		Variant="Saitama"
+	if [ "$branch" == "injectorx-uc" ];then
+		Variant="Asuna"
 	else
 	if [ "$branch" == "lynx" ];then
-		Variant="Ryuu"
+		Variant="Kiseki"
 	else
 	if [ "$branch" == "lynx-uvc" ];then
-		Variant="Ishigami"
+		Variant="Yuuki"
 	else
 		Variant="XOBOD"
 	fi
@@ -414,7 +414,7 @@ MakeZip(){
     if [ ! -z "$spectrumFile" ];then
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
-    cp -af anykernel-real.sh anykernel.sh && sed -i "s/kernel.string=.*/kernel.string=LynX-$Variant by Ryuuji/g" anykernel.sh
+    cp -af anykernel-real.sh anykernel.sh && sed -i "s/kernel.string=.*/kernel.string=InjectorX-$Variant by Ryuuji/g" anykernel.sh
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
     if [ ! -z "$1" ];then
