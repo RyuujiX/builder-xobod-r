@@ -53,10 +53,10 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	
     if [ ! -z "$2" ] && [ "$2" == 'full' ];then
         getInfo ">> cloning kernel full . . . <<"
-        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/kernel-x01bd -b "$branch" $kernelDir
+        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/kernel-x01bd-r -b "$branch" $kernelDir
     else
         getInfo ">> cloning kernel . . . <<"
-        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/kernel-x01bd -b "$branch" $kernelDir --depth=1 
+        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/kernel-x01bd-r -b "$branch" $kernelDir --depth=1 
     fi
     [ -z "$BuilderKernel" ] && BuilderKernel="clang"
     if [ "$BuilderKernel" == "clang" ];then
@@ -425,20 +425,6 @@ MakeZip(){
 
 }
 
-FixPieWifi()
-{
-    cd $kernelDir
-    git reset --hard origin/$branch
-    git revert 4d79c0f15bbe67910e9f1346cc18a18101a47607 --no-commit
-    git commit -s -m "Fix wifi broken for Android 9"
-    KVer=$(make kernelversion)
-    HeadCommitId=$(git log --pretty=format:'%h' -n1)
-    HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
-    KernelFor='P'
-    RefreshRate="60"
-    rm -rf out
-    cd $mainDir
-}
 
 update_file() {
     if [ ! -z "$1" ] && [ ! -z "$2" ] && [ ! -z "$3" ];then
