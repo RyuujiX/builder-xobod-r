@@ -104,7 +104,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	fi
 
     getInfo ">> cloning Anykernel . . . <<"
-    git clone https://github.com/RyuujiX/AnyKernel3 -b master $AnykernelDir --depth=1
+    git clone https://github.com/RyuujiX/AnyKernel3 -b injectorx $AnykernelDir --depth=1
     getInfo ">> cloning Spectrum . . . <<"
     git clone https://github.com/RyuujiX/spectrum -b master $SpectrumDir --depth=1
     if [ "$useGdrive" == "Y" ];then
@@ -131,10 +131,10 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	if [ "$branch" == "injectorx-uc" ];then
 		Variant="Asuna"
 	else
-	if [ "$branch" == "lynx" ];then
+	if [ "$branch" == "injectorx" ];then
 		Variant="Kiseki"
 	else
-	if [ "$branch" == "lynx-uvc" ];then
+	if [ "$branch" == "injectorx-uvc" ];then
 		Variant="Yuuki"
 	else
 		Variant="XOBOD"
