@@ -127,6 +127,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     RefreshRate="60"
     SetTag="LA.UM.9.2.r1"
     SetLastTag="SDMxx0.0"
+	Driver="NFI"
     FolderUp=""
 	if [ "$branch" == "injectorx-uc" ];then
 		Variant="Asuna"
@@ -383,12 +384,12 @@ CompileKernel(){
         [[ "$BuilderKernel" == "gcc" ]] && TypeBuilder="GCC"
         [[ "$BuilderKernel" == "clang" ]] && TypeBuilder="Proton"
         [[ "$BuilderKernel" == "dtc" ]] && TypeBuilder="DTC"
-		[[ "$BuilderKernel" == "storm" ]] && TypeBuilder="StormBreaker"
+		[[ "$BuilderKernel" == "storm" ]] && TypeBuilder="Storm"
 		[[ "$BuilderKernel" == "mystic" ]] && TypeBuilder="Mystic"
         if [ $TypeBuild == "Stable" ];then
-            ZipName="[$GetBD][$KernelFor]$KName-$KVer[$TypeBuilder][${RefreshRate}Hz].zip"
+            ZipName="[$GetBD][$KernelFor][$Driver]$KName-$KVer[$TypeBuilder][${RefreshRate}Hz].zip"
         else
-            ZipName="[$GetBD][$KernelFor][$TypeBuild]$KName-$KVer[$TypeBuilder][${RefreshRate}Hz].zip"
+            ZipName="[$GetBD][$KernelFor][$Driver][$TypeBuild]$KName-$KVer[$TypeBuilder][${RefreshRate}Hz].zip"
         fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
@@ -425,6 +426,24 @@ MakeZip(){
 
 }
 
+SwitchOFI()
+{
+    cd $kernelDir
+    git reset --hard origin/$branch
+    rm -rf out drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
+    git add .
+    git commit -s -m "Remove R WLAN DRIVERS"
+    git revert 34ed165ea973fcae7074a968f56fc5b89954a071 --no-commit
+	git commit -s -m "Switch to OFI"
+    KVer=$(make kernelversion)
+    HeadCommitId=$(git log --pretty=format:'%h' -n1)
+    HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
+    KernelFor='R'
+    RefreshRate="60"
+	Driver="OFI"
+    rm -rf out
+    cd $mainDir
+}
 
 update_file() {
     if [ ! -z "$1" ] && [ ! -z "$2" ] && [ ! -z "$3" ];then
