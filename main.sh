@@ -131,14 +131,18 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     FolderUp=""
 	if [ "$branch" == "injectorx-uc" ];then
 		Variant="Asuna"
+		JP="キセキ"
 	else
 	if [ "$branch" == "injectorx" ];then
 		Variant="Kiseki"
+		JP="アスナ"
 	else
 	if [ "$branch" == "injectorx-uvc" ];then
 		Variant="Yuuki"
+		JP="ユウキ"
 	else
 		Variant="XOBOD"
+		JP="Cobod"
 	fi
 	fi
 	fi
@@ -387,9 +391,9 @@ CompileKernel(){
 		[[ "$BuilderKernel" == "storm" ]] && TypeBuilder="Storm"
 		[[ "$BuilderKernel" == "mystic" ]] && TypeBuilder="Mystic"
         if [ $TypeBuild == "Stable" ];then
-            ZipName="[$GetBD][$KernelFor][$Driver]$KName-$KVer[$TypeBuilder][${RefreshRate}Hz].zip"
+            ZipName="[$GetBD][$KernelFor][$Driver]InjectorX-$JP-$KVer[$TypeBuilder][${RefreshRate}Hz].zip"
         else
-            ZipName="[$GetBD][$KernelFor][$Driver][$TypeBuild]$KName-$KVer[$TypeBuilder][${RefreshRate}Hz].zip"
+            ZipName="[$GetBD][$KernelFor][$Driver][$TypeBuild]InjectorX-$JP-$KVer[$TypeBuilder][${RefreshRate}Hz].zip"
         fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
