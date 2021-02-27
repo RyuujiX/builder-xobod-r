@@ -131,11 +131,11 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     FolderUp=""
 	if [ "$branch" == "injectorx-uc" ];then
 		Variant="Asuna"
-		JP="キセキ"
+		JP="アスナ"
 	else
 	if [ "$branch" == "injectorx" ];then
 		Variant="Kiseki"
-		JP="アスナ"
+		JP="キセキ"
 	else
 	if [ "$branch" == "injectorx-uvc" ];then
 		Variant="Yuuki"
