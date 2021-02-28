@@ -221,6 +221,11 @@ tg_send_files(){
         -F "disable_web_page_preview=true" \
         -F "parse_mode=html" \
         -F caption="$MSG"
+		if [ ! -z "$1" ];then
+			tg_send_info "$MSG" "$1"
+		else
+			tg_send_info "$MSG"
+		fi
     fi
 
     # remove files after build done
@@ -298,9 +303,9 @@ CompileKernel(){
     BUILD_START=$(date +"%s")
     if [ "$SendInfo" != 'sudah' ];then
         if [ "$BuilderKernel" == "gcc" ];then
-            MSG="<b>🔨 Kernel Baru lagi Otewe Tod</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild"
+            MSG="<b>🔨 Kernel Baru lagi Otewe Tod</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild"
         else
-            MSG="<b>🔨 Kernel Baru lagi Otewe Tod</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild"
+            MSG="<b>🔨 Kernel Baru lagi Otewe Tod</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild"
         fi
         if [ ! -z "$1" ];then
             tg_send_info "$MSG" "$1"
@@ -404,8 +409,8 @@ CompileKernel(){
         fi
     else
         MSG="<b>❌ Build Gagal Tod</b>%0A- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s)</code>%0A%0ASad Boy"
-        if [ ! -z "$2" ];then
-            tg_send_info "$MSG" "$2"
+        if [ ! -z "$1" ];then
+            tg_send_info "$MSG" "$1"
         else
             tg_send_info "$MSG" 
         fi
