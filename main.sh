@@ -437,48 +437,19 @@ MakeZip(){
 
 SwitchOFI()
 {
-if [ "$branch" == "injectorx-uc" ];then
 	cd $kernelDir
     git reset --hard origin/$branch
+	if [ "$branch" == "injectorx-uc" ];then
 	git revert 90b60464d1c4f71fb7107a2a68cc3efb2413b5d1 --no-commit
-	git commit -s -m "Bringup OFI Edition"
-    rm -rf out drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
-    git add .
-    git commit -s -m "Remove R WLAN DRIVERS"
-    git revert 34ed165ea973fcae7074a968f56fc5b89954a071 --no-commit
-	git commit -s -m "Switch to OFI"
-    KVer=$(make kernelversion)
-    HeadCommitId=$(git log --pretty=format:'%h' -n1)
-    HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
-    KernelFor='R'
-    RefreshRate="60"
-	Driver="OFI"
-    rm -rf out
-    cd $mainDir
-else
-if [ "$branch" == "injectorx" ];then
-	cd $kernelDir
-    git reset --hard origin/$branch
+	else
+	if [ "$branch" == "injectorx" ];then
 	git revert 5b24888c6b288b9962ce9d400468be5e6bed7b80 --no-commit
-	git commit -s -m "Bringup OFI Edition"
-    rm -rf out drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
-    git add .
-    git commit -s -m "Remove R WLAN DRIVERS"
-    git revert 34ed165ea973fcae7074a968f56fc5b89954a071 --no-commit
-	git commit -s -m "Switch to OFI"
-    KVer=$(make kernelversion)
-    HeadCommitId=$(git log --pretty=format:'%h' -n1)
-    HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
-    KernelFor='R'
-    RefreshRate="60"
-	Driver="OFI"
-    rm -rf out
-    cd $mainDir
-else
-if [ "$branch" == "injectorx-uvc" ];then
-	cd $kernelDir
-    git reset --hard origin/$branch
+	else
+	if [ "$branch" == "injectorx-uvc" ];then
 	git revert edeb69e68a1911528a9e18e5d1be6425ae5e7b17 --no-commit
+	fi
+	fi
+	fi
 	git commit -s -m "Bringup OFI Edition"
     rm -rf out drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
