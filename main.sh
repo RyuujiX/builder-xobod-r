@@ -198,7 +198,7 @@ tg_send_info(){
 tg_send_files(){
     KernelFiles="$(pwd)/$RealZipName"
 	MD5CHECK=$(md5sum "$KernelFiles" | cut -d' ' -f1)
-    MSG="✅ <b>Build Done !</b> 
+    MSG="✅ <b>Build Done</b> 
 - <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s) </code> 
 
 <b>MD5 Checksum</b>
@@ -409,7 +409,7 @@ CompileKernel(){
             MakeZip
         fi
     else
-        MSG="<b>❌ Build Failed !</b>%0A- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s)</code>%0A%0ASad Boy"
+        MSG="<b>❌ Build Failed</b>%0A- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s)</code>%0A%0ASad Boy"
         if [ ! -z "$1" ];then
             tg_send_info "$MSG" "$1"
         else
