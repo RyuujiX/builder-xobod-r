@@ -58,27 +58,31 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         getInfo ">> cloning kernel . . . <<"
         git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/kernel-x01bd-r -b "$branch" $kernelDir --depth=1 
     fi
-    [ -z "$BuilderKernel" ] && BuilderKernel="clang"
+    [ -z "$BuilderKernel" ] && BuilderKernel="storm"
     if [ "$BuilderKernel" == "clang" ];then
         getInfo ">> cloning proton clang 12 . . . <<"
         git clone https://github.com/kdrag0n/proton-clang -b master $clangDir --depth=1
 		gcc10="Y"
+		Compiler="Proton Clang"
 	fi
     if [ "$BuilderKernel" == "dtc" ];then
         getInfo ">> cloning DragonTC clang 10 . . . <<"
         git clone https://github.com/NusantaraDevs/DragonTC -b 10.0 $clangDir --depth=1
 		gcc10="Y"
+		Compiler="DragonTC Clang"
     fi
 	if [ "$BuilderKernel" == "storm" ];then
         getInfo ">> cloning StormBreaker clang 11 . . . <<"
         git clone https://github.com/stormbreaker-project/stormbreaker-clang -b 11.x $clangDir --depth=1
 		gcc10="Y"
         SimpleClang="Y"
+		Compiler="StormBreaker Clang"
 	fi
 	if [ "$BuilderKernel" == "mystic" ];then
         getInfo ">> cloning Mystic clang 12 . . . <<"
         git clone https://github.com/okta-10/mystic-clang -b Mystic-12.0.0 $clangDir --depth=1
 		allFromClang='Y'
+		Compiler="Mystic Clang"
 	fi
     if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
@@ -87,6 +91,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         git clone https://github.com/RyuujiX/arm-linux-androideabi-4.9/ -b android-10.0.0_r47 $gcc32Dir --depth=1
         for64=aarch64-linux-android
         for32=arm-linux-androideabi
+		Compiler="GCC Clang"
     else
 	if [ "$gcc10" == "Y" ];then
 	getInfo ">> cloning gcc64 10.2.0 . . . <<"
@@ -194,7 +199,7 @@ tg_send_info(){
 tg_send_files(){
     KernelFiles="$(pwd)/$RealZipName"
 	MD5CHECK=$(md5sum "$KernelFiles" | cut -d' ' -f1)
-    MSG="✅ <b>Build Dah Kelar Tod</b> 
+    MSG="✅ <b>Build Done !</b> 
 - <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s) </code> 
 
 <b>MD5 Checksum</b>
@@ -303,9 +308,9 @@ CompileKernel(){
     BUILD_START=$(date +"%s")
     if [ "$SendInfo" != 'sudah' ];then
         if [ "$BuilderKernel" == "gcc" ];then
-            MSG="<b>🔨 Kernel Baru lagi Otewe Tod</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild"
+            MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild"
         else
-            MSG="<b>🔨 Kernel Baru lagi Otewe Tod</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild"
+            MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild"
         fi
         if [ ! -z "$1" ];then
             tg_send_info "$MSG" "$1"
@@ -408,7 +413,7 @@ CompileKernel(){
             MakeZip
         fi
     else
-        MSG="<b>❌ Build Gagal Tod</b>%0A- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s)</code>%0A%0ASad Boy"
+        MSG="<b>❌ Build Failed !</b>%0A- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s)</code>%0A%0ASad Boy"
         if [ ! -z "$1" ];then
             tg_send_info "$MSG" "$1"
         else
