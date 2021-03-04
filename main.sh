@@ -457,6 +457,7 @@ SwitchOFI()
     git commit -s -m "Remove R WLAN DRIVERS"
     git revert 34ed165ea973fcae7074a968f56fc5b89954a071 --no-commit
 	git commit -s -m "Switch to OFI"
+	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
     KVer=$(make kernelversion)
     HeadCommitId=$(git log --pretty=format:'%h' -n1)
     HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
