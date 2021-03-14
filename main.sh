@@ -397,9 +397,9 @@ CompileKernel(){
 		[[ "$BuilderKernel" == "storm" ]] && TypeBuilder="Storm"
 		[[ "$BuilderKernel" == "mystic" ]] && TypeBuilder="Mystic"
         if [ $TypeBuild == "Stable" ];then
-            ZipName="$KName-$Driver-$KVer-$KernelFor.zip"
+            ZipName="$KName-$KVer-$KernelFor.zip"
         else
-            ZipName="[$TypeBuilder]$KName-$Driver-$KVer-$KernelFor.zip"
+            ZipName="[$TypeBuilder]$KName-$KVer-$KernelFor.zip"
         fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
@@ -444,7 +444,7 @@ SwitchOFI()
 	git revert 90b60464d1c4f71fb7107a2a68cc3efb2413b5d1 --no-commit
 	else
 	if [ "$branch" == "injectorx" ];then
-	git revert 75dd746b5aca00b410ac432cebdf35ebaac704bf --no-commit
+	git revert 7130f0d0126edc4ab464a6f46c6f5490417a7580 --no-commit
 	else
 	if [ "$branch" == "injectorx-uvc" ];then
 	git revert edeb69e68a1911528a9e18e5d1be6425ae5e7b17 --no-commit
