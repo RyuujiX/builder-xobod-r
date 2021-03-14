@@ -397,9 +397,9 @@ CompileKernel(){
 		[[ "$BuilderKernel" == "storm" ]] && TypeBuilder="Storm"
 		[[ "$BuilderKernel" == "mystic" ]] && TypeBuilder="Mystic"
         if [ $TypeBuild == "Stable" ];then
-            ZipName="[$GetBD][$KernelFor][$Driver]InjectorX-$JP-$KVer[$TypeBuilder][${RefreshRate}Hz].zip"
+            ZipName="$KName-$Driver-$KVer-$KernelFor.zip"
         else
-            ZipName="[$GetBD][$KernelFor][$Driver][$TypeBuild]InjectorX-$JP-$KVer[$TypeBuilder][${RefreshRate}Hz].zip"
+            ZipName="[$TypeBuilder]$KName-$Driver-$KVer-$KernelFor.zip"
         fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
@@ -425,7 +425,7 @@ MakeZip(){
     if [ ! -z "$spectrumFile" ];then
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
-    cp -af anykernel-real.sh anykernel.sh && sed -i "s/kernel.string=.*/kernel.string=InjectorX-$Variant $Driver ${RefreshRate}Hz by Ryuuji/g" anykernel.sh
+    cp -af anykernel-real.sh anykernel.sh && sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Hikari $Driver by Ryuuji/g" anykernel.sh
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
     if [ ! -z "$1" ];then
@@ -444,7 +444,7 @@ SwitchOFI()
 	git revert 90b60464d1c4f71fb7107a2a68cc3efb2413b5d1 --no-commit
 	else
 	if [ "$branch" == "injectorx" ];then
-	git revert 5b24888c6b288b9962ce9d400468be5e6bed7b80 --no-commit
+	git revert 75dd746b5aca00b410ac432cebdf35ebaac704bf --no-commit
 	else
 	if [ "$branch" == "injectorx-uvc" ];then
 	git revert edeb69e68a1911528a9e18e5d1be6425ae5e7b17 --no-commit

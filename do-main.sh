@@ -9,7 +9,7 @@ fi
 
 FolderUp="BrokenNucleus"
 spectrumFile="ryuu.rc"
-TypeBuild="TEST"
+TypeBuild="Stable"
 TypeBuildTag="Yeah"
 getInfo ">> Building kernel . . . . <<"
 
@@ -19,9 +19,9 @@ CompileKernel
 # CompileKernel "71"
 # CompileKernel "72"
 
-# SwitchOFI
+SwitchOFI
 
-# CompileKernel
+CompileKernel
 # CompileKernel "65"
 # CompileKernel "68"
 # CompileKernel "71"
