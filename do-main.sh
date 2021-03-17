@@ -26,5 +26,3 @@ CompileKernel
 # CompileKernel "68"
 # CompileKernel "71"
 # CompileKernel "72"
-
-tg_send_info "All $Compiler for $KName build is finished :v"
