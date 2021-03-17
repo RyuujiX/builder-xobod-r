@@ -403,8 +403,8 @@ CompileKernel(){
         fi
     else
         MSG="<b>❌ Build Failed</b>%0A- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s)</code>%0A%0ASad Boy"
-        if [ ! -z "$1" ];then
-            tg_send_info "$MSG" "$1"
+        if [ ! -z "$2" ];then
+            tg_send_info "$MSG" "$2"
         else
             tg_send_info "$MSG" 
         fi
