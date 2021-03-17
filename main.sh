@@ -397,9 +397,9 @@ CompileKernel(){
 		[[ "$BuilderKernel" == "storm" ]] && TypeBuilder="Storm"
 		[[ "$BuilderKernel" == "mystic" ]] && TypeBuilder="Mystic"
         if [ $TypeBuild == "Stable" ];then
-            ZipName="$KName-$KVer-$KernelFor-$CODENAME.zip"
+            ZipName="$KName-$KVer-$TypeBuilder-$CODENAME.zip"
         else
-            ZipName="[$TypeBuilder]$KName-$KVer-$KernelFor-$CODENAME.zip"
+            ZipName="[$TypeBuild]$KName-$KVer-$TypeBuilder-$CODENAME.zip"
         fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
