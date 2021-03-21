@@ -1,6 +1,6 @@
 #! /bin/bash
 branch="injectorx"
-BuilderKernel="00000"
+BuilderKernel="clang"
 
 if [ "$BuilderKernel" != "clang" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] && [ "$BuilderKernel" != "storm" ] && [ "$BuilderKernel" != "mystic" ] ;then
     exit;
@@ -13,7 +13,7 @@ TypeBuild="Stable"
 TypeBuildTag="Yeah"
 getInfo ">> Building kernel . . . . <<"
 
-CompileKernel
+# CompileKernel
 # CompileKernel "65"
 # CompileKernel "68"
 # CompileKernel "71"
