@@ -418,7 +418,7 @@ MakeZip(){
     if [ ! -z "$spectrumFile" ];then
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
-    cp -af anykernel-real.sh anykernel.sh && sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Noragami $KernelFor-$Driver $TypePrint by Ryuuji/g" anykernel.sh
+    cp -af anykernel-real.sh anykernel.sh && sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Tsukishima $KernelFor-$Driver $TypePrint by Ryuuji/g" anykernel.sh
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
     if [ ! -z "$1" ];then
@@ -437,7 +437,7 @@ SwitchOFI()
 	git revert 90b60464d1c4f71fb7107a2a68cc3efb2413b5d1 --no-commit
 	else
 	if [ "$branch" == "injectorx" ];then
-	git revert 2ee8764dffa5f2a98568096ee06d7a9032bb35cc --no-commit
+	git revert 481d0d13ff4d325a88ccf78a4e7d422323bc6416 --no-commit
 	else
 	if [ "$branch" == "injectorx-uvc" ];then
 	git revert edeb69e68a1911528a9e18e5d1be6425ae5e7b17 --no-commit
