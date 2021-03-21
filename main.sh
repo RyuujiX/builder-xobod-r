@@ -62,7 +62,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     if [ "$BuilderKernel" == "clang" ];then
         getInfo ">> cloning proton clang 12 . . . <<"
         git clone https://github.com/kdrag0n/proton-clang -b master $clangDir --depth=1
-		gcc10="Y"
+		allFromClang="Y"
 		Compiler="Proton Clang"
 		TypeBuilder="Proton"
 		TypePrint="Proton"
@@ -70,7 +70,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     if [ "$BuilderKernel" == "dtc" ];then
         getInfo ">> cloning DragonTC clang 10 . . . <<"
         git clone https://github.com/NusantaraDevs/DragonTC -b 10.0 $clangDir --depth=1
-		gcc10="Y"
+		allFromClang="Y"
 		Compiler="DragonTC Clang"
 		TypeBuilder="DTC"
 		TypePrint="DragonTC"
@@ -78,8 +78,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	if [ "$BuilderKernel" == "storm" ];then
         getInfo ">> cloning StormBreaker clang 11 . . . <<"
         git clone https://github.com/stormbreaker-project/stormbreaker-clang -b 11.x $clangDir --depth=1
-		gcc10="Y"
-        SimpleClang="Y"
+		allFromClang="Y"
 		Compiler="StormBreaker Clang"
 		TypeBuilder="Storm"
 		TypePrint="StormBreaker"
