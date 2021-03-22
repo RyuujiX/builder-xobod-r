@@ -423,6 +423,7 @@ MakeZip(){
 	sed -i "s/kernel.for=.*/kernel.for=$KernelFor-$Driver/g" anykernel.sh
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
+	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
     if [ ! -z "$1" ];then
