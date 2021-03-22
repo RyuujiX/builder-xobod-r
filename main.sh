@@ -424,6 +424,8 @@ MakeZip(){
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=Time won’t make you forget, it will make you understand things./g" anykernel.sh
+	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
     if [ ! -z "$1" ];then
