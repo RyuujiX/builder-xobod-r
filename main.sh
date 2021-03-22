@@ -418,7 +418,11 @@ MakeZip(){
     if [ ! -z "$spectrumFile" ];then
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
-    cp -af anykernel-real.sh anykernel.sh && sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Tsukishima $KernelFor-$Driver $TypePrint by Ryuuji/g" anykernel.sh
+    cp -af anykernel-real.sh anykernel.sh
+	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Tsukishima by Ryuuji/g" anykernel.sh
+	sed -i "s/kernel.for=.*/kernel.for=$KernelFor-$Driver/g" anykernel.sh
+	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
+	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
     if [ ! -z "$1" ];then
