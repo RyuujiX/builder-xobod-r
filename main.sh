@@ -59,8 +59,8 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/kernel-x01bd-r -b "$branch" $kernelDir --depth=1 
     fi
     [ -z "$BuilderKernel" ] && BuilderKernel="storm"
-    if [ "$BuilderKernel" == "clang" ];then
-        getInfo ">> cloning proton clang 12 . . . <<"
+    if [ "$BuilderKernel" == "proton" ];then
+        getInfo ">> cloning Proton clang 13 . . . <<"
         git clone https://github.com/kdrag0n/proton-clang -b master $clangDir --depth=1
 		gcc10="Y"
 		Compiler="Proton Clang"
@@ -84,13 +84,13 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		TypeBuilder="Storm"
 		TypePrint="StormBreaker"
 	fi
-	if [ "$BuilderKernel" == "mystic" ];then
-        getInfo ">> cloning Mystic clang 12 . . . <<"
-        git clone https://github.com/okta-10/mystic-clang -b Mystic-12.0.0 $clangDir --depth=1
-		allFromClang='Y'
-		Compiler="Mystic Clang"
-		TypeBuilder="Mystic"
-		TypePrint="Mystic"
+	if [ "$BuilderKernel" == "strix" ];then
+        getInfo ">> cloning STRIX clang . . . <<"
+        git clone https://github.com/STRIX-Project/STRIX-clang -b main $clangDir --depth=1
+		gcc10="Y"
+		Compiler="STRIX Clang"
+		TypeBuilder="STRIX"
+		TypePrint="STRIX"
 	fi
     if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
