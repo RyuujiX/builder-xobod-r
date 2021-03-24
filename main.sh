@@ -88,6 +88,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         getInfo ">> cloning STRIX clang . . . <<"
         git clone https://github.com/STRIX-Project/STRIX-clang -b main $clangDir --depth=1
 		gcc10="Y"
+		SimpleClang="Y"
 		Compiler="STRIX Clang"
 		TypeBuilder="STRIX"
 		TypePrint="STRIX"
