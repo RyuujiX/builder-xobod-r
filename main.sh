@@ -424,12 +424,12 @@ MakeZip(){
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
     cp -af anykernel-real.sh anykernel.sh
-	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Tsukishima/g" anykernel.sh
+	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-KuroNeko/g" anykernel.sh
 	sed -i "s/kernel.for=.*/kernel.for=$KernelFor-$Driver/g" anykernel.sh
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
-	sed -i "s/message.word=.*/message.word=Time won’t make you forget, it will make you understand things./g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=Patience is needed when you want to achieve a success./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
@@ -449,7 +449,7 @@ SwitchOFI()
 	git revert 90b60464d1c4f71fb7107a2a68cc3efb2413b5d1 --no-commit
 	else
 	if [ "$branch" == "injectorx" ];then
-	git revert 481d0d13ff4d325a88ccf78a4e7d422323bc6416 --no-commit
+	git revert 4dc438ab540a9bb6c2da714f9cc63314c0a0f877 --no-commit
 	else
 	if [ "$branch" == "injectorx-uvc" ];then
 	git revert edeb69e68a1911528a9e18e5d1be6425ae5e7b17 --no-commit
