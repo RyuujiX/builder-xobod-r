@@ -149,7 +149,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     export KBUILD_BUILD_HOST="DirumahAja"
     if [ "$BuilderKernel" == "gcc" ];then
 	cd $kernelDir
-	git revert aa635687f89682a8d9a7c047c9228843f438b250 --no-commit
+	git revert 63f0ca0bd1751cbebb7e61b5a2a752395e864d9e --no-commit
 	git commit -s -m "Swtich to OPTIMIZE_FOR_SIZE"
 	cd $mainDir
         ClangType="$($gcc64Dir/bin/$for64-gcc --version | head -n 1)"
