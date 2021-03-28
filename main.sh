@@ -402,7 +402,7 @@ CompileKernel(){
         else
             MakeZip
         fi
-    else
+    elif ! [ -f $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb ];then
         MSG="❌<b>Build Failed</b>
 		- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s) </code>
 		
