@@ -93,6 +93,14 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		TypeBuilder="STRIX"
 		TypePrint="STRIX"
 	fi
+	if [ "$BuilderKernel" == "evagcc" ];then
+        getInfo ">> cloning Eva GCC clang . . . <<"
+        git clone https://github.com/mvaisakh/gcc-arm64 -b gcc-master $clangDir --depth=1
+		allFromClang="Y"
+		Compiler="Eva GCC Clang"
+		TypeBuilder="GCC"
+		TypePrint="Eva GCC"
+	fi
     if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
         git clone https://github.com/RyuujiX/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
