@@ -9,7 +9,7 @@ fi
 
 FolderUp="BrokenNucleus"
 spectrumFile="ryuu.rc"
-TypeBuild="Stable"
+TypeBuild="RELEASE"
 TypeBuildTag="Yeah"
 getInfo ">> Building kernel . . . . <<"
 

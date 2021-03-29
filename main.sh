@@ -162,7 +162,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	cd $mainDir
         ClangType="$($gcc64Dir/bin/$for64-gcc --version | head -n 1)"
     else
-        ClangType="$($clangDir/bin/clang --version | head -n 1)"
+        ClangType=$("$clangDir"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
     fi
     KBUILD_COMPILER_STRING="$ClangType"
     if [ -e $gcc64Dir/bin/$for64-gcc ];then
@@ -398,10 +398,10 @@ CompileKernel(){
     DIFF=$((BUILD_END - BUILD_START))
     if [ -f $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb ];then
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
-        if [ $TypeBuild == "Stable" ];then
+        if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
             ZipName="$KName-$KVer-$TypeBuilder-$CODENAME.zip"
         else
-            ZipName="[$TypeBuild]$KName-$KVer-$TypeBuilder-$CODENAME.zip"
+            ZipName="$KName-$TypeBuild-$KVer-$TypeBuilder-$CODENAME.zip"
         fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
@@ -439,6 +439,7 @@ MakeZip(){
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
 	sed -i "s/message.word=.*/message.word=Patience is needed when you want to achieve a success./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
+	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
     if [ ! -z "$1" ];then
