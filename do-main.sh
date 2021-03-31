@@ -1,6 +1,6 @@
 #! /bin/bash
 branch="injectorx"
-BuilderKernel="00000"
+BuilderKernel="storm"
 
 if [ "$BuilderKernel" != "proton" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] && [ "$BuilderKernel" != "storm" ] && [ "$BuilderKernel" != "strix" ] && [ "$BuilderKernel" != "evagcc" ] ;then
     exit;
