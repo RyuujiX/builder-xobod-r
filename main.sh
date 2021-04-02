@@ -47,7 +47,7 @@ SpectrumDir=$mainDir/Spectrum
 
 GdriveDir=$mainDir/Gdrive-Uploader
 
-useGdrive='Y'
+useGdrive='N'
 
 if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	
