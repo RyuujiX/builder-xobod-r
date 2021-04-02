@@ -213,20 +213,6 @@ tg_send_files(){
 
 <b>Zip Name</b> 
 - <code>$ZipName</code>"
-
-
-    if [ "$useGdrive" == "Y" ];then
-        currentFolder="$(pwd)"
-        cd $GdriveDir
-        chmod +x run.sh
-        . run.sh "$KernelFiles" "x01bd" "$(date +"%m-%d-%Y")" "$FolderUp"
-        cd $currentFolder
-		if [ ! -z "$1" ];then
-            tg_send_info "$MSG" "$1"
-        else
-            tg_send_info "$MSG"
-        fi
-    fi
 	
         curl --progress-bar -F document=@"$KernelFiles" "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
         -F chat_id="$SaveChatID"  \
@@ -238,6 +224,19 @@ tg_send_files(){
 		else
 			tg_send_info "$MSG"
 		fi
+		
+	if [ "$useGdrive" == "Y" ];then
+        currentFolder="$(pwd)"
+        cd $GdriveDir
+        chmod +x run.sh
+        . run.sh "$KernelFiles" "x01bd" "$(date +"%m-%d-%Y")" "$FolderUp"
+        cd $currentFolder
+		if [ ! -z "$1" ];then
+            tg_send_info "$MSG" "$1"
+        else
+            tg_send_info "$MSG"
+        fi
+    fi
 		
     # remove files after build done
     rm -rf $KernelFiles
