@@ -33,7 +33,7 @@ GdriveDir=$mainDir/Gdrive-Uploader
 git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/gd-up -b master $GdriveDir
 echo 'test' > test.txt
 fileNya="$(pwd)/test.txt"
-cd FOLDERUPLOADNYA
+cd $GdriveDir
 chmod +x gdrive
 chmod +x run.sh
 . run.sh "$fileNya" "x01bd"
