@@ -47,7 +47,7 @@ SpectrumDir=$mainDir/Spectrum
 
 GdriveDir=$mainDir/Gdrive-Uploader
 
-useGdrive='N'
+useGdrive='Y'
 
 if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	
@@ -133,7 +133,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     git clone https://github.com/RyuujiX/spectrum -b master $SpectrumDir --depth=1
     if [ "$useGdrive" == "Y" ];then
         getInfo ">> cloning Gdrive Uploader . . . <<"
-        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/gdrive-uploader -b master $GdriveDir --depth=1 
+        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/gd-up -b master $GdriveDir --depth=1 
     fi
     
     DEVICE="Asus Max Pro M2"
@@ -226,7 +226,8 @@ tg_send_files(){
         else
             tg_send_info "$MSG"
         fi
-    else
+    fi
+	
         curl --progress-bar -F document=@"$KernelFiles" "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
         -F chat_id="$SaveChatID"  \
         -F "disable_web_page_preview=true" \
@@ -237,8 +238,7 @@ tg_send_files(){
 		else
 			tg_send_info "$MSG"
 		fi
-    fi
-
+		
     # remove files after build done
     rm -rf $KernelFiles
 }
@@ -432,12 +432,12 @@ MakeZip(){
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
     cp -af anykernel-real.sh anykernel.sh
-	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-KuroNeko/g" anykernel.sh
+	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-ShiroNeko/g" anykernel.sh
 	sed -i "s/kernel.for=.*/kernel.for=$KernelFor-$Driver/g" anykernel.sh
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
-	sed -i "s/message.word=.*/message.word=Patience is needed when you want to achieve a success./g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=Intelligence is not the determinant of success, but hard work is the real determinant of your success./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 
@@ -458,7 +458,7 @@ SwitchOFI()
 	git revert 90b60464d1c4f71fb7107a2a68cc3efb2413b5d1 --no-commit
 	else
 	if [ "$branch" == "injectorx" ];then
-	git revert 4dc438ab540a9bb6c2da714f9cc63314c0a0f877 --no-commit
+	git revert ece2bacbceab13d192364ab37a9f13959d7a8887 --no-commit
 	else
 	if [ "$branch" == "injectorx-uvc" ];then
 	git revert edeb69e68a1911528a9e18e5d1be6425ae5e7b17 --no-commit
