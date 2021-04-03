@@ -10,7 +10,11 @@ fi
 FolderUp="BrokenNucleus"
 spectrumFile="ryuu.rc"
 TypeBuild="RELEASE"
-TypeBuildTag="Yeah"
+if [ "$branch" = "injectorx-eas" ];then
+TypeBuildTag="EAS"
+else
+TypeBuildTag="HMP"
+fi
 getInfo ">> Building kernel . . . . <<"
 
 CompileKernel

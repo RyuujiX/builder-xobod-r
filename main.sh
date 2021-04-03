@@ -439,6 +439,7 @@ MakeZip(){
 	sed -i "s/message.word=.*/message.word=Intelligence is not the determinant of success, but hard work is the real determinant of your success./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
+	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
     if [ ! -z "$1" ];then
@@ -453,8 +454,8 @@ SwitchOFI()
 {
 	cd $kernelDir
     git reset --hard origin/$branch
-	if [ "$branch" == "injectorx-uc" ];then
-	git revert 90b60464d1c4f71fb7107a2a68cc3efb2413b5d1 --no-commit
+	if [ "$branch" == "injectorx-eas" ];then
+	git revert fd2a539b6335cea9a914bae97d2b0c9d5431f22e --no-commit
 	else
 	if [ "$branch" == "injectorx" ];then
 	git revert ece2bacbceab13d192364ab37a9f13959d7a8887 --no-commit
