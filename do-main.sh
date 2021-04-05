@@ -11,9 +11,11 @@ FolderUp="BrokenNucleus"
 TypeBuild="RELEASE"
 if [ "$branch" = "injectorx-eas" ];then
 TypeBuildTag="EAS"
+TypeScript="EAS Advanced Configuration"
 spectrumFile="eas.rc"
 else
 TypeBuildTag="HMP"
+TypeScript="Spectrum"
 spectrumFile="ryuu.rc"
 fi
 getInfo ">> Building kernel . . . . <<"
