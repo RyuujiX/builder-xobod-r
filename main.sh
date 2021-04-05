@@ -397,7 +397,13 @@ CompileKernel(){
     DIFF=$((BUILD_END - BUILD_START))
     if [ -f $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb ];then
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
-        if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
+		if [ "branch" = "injectorx-eas" ];then
+         if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
+            ZipName="$KName-$KVer-$CODENAME.zip"
+         else
+            ZipName="$KName-$TypeBuild-$KVer-$CODENAME.zip"
+         fi
+		elif [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
             ZipName="$KName-$KVer-$TypeBuilder-$CODENAME.zip"
         else
             ZipName="$KName-$TypeBuild-$KVer-$TypeBuilder-$CODENAME.zip"
