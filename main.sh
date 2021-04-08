@@ -437,12 +437,12 @@ MakeZip(){
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
     cp -af anykernel-real.sh anykernel.sh
-	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-ShiroNeko/g" anykernel.sh
+	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Hayabusa/g" anykernel.sh
 	sed -i "s/kernel.for=.*/kernel.for=$KernelFor-$Driver/g" anykernel.sh
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
-	sed -i "s/message.word=.*/message.word=Intelligence is not the determinant of success, but hard work is the real determinant of your success./g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=If you don’t go after what you want, you’ll never have it. And if you don’t ask, the answer is always no. Also if you don’t step forward, you’re always in the same place./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
@@ -462,15 +462,9 @@ SwitchOFI()
 	cd $kernelDir
     git reset --hard origin/$branch
 	if [ "$branch" == "injectorx-eas" ];then
-	git revert fd2a539b6335cea9a914bae97d2b0c9d5431f22e --no-commit
-	else
-	if [ "$branch" == "injectorx" ];then
-	git revert ece2bacbceab13d192364ab37a9f13959d7a8887 --no-commit
-	else
-	if [ "$branch" == "injectorx-uvc" ];then
-	git revert edeb69e68a1911528a9e18e5d1be6425ae5e7b17 --no-commit
-	fi
-	fi
+	git revert c9a68b00e2ae0bc89bdd809d5a12ccb3074b774e --no-commit
+	elif [ "$branch" == "injectorx" ];then
+	git revert 6563d054035a52b8814d56ca0b365fcf99cbb874 --no-commit
 	fi
 	git commit -s -m "Bringup OFI Edition"
     rm -rf out drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
