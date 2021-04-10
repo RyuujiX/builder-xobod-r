@@ -1,6 +1,6 @@
 #! /bin/bash
-branch="injectorx"
-BuilderKernel="00000"
+branch="injectorx-eas"
+BuilderKernel="yuki"
 
 if [ "$BuilderKernel" != "proton" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] && [ "$BuilderKernel" != "storm" ] && [ "$BuilderKernel" != "strix" ] && [ "$BuilderKernel" != "yuki" ] ;then
     exit;
@@ -8,7 +8,7 @@ fi
 . main.sh 'initial' 'full'
 
 FolderUp="BrokenNucleus"
-TypeBuild="RELEASE"
+TypeBuild="STABLE"
 if [ "$branch" = "injectorx-eas" ];then
 TypeBuildTag="EAS"
 TypeScript="EAS Advanced Configuration"
@@ -26,9 +26,9 @@ CompileKernel
 # CompileKernel "71"
 # CompileKernel "72"
 
-SwitchOFI
+# SwitchOFI
 
-CompileKernel
+# CompileKernel
 # CompileKernel "65"
 # CompileKernel "68"
 # CompileKernel "71"
