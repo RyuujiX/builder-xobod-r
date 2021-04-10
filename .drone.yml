@@ -1,0 +1,22 @@
+--- 
+clone: 
+  depth: 1
+kind: pipeline
+name: RyuuPipeline
+concurrency:
+  limit: 6
+steps: 
+  - 
+    environment: 
+      BOT_TOKEN:
+        from_secret: BOT_TOKEN
+      GIT_SECRET:
+        from_secret: GIT_SECRET
+      GIT_SECRETB:
+        from_secret: GIT_SECRETB
+      GIT_USERNAME:
+        from_secret: GIT_USERNAME
+    image: zycromerz/kerneldocker:latest
+    name: RyuujiX-Build
+    commands: 
+      - "bash ./do-main.sh"
