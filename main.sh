@@ -93,13 +93,14 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		TypeBuilder="STRIX"
 		TypePrint="STRIX"
 	fi
-	if [ "$BuilderKernel" == "evagcc" ];then
-        getInfo ">> cloning Eva GCC clang . . . <<"
-        git clone https://github.com/mvaisakh/gcc-arm64 -b gcc-master $clangDir --depth=1
-		allFromClang="Y"
-		Compiler="Eva GCC Clang"
-		TypeBuilder="GCC"
-		TypePrint="Eva GCC"
+	if [ "$BuilderKernel" == "yuki" ];then
+        getInfo ">> cloning Yuki clang . . . <<"
+        git clone https://github.com/Klozz/Yuki-clang -b main $clangDir --depth=1
+		gcc10="Y"
+		SimpleClang="Y"
+		Compiler="Yuki Clang"
+		TypeBuilder="Yuki"
+		TypePrint="Yuki"
 	fi
     if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
