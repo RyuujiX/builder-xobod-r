@@ -157,10 +157,10 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     export KBUILD_BUILD_USER="RyuujiX"
     export KBUILD_BUILD_HOST="DirumahAja"
     if [ "$BuilderKernel" == "gcc" ];then
-	cd $kernelDir
-	git revert 63f0ca0bd1751cbebb7e61b5a2a752395e864d9e --no-commit
-	git commit -s -m "Swtich to OPTIMIZE_FOR_SIZE"
-	cd $mainDir
+	# cd $kernelDir
+	# git revert 63f0ca0bd1751cbebb7e61b5a2a752395e864d9e --no-commit
+	# git commit -s -m "Swtich to OPTIMIZE_FOR_SIZE"
+	# cd $mainDir
         ClangType="$($gcc64Dir/bin/$for64-gcc --version | head -n 1)"
     else
         ClangType=$("$clangDir"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
@@ -403,7 +403,12 @@ CompileKernel(){
     fi
     BUILD_END=$(date +"%s")
     DIFF=$((BUILD_END - BUILD_START))
-    if [ -f $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb ];then
+	if [[ ! -e $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb ]];then
+        MSG="<b>❌ Build failed</b>%0AKernel Name : <b>${KName}</b>%0A- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s)</code>%0A%0ASad Boy"
+		
+        tg_send_info "$MSG" 
+        exit -1
+	fi
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
 		if [ "branch" = "injectorx-eas" ];then
          if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
@@ -423,19 +428,6 @@ CompileKernel(){
         else
             MakeZip
         fi
-    elif ! [ -f $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb ];then
-        MSG="❌<b>Build Failed</b>
-		- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s) </code>
-		
-		Sad Boy"
-		
-        if [ ! -z "$2" ];then
-            tg_send_info "$MSG" "$2"
-        else
-            tg_send_info "$MSG" 
-        fi
-        exit -1
-    fi
 }
 
 
