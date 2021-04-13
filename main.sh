@@ -417,7 +417,7 @@ CompileKernel(){
         exit -1
 	fi
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
-		if [ "branch" = "injectorx-eas" ];then
+		if [ "$branch" = "injectorx-eas" ];then
          if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
             ZipName="$KName-$KVer-$CODENAME.zip"
          else
