@@ -444,12 +444,12 @@ MakeZip(){
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
     cp -af anykernel-real.sh anykernel.sh
-	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Hayabusa/g" anykernel.sh
+	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Amaterasu/g" anykernel.sh
 	sed -i "s/kernel.for=.*/kernel.for=$KernelFor-$Driver/g" anykernel.sh
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
-	sed -i "s/message.word=.*/message.word=If you don’t go after what you want, you’ll never have it. And if you don’t ask, the answer is always no. Also if you don’t step forward, you’re always in the same place./g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=Happiness is not how much money we have, but how much time we can be thankful./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
@@ -469,9 +469,9 @@ SwitchOFI()
 	cd $kernelDir
     git reset --hard origin/$branch
 	if [ "$branch" == "injectorx-eas" ];then
-	git revert c9a68b00e2ae0bc89bdd809d5a12ccb3074b774e --no-commit
+	git revert e9956c54a254c091f8f86be9a4735c5110de5cff --no-commit
 	elif [ "$branch" == "injectorx" ];then
-	git revert 6563d054035a52b8814d56ca0b365fcf99cbb874 --no-commit
+	git revert 47a9e956547f2f6061cfc1d2c4b771a8cbf87677 --no-commit
 	fi
 	git commit -s -m "Bringup OFI Edition"
     rm -rf out drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
