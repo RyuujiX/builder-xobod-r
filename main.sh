@@ -137,12 +137,9 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/gd-up -b master $GdriveDir --depth=1 
     fi
     
-    DEVICE="Asus Max Pro M2"
-    CODENAME="X01BD"
     SaveChatID="-275630226"
     ARCH="arm64"
     TypeBuild="Stable"
-    DEFFCONFIG="X01BD_defconfig"
     GetBD=$(date +"%m%d")
     GetCBD=$(date +"%Y-%m-%d")
     TotalCores=$(nproc --all)
@@ -153,6 +150,13 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     SetLastTag="SDMxx0.0"
 	Driver="NFI"
     FolderUp=""
+	if [ "$CODENAME" == "X00TD" ];then
+	DEVICE="Asus Max Pro M1"
+	DEFFCONFIG="X00TD_defconfig"
+	elif [ "$CODENAME" == "X01BD" ];then
+	DEVICE="Asus Max Pro M2"
+	DEFFCONFIG="X01BD_defconfig"
+	fi
 
     export KBUILD_BUILD_USER="RyuujiX"
     export KBUILD_BUILD_HOST="DirumahAja"
@@ -186,7 +190,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     HeadCommitId=$(git log --pretty=format:'%h' -n1)
     HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
     cd $mainDir
-    apt-get -y update && apt-get -y upgrade && apt-get -y install tzdata git automake lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng bc libstdc++6 wget python3 python3-pip python gcc clang libssl-dev rsync flex git-lfs libz3-dev libz3-4 axel tar && python3 -m pip  install networkx
+    apt-get -y update && apt-get -y upgrade && apt-get -y install tzdata git automake lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng bc libstdc++6 libncurses5 wget python3 python3-pip python gcc clang libssl-dev rsync flex git-lfs libz3-dev libz3-4 axel tar && python3 -m pip  install networkx
 fi
 
 tg_send_info(){
@@ -440,20 +444,36 @@ CompileKernel(){
 
 MakeZip(){
     cd $AnykernelDir
+	git reset --hard origin/injectorx
     if [ ! -z "$spectrumFile" ];then
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
     cp -af anykernel-real.sh anykernel.sh
-	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Amaterasu/g" anykernel.sh
+	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Sugiono/g" anykernel.sh
 	sed -i "s/kernel.for=.*/kernel.for=$KernelFor-$Driver/g" anykernel.sh
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
-	sed -i "s/message.word=.*/message.word=Happiness is not how much money we have, but how much time we can be thankful./g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=There is no age limit to produce a good hardwork./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
 	sed -i "s/script.type=.*/script.type=$TypeScript/g" anykernel.sh
+	if [ "$CODENAME" == "X00TD" ];then
+	sed -i "s/device.name1=.*/device.name1=X00TD/g" anykernel.sh
+	sed -i "s/device.name2=.*/device.name2=X00T/g" anykernel.sh
+	sed -i "s/device.name3=.*/device.name3=Zenfone Max Pro M1 (X00TD)/g" anykernel.sh
+	sed -i "s/device.name4=.*/device.name4=ASUS_X00TD/g" anykernel.sh
+	sed -i "s/device.name5=.*/device.name5=ASUS_X00T/g" anykernel.sh
+	sed -i "s/X00TD=.*/X00TD=1/g" anykernel.sh
+	fi
+	cd $AnykernelDir/META-INF/com/google/android
+	sed -i "s/KNAME/$KName/g" aroma-config
+	sed -i "s/KVER/$KVer/g" aroma-config
+	sed -i "s/KAUTHOR/Ryuuji @ItsRyuujiX/g" aroma-config
+	sed -i "s/KDEVICE/$DEVICE - $CODENAME/g" aroma-config
+	sed -i "s/KBDATE/$GetCBD/g" aroma-config
+	cd $AnykernelDir
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
     if [ ! -z "$1" ];then
@@ -469,9 +489,9 @@ SwitchOFI()
 	cd $kernelDir
     git reset --hard origin/$branch
 	if [ "$branch" == "injectorx-eas" ];then
-	git revert e9956c54a254c091f8f86be9a4735c5110de5cff --no-commit
+	git revert 537029e1bd885432c486385e8afb265fbaf06e59 --no-commit
 	elif [ "$branch" == "injectorx" ];then
-	git revert 47a9e956547f2f6061cfc1d2c4b771a8cbf87677 --no-commit
+	git revert f7b646d93ca6e8156944ee813822e7d0ccca240d --no-commit
 	fi
 	git commit -s -m "Bringup OFI Edition"
     rm -rf out drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
@@ -479,13 +499,20 @@ SwitchOFI()
     git commit -s -m "Remove R WLAN DRIVERS"
     git revert 34ed165ea973fcae7074a968f56fc5b89954a071 --no-commit
 	git commit -s -m "Switch to OFI"
-	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
     KVer=$(make kernelversion)
     HeadCommitId=$(git log --pretty=format:'%h' -n1)
     HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
     KernelFor='R'
     RefreshRate="60"
 	Driver="OFI"
+	if [ "$CODENAME" == "X00TD" ];then
+	DEVICE="Asus Max Pro M1"
+	DEFFCONFIG="X00TD_defconfig"
+	elif [ "$CODENAME" == "X01BD" ];then
+	DEVICE="Asus Max Pro M2"
+	DEFFCONFIG="X01BD_defconfig"
+	fi
+	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
     rm -rf out
     cd $mainDir
 }
