@@ -102,6 +102,15 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		TypeBuilder="Yuki"
 		TypePrint="Yuki"
 	fi
+	if [ "$BuilderKernel" == "sdclang" ];then
+        getInfo ">> cloning Snapdragon-LLVM clang 10.0.9 . . . <<"
+        git clone https://github.com/RyuujiX/snapdragon-llvm -b 10.0.9 $clangDir --depth=1
+		gcc10="Y"
+		SimpleClang="Y"
+		Compiler="Snapdragon-LLVM Clang"
+		TypeBuilder="SD"
+		TypePrint="Snapdragon-LLVM"
+	fi
     if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
         git clone https://github.com/RyuujiX/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
