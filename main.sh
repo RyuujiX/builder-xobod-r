@@ -194,6 +194,17 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         cd $mainDir
     fi
     cd $kernelDir
+	if [ "$LVibration" == "1" ];then
+	if [ "$branch" == "injectorx-eas" ];then
+	git revert 4c6c95e3f4ddaec6b84bf799be6bf3cfb194ee6d --no-commit
+	elif [ "$branch" == "injectorx" ];then
+	git revert b29ef878451cba4a1bbd25166fb819daf2d1cb02 --no-commit
+	fi
+	git commit -s -m "Enable LED Vibration"
+	Vibrate="LV"
+	else
+	Vibrate="NLV"
+	fi
 	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
     KVer=$(make kernelversion)
     HeadCommitId=$(git log --pretty=format:'%h' -n1)
@@ -338,9 +349,9 @@ CompileKernel(){
             ProgLink="https://cloud.drone.io/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/1/2"
         fi
         if [ "$BuilderKernel" == "gcc" ];then
-            MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Build Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild"
+            MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Build Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild  #$Vibrate"
         else
-            MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Build Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild"
+            MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Build Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild  #$Vibrate"
         fi
         if [ ! -z "$1" ];then
             tg_send_info "$MSG" "$1"
@@ -432,14 +443,14 @@ CompileKernel(){
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
 		if [ "$branch" = "injectorx-eas" ];then
          if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="$KName-$KVer-$CODENAME.zip"
+            ZipName="[$Vibrate]$KName-$KVer-$CODENAME.zip"
          else
-            ZipName="$KName-$TypeBuild-$KVer-$CODENAME.zip"
+            ZipName="[$Vibrate]$KName-$TypeBuild-$KVer-$CODENAME.zip"
          fi
 		elif [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="$KName-$KVer-$TypeBuilder-$CODENAME.zip"
+            ZipName="[$Vibrate]$KName-$KVer-$TypeBuilder-$CODENAME.zip"
         else
-            ZipName="$KName-$TypeBuild-$KVer-$TypeBuilder-$CODENAME.zip"
+            ZipName="[$Vibrate]$KName-$TypeBuild-$KVer-$TypeBuilder-$CODENAME.zip"
         fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
@@ -508,6 +519,17 @@ SwitchOFI()
     git commit -s -m "Remove R WLAN DRIVERS"
     git revert 34ed165ea973fcae7074a968f56fc5b89954a071 --no-commit
 	git commit -s -m "Switch to OFI"
+	if [ "$LVibration" == "1" ];then
+	if [ "$branch" == "injectorx-eas" ];then
+	git revert 4c6c95e3f4ddaec6b84bf799be6bf3cfb194ee6d --no-commit
+	elif [ "$branch" == "injectorx" ];then
+	git revert b29ef878451cba4a1bbd25166fb819daf2d1cb02 --no-commit
+	fi
+	git commit -s -m "Enable LED Vibration"
+	Vibrate="LV"
+	else
+	Vibrate="NLV"
+	fi
     KVer=$(make kernelversion)
     HeadCommitId=$(git log --pretty=format:'%h' -n1)
     HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
