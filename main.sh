@@ -148,17 +148,14 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     
     SaveChatID="-275630226"
     ARCH="arm64"
-    TypeBuild="Stable"
     GetBD=$(date +"%m%d")
     GetCBD=$(date +"%Y-%m-%d")
     TotalCores=$(nproc --all)
-    TypeBuildTag="AOSP"
     KernelFor='R'
     RefreshRate="60"
     SetTag="LA.UM.9.2.r1"
     SetLastTag="SDMxx0.0"
 	Driver="NFI"
-    FolderUp=""
 	if [ "$CODENAME" == "X00TD" ];then
 	DEVICE="Asus Max Pro M1"
 	DEFFCONFIG="X00TD_defconfig"
