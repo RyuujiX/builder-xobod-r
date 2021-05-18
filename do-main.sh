@@ -2,7 +2,7 @@
 branch="injectorx"
 LVibration="1"
 CODENAME="X01BD"
-BuilderKernel="00000"
+BuilderKernel="proton"
 
 if [ "$BuilderKernel" != "proton" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] && [ "$BuilderKernel" != "storm" ] && [ "$BuilderKernel" != "strix" ] && [ "$BuilderKernel" != "yuki" ] && [ "$BuilderKernel" != "sdclang" ] ;then
     exit;
@@ -10,7 +10,7 @@ fi
 . main.sh 'initial' 'full'
 
 FolderUp="BrokenNucleus"
-TypeBuild="RELEASE"
+TypeBuild="TEST"
 if [ "$branch" = "injectorx-eas" ];then
 TypeBuildTag="EAS"
 TypeScript="EAS Advanced Configuration"
@@ -36,9 +36,9 @@ CompileKernel
 # CompileKernel "71"
 # CompileKernel "72"
 
-SwitchOFI
+# SwitchOFI
 
-CompileKernel
+# CompileKernel
 # CompileKernel "65"
 # CompileKernel "68"
 # CompileKernel "71"
