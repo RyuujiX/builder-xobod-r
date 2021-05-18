@@ -138,7 +138,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	fi
 
     getInfo ">> cloning Anykernel . . . <<"
-    git clone https://github.com/RyuujiX/AnyKernel3 -b injectorx $AnykernelDir --depth=1
+    git clone https://github.com/RyuujiX/AnyKernel3 -b $AKbranch $AnykernelDir --depth=1
     getInfo ">> cloning Spectrum . . . <<"
     git clone https://github.com/RyuujiX/spectrum -b master $SpectrumDir --depth=1
     if [ "$useGdrive" == "Y" ];then
@@ -472,7 +472,7 @@ CompileKernel(){
 
 MakeZip(){
     cd $AnykernelDir
-	git reset --hard origin/injectorx
+	git reset --hard origin/$AKbranch
     if [ ! -z "$spectrumFile" ];then
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
