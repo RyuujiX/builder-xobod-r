@@ -1,6 +1,7 @@
 #! /bin/bash
 branch="injectorx"
 LVibration="1"
+X00TDOC="0"
 CODENAME="X01BD"
 BuilderKernel="00000"
 
