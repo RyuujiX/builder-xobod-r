@@ -500,6 +500,11 @@ MakeZip(){
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
 	sed -i "s/script.type=.*/script.type=$TypeScript/g" anykernel.sh
+	if [ "$Vibrate" == "LV" ];then
+	sed -i "s/supported.versions=.*/supported.versions=11-12/g" anykernel.sh
+	elif [ "$Vibrate" == "NLV" ];then
+	sed -i "s/supported.versions=.*/supported.versions=10-12/g" anykernel.sh
+	fi
 	if [ "$CODENAME" == "X00TD" ];then
 	sed -i "s/device.name1=.*/device.name1=X00TD/g" anykernel.sh
 	sed -i "s/device.name2=.*/device.name2=X00T/g" anykernel.sh
