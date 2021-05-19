@@ -156,6 +156,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     SetTag="LA.UM.9.2.r1"
     SetLastTag="SDMxx0.0"
 	Driver="NFI"
+	CpuFreq=""
 	if [ "$CODENAME" == "X00TD" ];then
 	DEVICE="Asus Max Pro M1"
 	DEFFCONFIG="X00TD_defconfig"
@@ -191,6 +192,19 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         cd $mainDir
     fi
     cd $kernelDir
+	if [ "$CODENAME" == "X00TD" ];then
+	if [ "$X00TDOC" == "0" ];then
+	if [ "$branch" == "injectorx-eas" ];then
+	git revert 573b19985f351a75a28f079c3422cee761beb32a --no-commit
+	elif [ "$branch" == "injectorx" ];then
+	git revert ab57fa49c36c023ac54fd8b614c94d048cf66882 --no-commit
+	fi
+	git commit -s -m "Back to Stock Freq"
+	CpuFreq="-Stock"
+	elif [ "$X00TDOC" == "1" ];then
+	CpuFreq="-OC"
+	fi
+	fi
 	if [ "$LVibration" == "1" ];then
 	if [ "$branch" == "injectorx-eas" ];then
 	git revert 4c6c95e3f4ddaec6b84bf799be6bf3cfb194ee6d --no-commit
@@ -448,14 +462,14 @@ CompileKernel(){
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
 		if [ "$branch" = "injectorx-eas" ];then
          if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="[$Vibrate]$KName-$KVer-$CODENAME.zip"
+            ZipName="[$Vibrate$CpuFreq]$KName-$KVer-$CODENAME.zip"
          else
-            ZipName="[$Vibrate]$KName-$TypeBuild-$KVer-$CODENAME.zip"
+            ZipName="[$Vibrate$CpuFreq]$KName-$TypeBuild-$KVer-$CODENAME.zip"
          fi
 		elif [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="[$Vibrate]$KName-$KVer-$TypeBuilder-$CODENAME.zip"
+            ZipName="[$Vibrate$CpuFreq]$KName-$KVer-$TypeBuilder-$CODENAME.zip"
         else
-            ZipName="[$Vibrate]$KName-$TypeBuild-$KVer-$TypeBuilder-$CODENAME.zip"
+            ZipName="[$Vibrate$CpuFreq]$KName-$TypeBuild-$KVer-$TypeBuilder-$CODENAME.zip"
         fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
@@ -470,6 +484,9 @@ CompileKernel(){
 MakeZip(){
     cd $AnykernelDir
 	git reset --hard origin/$AKbranch
+	if [ "$X00TDOC" == "1" ] && [ "$TypeBuildTag" == "HMP" ];then
+	spectrumFile=""
+	fi
     if [ ! -z "$spectrumFile" ];then
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
@@ -524,6 +541,19 @@ SwitchOFI()
     git commit -s -m "Remove R WLAN DRIVERS"
     git revert 34ed165ea973fcae7074a968f56fc5b89954a071 --no-commit
 	git commit -s -m "Switch to OFI"
+	if [ "$CODENAME" == "X00TD" ];then
+	if [ "$X00TDOC" == "0" ];then
+	if [ "$branch" == "injectorx-eas" ];then
+	git revert 573b19985f351a75a28f079c3422cee761beb32a --no-commit
+	elif [ "$branch" == "injectorx" ];then
+	git revert ab57fa49c36c023ac54fd8b614c94d048cf66882 --no-commit
+	fi
+	git commit -s -m "Back to Stock Freq"
+	CpuFreq="-Stock"
+	elif [ "$X00TDOC" == "1" ];then
+	CpuFreq="-OC"
+	fi
+	fi
 	if [ "$LVibration" == "1" ];then
 	if [ "$branch" == "injectorx-eas" ];then
 	git revert 4c6c95e3f4ddaec6b84bf799be6bf3cfb194ee6d --no-commit
