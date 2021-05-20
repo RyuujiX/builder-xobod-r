@@ -111,6 +111,17 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		TypeBuilder="SD"
 		TypePrint="Snapdragon-LLVM"
 	fi
+	if  [ "$BuilderKernel" == "evagcc" ] || [ "$evagcc" == "Y" ];then
+	    getInfo ">> cloning gcc64 . . . <<"
+        git clone https://github.com/RyuujiX/gcc-arm64 -b gcc-master $gcc64Dir --depth=1
+        getInfo ">> cloning gcc32 . . . <<"
+        git clone https://github.com/RyuujiX/gcc-arm -b gcc-master $gcc32Dir --depth=1
+        for64=aarch64-elf
+        for32=arm-eabi
+		Compiler="EVA GCC"
+		TypeBuilder="GCC"
+		TypePrint="EVA GCC"
+	fi
     if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
         git clone https://github.com/RyuujiX/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
@@ -118,7 +129,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         git clone https://github.com/RyuujiX/arm-linux-androideabi-4.9/ -b android-10.0.0_r47 $gcc32Dir --depth=1
         for64=aarch64-linux-android
         for32=arm-linux-androideabi
-		Compiler="GCC Clang"
+		Compiler="GCC"
 		TypeBuilder="GCC"
 		TypePrint="GCC"
     else
@@ -167,7 +178,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 
     export KBUILD_BUILD_USER="RyuujiX"
     export KBUILD_BUILD_HOST="DirumahAja"
-    if [ "$BuilderKernel" == "gcc" ];then
+    if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "evagcc" ];then
 	# cd $kernelDir
 	# git revert 63f0ca0bd1751cbebb7e61b5a2a752395e864d9e --no-commit
 	# git commit -s -m "Swtich to OPTIMIZE_FOR_SIZE"
@@ -295,6 +306,19 @@ CompileKernel(){
                 CROSS_COMPILE_ARM32=arm-linux-androideabi-
         )
     else
+	if [ "$BuilderKernel" == "evagcc" ];then
+        MAKE+=(
+                ARCH=$ARCH \
+                SUBARCH=$ARCH \
+                PATH=$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+                CROSS_COMPILE=$for64- \
+                CROSS_COMPILE_ARM32=$for32- \
+                LD=ld.lld \
+                AR=aarch64-elf-ar \
+                OBJDUMP=aarch64-elf-objdump \
+                STRIP=aarch64-elf-strip
+        )
+	else
         if [ "$allFromClang" == "Y" ];then
             MAKE+=(
                 ARCH=$ARCH \
@@ -363,7 +387,7 @@ CompileKernel(){
             BuildNumber="${DRONE_BUILD_NUMBER}"
             ProgLink="https://cloud.drone.io/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/1/2"
         fi
-        if [ "$BuilderKernel" == "gcc" ];then
+        if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "evagcc" ];then
             MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Build Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild  #$Vibrate"
         else
             MSG="<b>🔨 Building Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Build Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Build Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Builder Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild  #$Vibrate"
@@ -392,6 +416,18 @@ CompileKernel(){
             PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
             CROSS_COMPILE=aarch64-linux-android- \
             CROSS_COMPILE_ARM32=arm-linux-androideabi-
+	else
+	if [ "$BuilderKernel" == "evagcc" ];then
+        make -j${TotalCores}  O=out \
+                ARCH=$ARCH \
+                SUBARCH=$ARCH \
+                PATH=$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+                CROSS_COMPILE=$for64- \
+                CROSS_COMPILE_ARM32=$for32- \
+                LD=ld.lld \
+                AR=aarch64-elf-ar \
+                OBJDUMP=aarch64-elf-objdump \
+                STRIP=aarch64-elf-strip
 	else
         if [ "$allFromClang" == "Y" ];then
             make -j${TotalCores}  O=out \
