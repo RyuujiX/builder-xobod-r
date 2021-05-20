@@ -1,16 +1,16 @@
 #! /bin/bash
-branch="injectorx"
+branch="injectorx-eas"
 LVibration="1"
 X00TDOC="0"
 CODENAME="X01BD"
-BuilderKernel="00000"
+BuilderKernel="gcc"
 
 if [ "$BuilderKernel" != "proton" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] && [ "$BuilderKernel" != "storm" ] && [ "$BuilderKernel" != "strix" ] && [ "$BuilderKernel" != "yuki" ] && [ "$BuilderKernel" != "sdclang" ] ;then
     exit;
 fi
 
 FolderUp="BrokenNucleus"
-TypeBuild="RELEASE"
+TypeBuild="TEST"
 if [ "$branch" = "injectorx-eas" ];then
 TypeBuildTag="EAS"
 TypeScript="EAS Advanced Configuration"
