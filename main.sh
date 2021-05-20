@@ -111,16 +111,16 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		TypeBuilder="SD"
 		TypePrint="Snapdragon-LLVM"
 	fi
-    if [ "$BuilderKernel" == "gcc" ];then
-        getInfo ">> cloning gcc64 . . . <<"
-        git clone https://github.com/RyuujiX/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
+	if  [ "$BuilderKernel" == "gcc" ] || [ "$evagcc" == "Y" ];then
+	    getInfo ">> cloning gcc64 . . . <<"
+        git clone https://github.com/RyuujiX/gcc-arm64 -b gcc-master $gcc64Dir --depth=1
         getInfo ">> cloning gcc32 . . . <<"
-        git clone https://github.com/RyuujiX/arm-linux-androideabi-4.9/ -b android-10.0.0_r47 $gcc32Dir --depth=1
-        for64=aarch64-linux-android
-        for32=arm-linux-androideabi
-		Compiler="GCC Clang"
+        git clone https://github.com/RyuujiX/gcc-arm -b gcc-master $gcc32Dir --depth=1
+        for64=aarch64-elf
+        for32=arm-eabi
+		Compiler="EVA GCC"
 		TypeBuilder="GCC"
-		TypePrint="GCC"
+		TypePrint="EVA GCC"
     else
 	if [ "$gcc10" == "Y" ];then
 	getInfo ">> cloning gcc64 10.2.0 . . . <<"
@@ -172,7 +172,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	# git revert 63f0ca0bd1751cbebb7e61b5a2a752395e864d9e --no-commit
 	# git commit -s -m "Swtich to OPTIMIZE_FOR_SIZE"
 	# cd $mainDir
-        ClangType="$($gcc64Dir/bin/$for64-gcc --version | head -n 1)"
+        ClangType="$($gcc64Dir/bin/$for64 --version | head -n 1)"
     else
         ClangType=$("$clangDir"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
     fi
@@ -291,10 +291,15 @@ CompileKernel(){
                 ARCH=$ARCH \
                 SUBARCH=$ARCH \
                 PATH=$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
-                CROSS_COMPILE=aarch64-linux-android- \
-                CROSS_COMPILE_ARM32=arm-linux-androideabi-
+                CROSS_COMPILE=$for64- \
+                CROSS_COMPILE_ARM32=$for32- \
+                LD=ld.lld \
+                LD_LIBRARY_PATH=/usr/lib \
+                AR=aarch64-elf-ar \
+                OBJDUMP=aarch64-elf-objdump \
+                STRIP=aarch64-elf-strip
         )
-    else
+	else
         if [ "$allFromClang" == "Y" ];then
             MAKE+=(
                 ARCH=$ARCH \
@@ -387,11 +392,16 @@ CompileKernel(){
     make -j${TotalCores}  O=out ARCH="$ARCH" "$DEFFCONFIG"
     if [ "$BuilderKernel" == "gcc" ];then
         make -j${TotalCores}  O=out \
-            ARCH=$ARCH \
-            SUBARCH=$ARCH \
-            PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
-            CROSS_COMPILE=aarch64-linux-android- \
-            CROSS_COMPILE_ARM32=arm-linux-androideabi-
+                ARCH=$ARCH \
+                SUBARCH=$ARCH \
+                PATH=$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+                CROSS_COMPILE=$for64- \
+                CROSS_COMPILE_ARM32=$for32- \
+                LD=ld.lld \
+                LD_LIBRARY_PATH=/usr/lib \
+                AR=aarch64-elf-ar \
+                OBJDUMP=aarch64-elf-objdump \
+                STRIP=aarch64-elf-strip
 	else
         if [ "$allFromClang" == "Y" ];then
             make -j${TotalCores}  O=out \
