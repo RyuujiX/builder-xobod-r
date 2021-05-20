@@ -16,7 +16,11 @@ TypeBuildTag="EAS"
 TypeScript="EAS Advanced Configuration"
 AKbranch="injectorx-eas"
 	if [ "$CODENAME" == "X00TD" ];then
+	if [ "$X00TDOC" == "1" ];then
+	spectrumFile="eas-x00t-oc.rc"
+	else
 	spectrumFile="eas-x00t.rc"
+	fi
 	else
 	spectrumFile="eas.rc"
 	fi
