@@ -491,12 +491,12 @@ MakeZip(){
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
     cp -af anykernel-real.sh anykernel.sh
-	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Sugiono/g" anykernel.sh
+	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Hikikomori/g" anykernel.sh
 	sed -i "s/kernel.for=.*/kernel.for=$KernelFor-$Driver/g" anykernel.sh
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
-	sed -i "s/message.word=.*/message.word=There is no age limit to produce a good hardwork./g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=The best revenge for the people who have insulted you is the success that you can show them later./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
@@ -536,12 +536,12 @@ SwitchOFI()
 	cd $kernelDir
     git reset --hard origin/$branch
 	if [ "$branch" == "injectorx-eas" ];then
-	git revert 537029e1bd885432c486385e8afb265fbaf06e59 --no-commit
+	git revert c207eb7a32242d0f43c4ddcdedf6e6cf7843a8fe --no-commit
 	elif [ "$branch" == "injectorx" ];then
-	git revert f7b646d93ca6e8156944ee813822e7d0ccca240d --no-commit
+	git revert 8af7659d3a31645588a15860eec037f9ba3b9e4e --no-commit
 	fi
 	git commit -s -m "Bringup OFI Edition"
-    rm -rf out drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
+    rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
     git commit -s -m "Remove R WLAN DRIVERS"
     git revert 34ed165ea973fcae7074a968f56fc5b89954a071 --no-commit
