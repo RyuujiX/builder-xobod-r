@@ -303,8 +303,6 @@ CompileKernel(){
                 CC=clang \
                 CROSS_COMPILE=$for64- \
                 CROSS_COMPILE_ARM32=$for32- \
-                LD=ld.lld \
-                LD_LIBRARY_PATH=$clangDir/lib \
                 AR=llvm-ar \
                 NM=llvm-nm \
                 OBJCOPY=llvm-objcopy \
@@ -321,8 +319,6 @@ CompileKernel(){
                     CC=clang \
                     CROSS_COMPILE=$for64- \
                     CROSS_COMPILE_ARM32=$for32- \
-                    LD=ld.lld \
-                    LD_LIBRARY_PATH=$clangDir/lib \
                     AR=llvm-ar \
                     NM=llvm-nm \
                     OBJCOPY=llvm-objcopy \
@@ -401,8 +397,6 @@ CompileKernel(){
                 CC=clang \
                 CROSS_COMPILE=$for64- \
                 CROSS_COMPILE_ARM32=$for32- \
-                LD=ld.lld \
-                LD_LIBRARY_PATH=$clangDir/lib \
                 AR=llvm-ar \
                 NM=llvm-nm \
                 OBJCOPY=llvm-objcopy \
@@ -418,8 +412,6 @@ CompileKernel(){
                     CC=clang \
                     CROSS_COMPILE=$for64- \
                     CROSS_COMPILE_ARM32=$for32- \
-                    LD=ld.lld \
-                    LD_LIBRARY_PATH=$clangDir/lib \
                     AR=llvm-ar \
                     NM=llvm-nm \
                     OBJCOPY=llvm-objcopy \
