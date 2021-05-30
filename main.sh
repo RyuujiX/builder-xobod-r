@@ -193,16 +193,16 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     fi
     cd $kernelDir
 	if [ "$CODENAME" == "X00TD" ];then
-	if [ "$X00TDOC" == "0" ];then
+	if [ "$X00TDOC" == "1" ];then
 	if [ "$branch" == "injectorx-eas" ];then
-	git revert 573b19985f351a75a28f079c3422cee761beb32a --no-commit
+	git revert 1d75bc5b315e633600966e129bfd3e047e4e4e26 --no-commit
 	elif [ "$branch" == "injectorx" ];then
-	git revert ab57fa49c36c023ac54fd8b614c94d048cf66882 --no-commit
+	git revert 0bca2e4c83fa5b062228b57e245528d621c33965 --no-commit
 	fi
-	git commit -s -m "Back to Stock Freq"
-	CpuFreq="-Stock"
-	elif [ "$X00TDOC" == "1" ];then
+	git commit -s -m "Overclock CPU and GPU"
 	CpuFreq="-OC"
+	elif [ "$X00TDOC" == "0" ];then
+	CpuFreq="-Stock"
 	fi
 	fi
 	if [ "$LVibration" == "1" ];then
@@ -483,12 +483,12 @@ MakeZip(){
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
     cp -af anykernel-real.sh anykernel.sh
-	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Hikikomori/g" anykernel.sh
+	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Mizuki/g" anykernel.sh
 	sed -i "s/kernel.for=.*/kernel.for=$KernelFor-$Driver/g" anykernel.sh
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
-	sed -i "s/message.word=.*/message.word=The best revenge for the people who have insulted you is the success that you can show them later./g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=When you have never made a mistake, it means you have not tried anything./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
@@ -528,9 +528,9 @@ SwitchOFI()
 	cd $kernelDir
     git reset --hard origin/$branch
 	if [ "$branch" == "injectorx-eas" ];then
-	git revert c207eb7a32242d0f43c4ddcdedf6e6cf7843a8fe --no-commit
+	git revert e31cfbb028ff2d92af87e4f327bfca25da68aba4 --no-commit
 	elif [ "$branch" == "injectorx" ];then
-	git revert 8af7659d3a31645588a15860eec037f9ba3b9e4e --no-commit
+	git revert 226908e2c6ba8af243cd6ee4bc6d694043fc90e7 --no-commit
 	fi
 	git commit -s -m "Bringup OFI Edition"
     rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
@@ -539,16 +539,16 @@ SwitchOFI()
     git revert 34ed165ea973fcae7074a968f56fc5b89954a071 --no-commit
 	git commit -s -m "Switch to OFI"
 	if [ "$CODENAME" == "X00TD" ];then
-	if [ "$X00TDOC" == "0" ];then
+	if [ "$X00TDOC" == "1" ];then
 	if [ "$branch" == "injectorx-eas" ];then
-	git revert 573b19985f351a75a28f079c3422cee761beb32a --no-commit
+	git revert 1d75bc5b315e633600966e129bfd3e047e4e4e26 --no-commit
 	elif [ "$branch" == "injectorx" ];then
-	git revert ab57fa49c36c023ac54fd8b614c94d048cf66882 --no-commit
+	git revert 0bca2e4c83fa5b062228b57e245528d621c33965 --no-commit
 	fi
-	git commit -s -m "Back to Stock Freq"
-	CpuFreq="-Stock"
-	elif [ "$X00TDOC" == "1" ];then
+	git commit -s -m "Overclock CPU and GPU"
 	CpuFreq="-OC"
+	elif [ "$X00TDOC" == "0" ];then
+	CpuFreq="-Stock"
 	fi
 	fi
 	if [ "$LVibration" == "1" ];then
