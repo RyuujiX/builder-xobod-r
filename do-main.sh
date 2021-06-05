@@ -11,7 +11,7 @@ fi
 
 FolderUp="BrokenNucleus"
 TypeBuild="RELEASE"
-if [ "$branch" = "injectorx-eas" ];then
+if [ "$branch" = "injectorx-eas" ] || [ "$branch" = "eas-test" ];then
 TypeBuildTag="EAS"
 TypeScript="EAS Advanced Configuration"
 AKbranch="injectorx-eas"

@@ -194,9 +194,9 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     cd $kernelDir
 	if [ "$CODENAME" == "X00TD" ];then
 	if [ "$X00TDOC" == "1" ];then
-	if [ "$branch" == "injectorx-eas" ];then
+	if [ "$branch" == "injectorx-eas" ] || [ "$branch" == "eas-test" ];then
 	git revert 1d75bc5b315e633600966e129bfd3e047e4e4e26 --no-commit
-	elif [ "$branch" == "injectorx" ];then
+	elif [ "$branch" == "injectorx" ] || [ "$branch" == "hmp-test" ];then
 	git revert 0bca2e4c83fa5b062228b57e245528d621c33965 --no-commit
 	fi
 	git commit -s -m "Overclock CPU and GPU"
@@ -206,9 +206,9 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	fi
 	fi
 	if [ "$LVibration" == "1" ];then
-	if [ "$branch" == "injectorx-eas" ];then
+	if [ "$branch" == "injectorx-eas" ] || [ "$branch" == "eas-test" ];then
 	git revert 4c6c95e3f4ddaec6b84bf799be6bf3cfb194ee6d --no-commit
-	elif [ "$branch" == "injectorx" ];then
+	elif [ "$branch" == "injectorx" ] || [ "$branch" == "hmp-test" ];then
 	git revert b29ef878451cba4a1bbd25166fb819daf2d1cb02 --no-commit
 	fi
 	git commit -s -m "Enable LED Vibration"
@@ -543,9 +543,9 @@ SwitchOFI()
 	git commit -s -m "Switch to OFI"
 	if [ "$CODENAME" == "X00TD" ];then
 	if [ "$X00TDOC" == "1" ];then
-	if [ "$branch" == "injectorx-eas" ];then
+	if [ "$branch" == "injectorx-eas" ] || [ "$branch" == "eas-test" ];then
 	git revert 1d75bc5b315e633600966e129bfd3e047e4e4e26 --no-commit
-	elif [ "$branch" == "injectorx" ];then
+	elif [ "$branch" == "injectorx" ] || [ "$branch" == "hmp-test" ];then
 	git revert 0bca2e4c83fa5b062228b57e245528d621c33965 --no-commit
 	fi
 	git commit -s -m "Overclock CPU and GPU"
@@ -555,9 +555,9 @@ SwitchOFI()
 	fi
 	fi
 	if [ "$LVibration" == "1" ];then
-	if [ "$branch" == "injectorx-eas" ];then
+	if [ "$branch" == "injectorx-eas" ] || [ "$branch" == "eas-test" ];then
 	git revert 4c6c95e3f4ddaec6b84bf799be6bf3cfb194ee6d --no-commit
-	elif [ "$branch" == "injectorx" ];then
+	elif [ "$branch" == "injectorx" ] || [ "$branch" == "hmp-test" ];then
 	git revert b29ef878451cba4a1bbd25166fb819daf2d1cb02 --no-commit
 	fi
 	git commit -s -m "Enable LED Vibration"
