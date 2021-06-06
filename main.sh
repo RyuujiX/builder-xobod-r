@@ -381,7 +381,7 @@ CompileKernel(){
     LastHeadCommitId=$(git log --pretty=format:'%h' -n1)
     TAGKENEL="$(git log | grep "${SetTag}" | head -n 1 | awk -F '\\'${SetLastTag}'' '{print $1"'${SetLastTag}'"}' | awk -F '\\'${SetTag}'' '{print "'${SetTag}'"$2}')"
     if [ ! -z "$TAGKENEL" ];then
-        export KBUILD_BUILD_HOST="StaySafe-$TAGKENEL"
+        export KBUILD_BUILD_HOST="StaySafe-$Driver-$Vibrate-$TAGKENEL"
     fi
     make -j${TotalCores}  O=out ARCH="$ARCH" "$DEFFCONFIG"
     if [ "$BuilderKernel" == "gcc" ];then
@@ -457,14 +457,14 @@ CompileKernel(){
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
 		if [ "$branch" = "injectorx-eas" ];then
          if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="[$Vibrate$CpuFreq]$KName-$KVer-$CODENAME.zip"
+            ZipName="[$Vibrate$CpuFreq]$KName-$Driver-$KVer-$CODENAME.zip"
          else
-            ZipName="[$Vibrate$CpuFreq]$KName-$TypeBuild-$KVer-$CODENAME.zip"
+            ZipName="[$Vibrate$CpuFreq]$KName-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
          fi
 		elif [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="[$Vibrate$CpuFreq]$KName-$KVer-$TypeBuilder-$CODENAME.zip"
+            ZipName="[$Vibrate$CpuFreq]$KName-$Driver-$KVer-$TypeBuilder-$CODENAME.zip"
         else
-            ZipName="[$Vibrate$CpuFreq]$KName-$TypeBuild-$KVer-$TypeBuilder-$CODENAME.zip"
+            ZipName="[$Vibrate$CpuFreq]$KName-$Driver-$TypeBuild-$KVer-$TypeBuilder-$CODENAME.zip"
         fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
@@ -487,7 +487,7 @@ MakeZip(){
     fi
     cp -af anykernel-real.sh anykernel.sh
 	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Mizuki/g" anykernel.sh
-	sed -i "s/kernel.for=.*/kernel.for=$KernelFor-$Driver/g" anykernel.sh
+	sed -i "s/kernel.for=.*/kernel.for=$Vibrate-$Driver/g" anykernel.sh
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
@@ -515,6 +515,7 @@ MakeZip(){
 	sed -i "s/KAUTHOR/Ryuuji @ItsRyuujiX/g" aroma-config
 	sed -i "s/KDEVICE/$DEVICE - $CODENAME/g" aroma-config
 	sed -i "s/KBDATE/$GetCBD/g" aroma-config
+	sed -i "s/KVARIANT/$Vibrate$CpuFreq-$Driver/g" aroma-config
 	cd $AnykernelDir
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
@@ -530,12 +531,12 @@ SwitchOFI()
 {
 	cd $kernelDir
     git reset --hard origin/$branch
-	if [ "$branch" == "injectorx-eas" ];then
-	git revert e31cfbb028ff2d92af87e4f327bfca25da68aba4 --no-commit
-	elif [ "$branch" == "injectorx" ];then
-	git revert 226908e2c6ba8af243cd6ee4bc6d694043fc90e7 --no-commit
-	fi
-	git commit -s -m "Bringup OFI Edition"
+	# if [ "$branch" == "injectorx-eas" ];then
+	# git revert e31cfbb028ff2d92af87e4f327bfca25da68aba4 --no-commit
+	# elif [ "$branch" == "injectorx" ];then
+	# git revert 226908e2c6ba8af243cd6ee4bc6d694043fc90e7 --no-commit
+	# fi
+	# git commit -s -m "Bringup OFI Edition"
     rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
     git commit -s -m "Remove R WLAN DRIVERS"
