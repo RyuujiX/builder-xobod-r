@@ -1,5 +1,5 @@
 #! /bin/bash
-branch="injectorx"
+branch="r2/hmp"
 LVibration="1"
 X00TDOC="0"
 CODENAME="X01BD"
@@ -11,7 +11,7 @@ fi
 
 FolderUp="BrokenNucleus"
 TypeBuild="RELEASE"
-if [ "$branch" = "injectorx-eas" ] || [ "$branch" = "eas-test" ];then
+if [ "$branch" = "r2/eas" ] || [ "$branch" = "eas-test" ];then
 TypeBuildTag="EAS"
 TypeScript="EAS Advanced Configuration"
 AKbranch="injectorx-eas"

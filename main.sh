@@ -193,24 +193,20 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     fi
     cd $kernelDir
 	if [ "$CODENAME" == "X00TD" ];then
-	if [ "$X00TDOC" == "1" ];then
-	if [ "$branch" == "injectorx-eas" ] || [ "$branch" == "eas-test" ];then
-	git revert 1d75bc5b315e633600966e129bfd3e047e4e4e26 --no-commit
-	elif [ "$branch" == "injectorx" ] || [ "$branch" == "hmp-test" ];then
-	git revert 0bca2e4c83fa5b062228b57e245528d621c33965 --no-commit
+	if [ "$X00TDOC" == "0" ];then
+	if [ "$branch" == "r2/eas" ] || [ "$branch" == "eas-test" ];then
+	git revert ecec1905584509815a0fc33e354845e02324ae5e --no-commit
+	elif [ "$branch" == "r2/hmp" ] || [ "$branch" == "hmp-test" ];then
+	git revert f32476500958218eb1267816bee1eb4068c961e1 --no-commit
 	fi
-	git commit -s -m "Overclock CPU and GPU"
-	CpuFreq="-OC"
-	elif [ "$X00TDOC" == "0" ];then
+	git commit -s -m "Back to stock freq"
 	CpuFreq="-Stock"
+	elif [ "$X00TDOC" == "1" ];then
+	CpuFreq="-OC"
 	fi
 	fi
 	if [ "$LVibration" == "1" ];then
-	if [ "$branch" == "injectorx-eas" ] || [ "$branch" == "eas-test" ];then
-	git revert 4c6c95e3f4ddaec6b84bf799be6bf3cfb194ee6d --no-commit
-	elif [ "$branch" == "injectorx" ] || [ "$branch" == "hmp-test" ];then
-	git revert b29ef878451cba4a1bbd25166fb819daf2d1cb02 --no-commit
-	fi
+	git revert 0c6649199b684298e1275c41b1f57b3a4f369a39 --no-commit
 	git commit -s -m "Enable LED Vibration"
 	Vibrate="LV"
 	else
@@ -455,7 +451,7 @@ CompileKernel(){
         exit -1
 	fi
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
-		if [ "$branch" = "injectorx-eas" ];then
+		if [ "$branch" = "r2/eas" ] || [ "$branch" = "eas-test" ];then
          if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
             ZipName="[$Vibrate$CpuFreq]$KName-$Driver-$KVer-$CODENAME.zip"
          else
@@ -486,7 +482,8 @@ MakeZip(){
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
     cp -af anykernel-real.sh anykernel.sh
-	sed -i "s/kernel.string=.*/kernel.string=SkyWalker-Mizuki/g" anykernel.sh
+	AKNAME="SkyWalker-Mizuki-R2"
+	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
 	sed -i "s/kernel.for=.*/kernel.for=$Vibrate-$Driver/g" anykernel.sh
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
@@ -510,7 +507,7 @@ MakeZip(){
 	sed -i "s/X00TD=.*/X00TD=1/g" anykernel.sh
 	fi
 	cd $AnykernelDir/META-INF/com/google/android
-	sed -i "s/KNAME/$KName/g" aroma-config
+	sed -i "s/KNAME/$AKNAME/g" aroma-config
 	sed -i "s/KVER/$KVer/g" aroma-config
 	sed -i "s/KAUTHOR/Ryuuji @ItsRyuujiX/g" aroma-config
 	sed -i "s/KDEVICE/$DEVICE - $CODENAME/g" aroma-config
@@ -540,27 +537,23 @@ SwitchOFI()
     rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
     git commit -s -m "Remove R WLAN DRIVERS"
-    git revert 34ed165ea973fcae7074a968f56fc5b89954a071 --no-commit
+    git revert 9b488cfbdd6a02aa84d7de76b7d6bbd4ad10b9d9 --no-commit
 	git commit -s -m "Switch to OFI"
 	if [ "$CODENAME" == "X00TD" ];then
-	if [ "$X00TDOC" == "1" ];then
-	if [ "$branch" == "injectorx-eas" ] || [ "$branch" == "eas-test" ];then
-	git revert 1d75bc5b315e633600966e129bfd3e047e4e4e26 --no-commit
-	elif [ "$branch" == "injectorx" ] || [ "$branch" == "hmp-test" ];then
-	git revert 0bca2e4c83fa5b062228b57e245528d621c33965 --no-commit
+	if [ "$X00TDOC" == "0" ];then
+	if [ "$branch" == "r2/eas" ] || [ "$branch" == "eas-test" ];then
+	git revert ecec1905584509815a0fc33e354845e02324ae5e --no-commit
+	elif [ "$branch" == "r2/hmp" ] || [ "$branch" == "hmp-test" ];then
+	git revert f32476500958218eb1267816bee1eb4068c961e1 --no-commit
 	fi
-	git commit -s -m "Overclock CPU and GPU"
-	CpuFreq="-OC"
-	elif [ "$X00TDOC" == "0" ];then
+	git commit -s -m "Back to stock freq"
 	CpuFreq="-Stock"
+	elif [ "$X00TDOC" == "1" ];then
+	CpuFreq="-OC"
 	fi
 	fi
 	if [ "$LVibration" == "1" ];then
-	if [ "$branch" == "injectorx-eas" ] || [ "$branch" == "eas-test" ];then
-	git revert 4c6c95e3f4ddaec6b84bf799be6bf3cfb194ee6d --no-commit
-	elif [ "$branch" == "injectorx" ] || [ "$branch" == "hmp-test" ];then
-	git revert b29ef878451cba4a1bbd25166fb819daf2d1cb02 --no-commit
-	fi
+	git revert 0c6649199b684298e1275c41b1f57b3a4f369a39 --no-commit
 	git commit -s -m "Enable LED Vibration"
 	Vibrate="LV"
 	else
