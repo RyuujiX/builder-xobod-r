@@ -451,17 +451,16 @@ CompileKernel(){
         exit -1
 	fi
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
-		if [ "$branch" = "r2/eas" ] || [ "$branch" = "eas-test" ];then
+		if [ "$KernelFor" == "P" ];then
+		FilenameVC=""
+		else
+		FilenameVC="[$Vibrate$CpuFreq]"
+		fi
          if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="[$Vibrate$CpuFreq]$KName-$Driver-$KVer-$CODENAME.zip"
+            ZipName="$FilenameVC$KName-$Driver-$KVer-$CODENAME.zip"
          else
-            ZipName="[$Vibrate$CpuFreq]$KName-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
+            ZipName="$FilenameVC$KName-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
          fi
-		elif [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="[$Vibrate$CpuFreq]$KName-$Driver-$KVer-$TypeBuilder-$CODENAME.zip"
-        else
-            ZipName="[$Vibrate$CpuFreq]$KName-$Driver-$TypeBuild-$KVer-$TypeBuilder-$CODENAME.zip"
-        fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
         if [ ! -z "$2" ];then
@@ -493,9 +492,13 @@ MakeZip(){
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
 	sed -i "s/script.type=.*/script.type=$TypeScript/g" anykernel.sh
-	if [ "$Vibrate" == "LV" ];then
+	if [ "$KernelFor" == "P" ];then
+	sed -i "s/supported.versions=.*/supported.versions=9/g" anykernel.sh
+	elif [ "$Vibrate" == "LV" ];then
 	sed -i "s/supported.versions=.*/supported.versions=11-12/g" anykernel.sh
-	elif [ "$Vibrate" == "NLV" ];then
+	elif [ "$CODENAME" == "X00TD" ] && [ "$Vibrate" == "NLV" ];then
+	sed -i "s/supported.versions=.*/supported.versions=9-12/g" anykernel.sh
+	elif [ "$CODENAME" == "X01BD" ] && [ "$Vibrate" == "NLV" ];then
 	sed -i "s/supported.versions=.*/supported.versions=10-12/g" anykernel.sh
 	fi
 	if [ "$CODENAME" == "X00TD" ];then
@@ -539,6 +542,7 @@ SwitchOFI()
     git commit -s -m "Remove R WLAN DRIVERS"
     git revert 9b488cfbdd6a02aa84d7de76b7d6bbd4ad10b9d9 --no-commit
 	git commit -s -m "Switch to OFI"
+	git cherry-pick 1ceac8f3cc7f5a770a98bef65c4ab4c797cddbd2
 	if [ "$CODENAME" == "X00TD" ];then
 	if [ "$X00TDOC" == "0" ];then
 	if [ "$branch" == "r2/eas" ] || [ "$branch" == "eas-test" ];then
@@ -565,6 +569,51 @@ SwitchOFI()
     KernelFor='R'
     RefreshRate="60"
 	Driver="OFI"
+	if [ "$CODENAME" == "X00TD" ];then
+	DEVICE="Asus Max Pro M1"
+	DEFFCONFIG="X00TD_defconfig"
+	elif [ "$CODENAME" == "X01BD" ];then
+	DEVICE="Asus Max Pro M2"
+	DEFFCONFIG="X01BD_defconfig"
+	fi
+	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
+    rm -rf out
+    cd $mainDir
+}
+
+FixPieWifi()
+{
+	cd $kernelDir
+    git reset --hard origin/$branch
+    rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
+    git add .
+    git commit -s -m "Remove R WLAN DRIVERS"
+    git revert 9b488cfbdd6a02aa84d7de76b7d6bbd4ad10b9d9 --no-commit
+	git commit -s -m "Switch to OFI"
+	git cherry-pick 1ceac8f3cc7f5a770a98bef65c4ab4c797cddbd2
+	if [ "$CODENAME" == "X00TD" ];then
+	if [ "$X00TDOC" == "0" ];then
+	if [ "$branch" == "r2/eas" ] || [ "$branch" == "eas-test" ];then
+	git revert ecec1905584509815a0fc33e354845e02324ae5e --no-commit
+	elif [ "$branch" == "r2/hmp" ] || [ "$branch" == "hmp-test" ];then
+	git revert f32476500958218eb1267816bee1eb4068c961e1 --no-commit
+	fi
+	git commit -s -m "Back to stock freq"
+	CpuFreq="Stock"
+	elif [ "$X00TDOC" == "1" ];then
+	CpuFreq="OC"
+	fi
+	fi
+	git revert be578e2def2d7a67d6643335d016008f7bee8da8 --no-commit
+	git revert 5c27bb6d8547112a8b815742c5dbcaae520b4497 --no-commit
+	git commit -s -m "Building for Android Pie"
+    KVer=$(make kernelversion)
+    HeadCommitId=$(git log --pretty=format:'%h' -n1)
+    HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
+    KernelFor='P'
+    RefreshRate="60"
+	Driver="Pie"
+	Vibrate=""
 	if [ "$CODENAME" == "X00TD" ];then
 	DEVICE="Asus Max Pro M1"
 	DEFFCONFIG="X00TD_defconfig"
