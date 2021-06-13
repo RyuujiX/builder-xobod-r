@@ -481,9 +481,11 @@ MakeZip(){
         cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
     fi
     cp -af anykernel-real.sh anykernel.sh
+	cp -af $kernelDir/changelog META-INF/com/google/android/aroma/changelog.txt
 	AKNAME="SkyWalker-Mizuki-R2"
+	VibCpu="$Vibrate$CpuFreq-"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
-	sed -i "s/kernel.for=.*/kernel.for=$Vibrate-$Driver/g" anykernel.sh
+	sed -i "s/kernel.for=.*/kernel.for=$VibCpu$Driver/g" anykernel.sh
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
@@ -515,7 +517,7 @@ MakeZip(){
 	sed -i "s/KAUTHOR/Ryuuji @ItsRyuujiX/g" aroma-config
 	sed -i "s/KDEVICE/$DEVICE - $CODENAME/g" aroma-config
 	sed -i "s/KBDATE/$GetCBD/g" aroma-config
-	sed -i "s/KVARIANT/$Vibrate$CpuFreq-$Driver/g" aroma-config
+	sed -i "s/KVARIANT/$VibrCpu$Driver/g" aroma-config
 	cd $AnykernelDir
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
