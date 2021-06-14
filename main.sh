@@ -120,6 +120,8 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		TypeBuilder="AOSP"
 		TypePrint="AOSP"
 		clangDir=$mainDir/clang/clang/host/linux-x86/clang-r416183b
+		export LD=ld.lld
+		export LD_LIBRARY_PATH="$clangDir/lib64:$LD_LIBRARY_PATH"
 	fi
     if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
