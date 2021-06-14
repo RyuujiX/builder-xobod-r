@@ -111,6 +111,16 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		TypeBuilder="SD"
 		TypePrint="Snapdragon-LLVM"
 	fi
+	if [ "$BuilderKernel" == "aosp" ];then
+        getInfo ">> cloning AOSP clang 12 . . . <<"
+        git clone https://github.com/RyuujiX/android-kernel-tools -b tools $clangDir --depth=1
+		gcc10="Y"
+		SimpleClang="Y"
+		Compiler="AOSP Clang"
+		TypeBuilder="AOSP"
+		TypePrint="AOSP"
+		clangDir=$mainDir/clang/clang/host/linux-x86/clang-r416183b
+	fi
     if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
         git clone https://github.com/RyuujiX/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
@@ -127,8 +137,13 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         git clone https://github.com/RyuujiX/aarch64-linux-gnu -b stable-gcc $gcc64Dir --depth=1
         getInfo ">> cloning gcc32 10.2.0 . . . <<"
         git clone https://github.com/RyuujiX/arm-linux-gnueabi -b stable-gcc $gcc32Dir --depth=1
+		if [ "$BuilderKernel" == "aosp" ];then
+		for64=aarch64-linux-android
+        for32=arm-linux-androideabi
+		else
         for64=aarch64-linux-gnu
         for32=arm-linux-gnueabi
+		fi
 	else
         gcc64Dir=$clangDir
         gcc32Dir=$clangDir
