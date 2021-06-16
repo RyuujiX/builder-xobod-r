@@ -500,9 +500,9 @@ MakeZip(){
     cp -af anykernel-real.sh anykernel.sh
 	cp -af $kernelDir/changelog META-INF/com/google/android/aroma/changelog.txt
 	if [ "$branch" = "hmp-test" ] || [ "$branch" = "eas-test" ];then
-	AKNAME="KnightWalker-Akira"
+	AKNAME="KnightWalker-Takashi"
 	else
-	AKNAME="SkyWalker-Mizuki-R2"
+	AKNAME="SkyWalker-Akatsuki"
 	fi
 	VibCpu="$Vibrate$CpuFreq-"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
@@ -510,7 +510,7 @@ MakeZip(){
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
-	sed -i "s/message.word=.*/message.word=When you have never made a mistake, it means you have not tried anything./g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=Smile is a simple way of enjoying life./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
