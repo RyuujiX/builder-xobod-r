@@ -209,6 +209,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         cd $mainDir
     fi
     cd $kernelDir
+	HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
 	if [ "$CODENAME" == "X00TD" ];then
 	if [ "$X00TDOC" == "0" ];then
 	if [ "$branch" == "r2/eas" ] || [ "$branch" == "eas-test" ];then
@@ -232,7 +233,6 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
     KVer=$(make kernelversion)
     HeadCommitId=$(git log --pretty=format:'%h' -n1)
-    HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
     cd $mainDir
     apt-get -y update && apt-get -y upgrade && apt-get -y install tzdata git automake lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng bc libstdc++6 libncurses5 wget python3 python3-pip python gcc clang libssl-dev rsync flex git-lfs libz3-dev libz3-4 axel tar && python3 -m pip  install networkx
 fi
@@ -588,7 +588,6 @@ SwitchOFI()
 	fi
     KVer=$(make kernelversion)
     HeadCommitId=$(git log --pretty=format:'%h' -n1)
-    HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
     KernelFor='R'
     RefreshRate="60"
 	Driver="OFI"
@@ -632,7 +631,6 @@ FixPieWifi()
 	git commit -s -m "Building for Android Pie"
     KVer=$(make kernelversion)
     HeadCommitId=$(git log --pretty=format:'%h' -n1)
-    HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
     KernelFor='P'
     RefreshRate="60"
 	Driver="Pie"
