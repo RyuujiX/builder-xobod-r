@@ -531,10 +531,8 @@ MakeZip(){
 	sed -i "s/supported.versions=.*/supported.versions=9/g" anykernel.sh
 	elif [ "$Vibrate" == "LV" ];then
 	sed -i "s/supported.versions=.*/supported.versions=11-12/g" anykernel.sh
-	elif [ "$CODENAME" == "X00TD" ] && [ "$Vibrate" == "NLV" ];then
+	elif [ "$Vibrate" == "NLV" ];then
 	sed -i "s/supported.versions=.*/supported.versions=9-12/g" anykernel.sh
-	elif [ "$CODENAME" == "X01BD" ] && [ "$Vibrate" == "NLV" ];then
-	sed -i "s/supported.versions=.*/supported.versions=10-12/g" anykernel.sh
 	fi
 	if [ "$CODENAME" == "X00TD" ];then
 	sed -i "s/device.name1=.*/device.name1=X00TD/g" anykernel.sh
