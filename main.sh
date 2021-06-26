@@ -545,7 +545,7 @@ MakeZip(){
 	sed -i "s/KAUTHOR/Ryuuji @ItsRyuujiX/g" aroma-config
 	sed -i "s/KDEVICE/$DEVICE - $CODENAME/g" aroma-config
 	sed -i "s/KBDATE/$GetCBD/g" aroma-config
-	sed -i "s/KVARIANT/$VibrCpu$Driver/g" aroma-config
+	sed -i "s/KVARIANT/$VibCpu$Driver/g" aroma-config
 	cd $AnykernelDir
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
