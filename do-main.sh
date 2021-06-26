@@ -29,7 +29,11 @@ TypeBuildTag="HMP"
 TypeScript="Spectrum"
 AKbranch="injectorx"
 	if [ "$CODENAME" == "X00TD" ];then
+	if [ "$X00TDOC" == "1" ];then
+	spectrumFile="ryuu-x00t-oc.rc"
+	else
 	spectrumFile="ryuu-x00t.rc"
+	fi
 	else
 	spectrumFile="ryuu.rc"
 	fi
