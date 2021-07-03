@@ -126,7 +126,8 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	if [ "$BuilderKernel" == "elas" ];then
         getInfo ">> cloning Elastics clang 13 . . . <<"
         git clone https://github.com/cbendot/Elastics-Toolchain -b main $clangDir --depth=1
-		allFromClang="Y"
+		gcc10="Y"
+		SimpleClang="Y"
 		Compiler="Elastics Clang"
 		TypeBuilder="Elastics"
 		TypePrint="Elastics"
