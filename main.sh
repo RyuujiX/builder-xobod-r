@@ -123,6 +123,14 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		export LD=ld.lld
 		export LD_LIBRARY_PATH="$clangDir/lib64:$LD_LIBRARY_PATH"
 	fi
+	if [ "$BuilderKernel" == "elas" ];then
+        getInfo ">> cloning Elastics clang 13 . . . <<"
+        git clone https://github.com/cbendot/Elastics-Toolchain -b main $clangDir --depth=1
+		gcc10="Y"
+		Compiler="Elastics Clang"
+		TypeBuilder="Elastics"
+		TypePrint="Elastics"
+    fi
     if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
         git clone https://github.com/RyuujiX/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
