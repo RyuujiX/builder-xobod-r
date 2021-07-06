@@ -132,6 +132,14 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		TypeBuilder="Elastics"
 		TypePrint="Elastics"
     fi
+    if [ "$BuilderKernel" == "iris" ];then
+        getInfo ">> cloning iRISxe clang 13 . . . <<"
+        git clone https://github.com/ramadhannangga/iRISxe-Clang -b 13.0 $clangDir --depth=1
+		allFromClang="Y"
+		Compiler="iRISxe Clang"
+		TypeBuilder="iRISxe"
+		TypePrint="iRISxe"
+    fi
     if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
         git clone https://github.com/RyuujiX/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
