@@ -136,6 +136,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         getInfo ">> cloning iRISxe clang 13 . . . <<"
         git clone https://github.com/ramadhannangga/iRISxe-Clang -b 13.0 $clangDir --depth=1
 		gcc10="Y"
+		SimpleClang="Y"
 		Compiler="iRISxe Clang"
 		TypeBuilder="iRISxe"
 		TypePrint="iRISxe"
