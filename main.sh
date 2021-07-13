@@ -515,7 +515,7 @@ MakeZip(){
 	if [ "$branch" = "hmp-test" ] || [ "$branch" = "eas-test" ];then
 	AKNAME="KnightWalker-Takashi"
 	else
-	AKNAME="SkyWalker-Raion"
+	AKNAME="SkyWalker-Hoshi"
 	fi
 	VibCpu="$Vibrate$CpuFreq-"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
@@ -523,7 +523,7 @@ MakeZip(){
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
-	sed -i "s/message.word=.*/message.word=What ever you decide to do, make sure it makes you happy./g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=Don't wait till tomorrow if u can do it Today./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
