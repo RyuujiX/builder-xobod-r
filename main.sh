@@ -513,9 +513,9 @@ MakeZip(){
     cp -af anykernel-real.sh anykernel.sh
 	cp -af $kernelDir/changelog META-INF/com/google/android/aroma/changelog.txt
 	if [ "$branch" = "hmp-test" ] || [ "$branch" = "eas-test" ];then
-	AKNAME="KnightWalker-Takashi"
+	AKNAME="KnightWalker-Arashi"
 	else
-	AKNAME="SkyWalker-Hoshi"
+	AKNAME="SkyWalker-Hoshi-R2"
 	fi
 	VibCpu="$Vibrate$CpuFreq-"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
