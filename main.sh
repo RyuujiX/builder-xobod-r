@@ -515,7 +515,7 @@ MakeZip(){
 	if [ "$branch" = "hmp-test" ] || [ "$branch" = "eas-test" ];then
 	AKNAME="KnightWalker-Takashi"
 	else
-	AKNAME="SkyWalker-Hoshi"
+	AKNAME="SkyWalker-Hoshi-R2"
 	fi
 	VibCpu="$Vibrate$CpuFreq-"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
