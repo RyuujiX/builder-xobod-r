@@ -1,22 +1,22 @@
 #! /bin/bash
-branch="r2/hmp"
+branch="r3/hmp"
 LVibration="1"
-X00TDOC="0"
+FreqOC="1"
 CODENAME="X01BD"
+FolderUp=""
+TypeBuild="RELEASE"
 BuilderKernel="00000"
 
 if [ "$BuilderKernel" != "proton" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] && [ "$BuilderKernel" != "storm" ] && [ "$BuilderKernel" != "strix" ] && [ "$BuilderKernel" != "yuki" ] && [ "$BuilderKernel" != "sdclang" ] && [ "$BuilderKernel" != "aosp" ] && [ "$BuilderKernel" != "elas" ] && [ "$BuilderKernel" != "iris" ];then
     exit;
 fi
 
-FolderUp="BrokenNucleus"
-TypeBuild="RELEASE"
-if [ "$branch" = "r2/eas" ] || [ "$branch" = "eas-test" ];then
+if [ "$branch" = "r3/eas" ] || [ "$branch" = "eas-test" ];then
 TypeBuildTag="EAS"
 TypeScript="EAS Advanced Configuration"
 AKbranch="injectorx-eas"
 	if [ "$CODENAME" == "X00TD" ];then
-	if [ "$X00TDOC" == "1" ];then
+	if [ "$FreqOC" == "1" ];then
 	spectrumFile="eas-x00t-oc.rc"
 	else
 	spectrumFile="eas-x00t.rc"
@@ -29,7 +29,7 @@ TypeBuildTag="HMP"
 TypeScript="Spectrum"
 AKbranch="injectorx"
 	if [ "$CODENAME" == "X00TD" ];then
-	if [ "$X00TDOC" == "1" ];then
+	if [ "$FreqOC" == "1" ];then
 	spectrumFile="ryuu-x00t-oc.rc"
 	else
 	spectrumFile="ryuu-x00t.rc"
