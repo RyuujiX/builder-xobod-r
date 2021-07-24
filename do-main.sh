@@ -2,6 +2,7 @@
 branch="r3/hmp"
 LVibration="1"
 FreqOC="1"
+WithSpec="Y"
 CODENAME="X01BD"
 FolderUp=""
 TypeBuild="RELEASE"
@@ -15,7 +16,9 @@ if [ "$branch" = "r3/eas" ] || [ "$branch" = "eas-test" ];then
 TypeBuildTag="EAS"
 TypeScript="EAS Advanced Configuration"
 AKbranch="injectorx-eas"
-	if [ "$CODENAME" == "X00TD" ];then
+	if [ "WithSpec" == "N" ];then
+	spectrumFile=""
+	elif [ "$CODENAME" == "X00TD" ];then
 	if [ "$FreqOC" == "1" ];then
 	spectrumFile="eas-x00t-oc.rc"
 	else
@@ -28,7 +31,9 @@ else
 TypeBuildTag="HMP"
 TypeScript="Spectrum"
 AKbranch="injectorx"
-	if [ "$CODENAME" == "X00TD" ];then
+	if [ "WithSpec" == "N" ];then
+	spectrumFile=""
+	elif [ "$CODENAME" == "X00TD" ];then
 	if [ "$FreqOC" == "1" ];then
 	spectrumFile="ryuu-x00t-oc.rc"
 	else
