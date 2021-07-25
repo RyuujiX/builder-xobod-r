@@ -233,9 +233,11 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	fi
 	git revert f68079be11ae4959848e8a6d03a9d639772d6a57 --no-commit
 	git commit -s -m "Back to stock freq"
+	if [ "$CODENAME" == "X00TD" ];then
 	CpuFreq="-Stock"
 	else
 	CpuFreq="-OC"
+	fi
 	fi
 	if [ "$LVibration" == "1" ];then
 	git revert 633e6bc38956270bd01fbe0a6a9c1f7618f88ca8 --no-commit
@@ -579,9 +581,11 @@ SwitchOFI()
 	fi
 	git revert f68079be11ae4959848e8a6d03a9d639772d6a57 --no-commit
 	git commit -s -m "Back to stock freq"
+	if [ "$CODENAME" == "X00TD" ];then
 	CpuFreq="-Stock"
 	else
 	CpuFreq="-OC"
+	fi
 	fi
 	if [ "$LVibration" == "1" ];then
 	git revert 633e6bc38956270bd01fbe0a6a9c1f7618f88ca8 --no-commit
@@ -617,9 +621,11 @@ FixPieWifi()
 	fi
 	git revert f68079be11ae4959848e8a6d03a9d639772d6a57 --no-commit
 	git commit -s -m "Back to stock freq"
+	if [ "$CODENAME" == "X00TD" ];then
 	CpuFreq="-Stock"
 	else
 	CpuFreq="-OC"
+	fi
 	fi
 	rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .

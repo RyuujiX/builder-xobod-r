@@ -16,17 +16,7 @@ if [ "$branch" = "r3/eas" ] || [ "$branch" = "eas-test" ];then
 TypeBuildTag="EAS"
 TypeScript="EAS Advanced Configuration"
 AKbranch="injectorx-eas"
-	if [ "WithSpec" == "N" ];then
 	spectrumFile=""
-	elif [ "$CODENAME" == "X00TD" ];then
-	if [ "$FreqOC" == "1" ];then
-	spectrumFile="eas-x00t-oc.rc"
-	else
-	spectrumFile="eas-x00t.rc"
-	fi
-	else
-	spectrumFile="eas.rc"
-	fi
 else
 TypeBuildTag="HMP"
 TypeScript="Spectrum"
