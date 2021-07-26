@@ -495,9 +495,9 @@ CompileKernel(){
 		FilenameVC="[$Vibrate$CpuFreq]"
 		fi
          if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="$FilenameVC$KName-$Driver-$KVer-$CODENAME.zip"
+            ZipName="$FilenameVC$KName-$TypeBuildTag-$Driver-$KVer-$CODENAME.zip"
          else
-            ZipName="$FilenameVC$KName-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
+            ZipName="$FilenameVC$KName-$TypeBuildTag-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
          fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
