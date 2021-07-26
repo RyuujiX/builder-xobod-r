@@ -140,6 +140,14 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		TypeBuilder="iRISxe"
 		TypePrint="iRISxe"
     fi
+	if [ "$BuilderKernel" == "atom" ];then
+        getInfo ">> cloning Atom-X clang 13 . . . <<"
+        git clone https://github.com/Atom-X-Devs/Atom-X-Clang -b atom-13 $clangDir --depth=1
+		allFromClang="Y"
+		Compiler="Atom-X Clang"
+		TypeBuilder="Atom-X"
+		TypePrint="Atom-X"
+    fi
     if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
         git clone https://github.com/RyuujiX/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
