@@ -236,7 +236,10 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     fi
     cd $kernelDir
 	HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
-	if [ "FreqOC" == "0" ] && [ "$branch" == "r3/hmp" ];then
+	if [ "FreqOC" == "0" ];then
+	if [ "$branch" == "r3/eas" ] || [ "$branch" == "eas-test" ];then
+	git revert 9934ed1da4796ec247a0198bc1b8d09801e00bd4 --no-commit
+	fi
 	git revert f68079be11ae4959848e8a6d03a9d639772d6a57 --no-commit
 	git commit -s -m "Back to stock freq"
 	if [ "$CODENAME" == "X00TD" ];then
@@ -581,7 +584,10 @@ SwitchOFI()
     git commit -s -m "Remove R WLAN DRIVERS"
     git revert 972771b38a3d1a4b1f2a2c3e550da48a29584b55 --no-commit
 	git commit -s -m "Switch to OFI"
-	if [ "FreqOC" == "0" ] && [ "$branch" == "r3/hmp" ];then
+	if [ "FreqOC" == "0" ];then
+	if [ "$branch" == "r3/eas" ] || [ "$branch" == "eas-test" ];then
+	git revert 9934ed1da4796ec247a0198bc1b8d09801e00bd4 --no-commit
+	fi
 	git revert f68079be11ae4959848e8a6d03a9d639772d6a57 --no-commit
 	git commit -s -m "Back to stock freq"
 	if [ "$CODENAME" == "X00TD" ];then
@@ -618,7 +624,10 @@ FixPieWifi()
 {
 	cd $kernelDir
     git reset --hard origin/$branch
-    if [ "FreqOC" == "0" ] && [ "$branch" == "r3/hmp" ];then
+    if [ "FreqOC" == "0" ];then
+	if [ "$branch" == "r3/eas" ] || [ "$branch" == "eas-test" ];then
+	git revert 9934ed1da4796ec247a0198bc1b8d09801e00bd4 --no-commit
+	fi
 	git revert f68079be11ae4959848e8a6d03a9d639772d6a57 --no-commit
 	git commit -s -m "Back to stock freq"
 	if [ "$CODENAME" == "X00TD" ];then
