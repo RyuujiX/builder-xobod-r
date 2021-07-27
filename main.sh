@@ -156,11 +156,36 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         git clone https://github.com/RyuujiX/arm-linux-androideabi-4.9/ -b android-10.0.0_r47 $gcc32Dir --depth=1
         for64=aarch64-linux-android
         for32=arm-linux-androideabi
-		Compiler="GCC Clang"
+		Compiler="GCC"
 		TypeBuilder="GCC"
 		TypePrint="GCC"
-    else
-	if [ "$gcc10" == "Y" ];then
+    elif [ "$BuilderKernel" == "gcc12" ] || [ "$gcc12" == "Y" ];then
+        [[ "$(pwd)" != "${mainDir}" ]] && cd "${mainDir}"
+		if [ -e "${gcc64Dir}/aarch64-linux-gnu" ] || [ -e "${gcc32Dir}/arm-linux-gnueabi" ];then
+		rm -rf ${GCCaPath}/aarch64-linux-gnu ${GCCbPath}/arm-linux-gnueabi
+		fi
+		mkdir "${gcc64Dir}"
+        mkdir "${gcc32Dir}"
+		if [ ! -e "${mainDir}/aarch64-zyc-linux-gnu-12.x-gnu-20210725.tar.gz" ];then
+		getInfo ">> Downloading aarch64-zyc-linux-gnu-12.x-gnu-20210725 (gcc64) . . . <<"
+        wget -q https://toolchain.lynxcloud.workers.dev/0:/ZyC%20GCC/GCC%2012/aarch64-zyc-linux-gnu-12.x-gnu-20210725.tar.gz
+        fi
+		if [ ! -e "${mainDir}/arm-zyc-linux-gnueabi-12.x-gnu-20210725.tar.gz" ];then
+        getInfo ">> Downloading arm-zyc-linux-gnueabi-12.x-gnu-20210725 (gcc32) . . . <<"
+        wget -q https://toolchain.lynxcloud.workers.dev/0:/ZyC%20GCC/GCC%2012/arm-zyc-linux-gnueabi-12.x-gnu-20210725.tar.gz
+        fi
+		getInfo ">> Extracting aarch64-zyc-linux-gnu-12.x-gnu-20210725 (gcc64) . . . <<"
+		tar -xf aarch64-zyc-linux-gnu-12.x-gnu-20210725.tar.gz -C $gcc64Dir
+		getInfo ">> Extracting arm-zyc-linux-gnueabi-12.x-gnu-20210725 (gcc32) . . . <<"
+		tar -xf arm-zyc-linux-gnueabi-12.x-gnu-20210725.tar.gz -C $gcc32Dir
+		gcc64Dir="${gcc64Dir}/aarch64-zyc-linux-gnu"
+		gcc32Dir="${gcc32Dir}/arm-zyc-linux-gnueabi"
+        for64=aarch64-zyc-linux-gnu
+        for32=arm-zyc-linux-gnueabi
+		Compiler="ZyC GCC"
+		TypeBuilder="GCC"
+		TypePrint="GCC"
+    elif [ "$gcc10" == "Y" ];then
 	getInfo ">> cloning gcc64 10.2.0 . . . <<"
         git clone https://github.com/RyuujiX/aarch64-linux-gnu -b stable-gcc $gcc64Dir --depth=1
         getInfo ">> cloning gcc32 10.2.0 . . . <<"
@@ -178,7 +203,6 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         for64=aarch64-linux-gnu
         for32=arm-linux-gnueabi
     fi
-	fi
 
     getInfo ">> cloning Anykernel . . . <<"
     git clone https://github.com/RyuujiX/AnyKernel3 -b $AKbranch $AnykernelDir --depth=1
@@ -210,7 +234,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 
     export KBUILD_BUILD_USER="RyuujiX"
     export KBUILD_BUILD_HOST="DirumahAja"
-    if [ "$BuilderKernel" == "gcc" ];then
+    if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
 	# cd $kernelDir
 	# git revert 63f0ca0bd1751cbebb7e61b5a2a752395e864d9e --no-commit
 	# git commit -s -m "Swtich to OPTIMIZE_FOR_SIZE"
@@ -321,13 +345,13 @@ tg_send_files(){
 CompileKernel(){
     cd $kernelDir
     export KBUILD_COMPILER_STRING
-    if [ "$BuilderKernel" == "gcc" ];then
+    if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
         MAKE+=(
                 ARCH=$ARCH \
                 SUBARCH=$ARCH \
                 PATH=$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
-                CROSS_COMPILE=aarch64-linux-android- \
-                CROSS_COMPILE_ARM32=arm-linux-androideabi-
+                CROSS_COMPILE=$for64- \
+                CROSS_COMPILE_ARM32=$for32-
         )
     else
         if [ "$allFromClang" == "Y" ];then
@@ -419,13 +443,13 @@ CompileKernel(){
         export KBUILD_BUILD_HOST="StaySafe-$Driver-$Vibrate-$TAGKENEL"
     fi
     make -j${TotalCores}  O=out ARCH="$ARCH" "$DEFFCONFIG"
-    if [ "$BuilderKernel" == "gcc" ];then
+    if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
         make -j${TotalCores}  O=out \
             ARCH=$ARCH \
             SUBARCH=$ARCH \
             PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
-            CROSS_COMPILE=aarch64-linux-android- \
-            CROSS_COMPILE_ARM32=arm-linux-androideabi-
+            CROSS_COMPILE=$for64- \
+            CROSS_COMPILE_ARM32=$for32-
 	else
         if [ "$allFromClang" == "Y" ];then
             make -j${TotalCores}  O=out \
