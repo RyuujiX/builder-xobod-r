@@ -242,11 +242,9 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	fi
 	git revert fb12aadd16d2ce49212e61f96c2b2bce3459b795 --no-commit
 	git commit -s -m "Back to stock freq"
-	if [ "$CODENAME" == "X00TD" ];then
 	CpuFreq="-Stock"
-	elif [ "FreqOC" == "1" ] && [ "$CODENAME" == "X00TD" ];then
+	else
 	CpuFreq="-OC"
-	fi
 	fi
 	if [ "$LVibration" == "1" ];then
 	git revert 944c3850b5c9db36c3b843728a9a51c05c571b4c --no-commit
@@ -494,8 +492,10 @@ CompileKernel(){
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
 		if [ "$KernelFor" == "P" ];then
 		FilenameVC=""
-		else
+		elif [ "$CODENAME" == "X00TD" ];then
 		FilenameVC="[$Vibrate$CpuFreq]"
+		else
+		FilenameVC="[$Vibrate]"
 		fi
          if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
             ZipName="$FilenameVC$KName-$TypeBuildTag-$Driver-$KVer-$CODENAME.zip"
@@ -590,11 +590,9 @@ SwitchOFI()
 	fi
 	git revert fb12aadd16d2ce49212e61f96c2b2bce3459b795 --no-commit
 	git commit -s -m "Back to stock freq"
-	if [ "$CODENAME" == "X00TD" ];then
 	CpuFreq="-Stock"
-	elif [ "FreqOC" == "1" ] && [ "$CODENAME" == "X00TD" ];then
+	else
 	CpuFreq="-OC"
-	fi
 	fi
 	if [ "$LVibration" == "1" ];then
 	git revert 944c3850b5c9db36c3b843728a9a51c05c571b4c --no-commit
@@ -630,11 +628,9 @@ FixPieWifi()
 	fi
 	git revert fb12aadd16d2ce49212e61f96c2b2bce3459b795 --no-commit
 	git commit -s -m "Back to stock freq"
-	if [ "$CODENAME" == "X00TD" ];then
 	CpuFreq="-Stock"
-	elif [ "FreqOC" == "1" ] && [ "$CODENAME" == "X00TD" ];then
+	else
 	CpuFreq="-OC"
-	fi
 	fi
 	rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
