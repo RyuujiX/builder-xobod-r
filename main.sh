@@ -238,9 +238,9 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
 	if [ "FreqOC" == "0" ];then
 	if [ "$branch" == "r3/eas" ] || [ "$branch" == "eas-test" ];then
-	git revert 9934ed1da4796ec247a0198bc1b8d09801e00bd4 --no-commit
+	git revert f3175e8d3c81aad80b91247575da1fc387f05ca4 --no-commit
 	fi
-	git revert f68079be11ae4959848e8a6d03a9d639772d6a57 --no-commit
+	git revert fb12aadd16d2ce49212e61f96c2b2bce3459b795 --no-commit
 	git commit -s -m "Back to stock freq"
 	if [ "$CODENAME" == "X00TD" ];then
 	CpuFreq="-Stock"
@@ -249,7 +249,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	fi
 	fi
 	if [ "$LVibration" == "1" ];then
-	git revert 633e6bc38956270bd01fbe0a6a9c1f7618f88ca8 --no-commit
+	git revert 944c3850b5c9db36c3b843728a9a51c05c571b4c --no-commit
 	git commit -s -m "Enable LED Vibration"
 	Vibrate="LV"
 	else
@@ -586,9 +586,9 @@ SwitchOFI()
 	git commit -s -m "Switch to OFI"
 	if [ "FreqOC" == "0" ];then
 	if [ "$branch" == "r3/eas" ] || [ "$branch" == "eas-test" ];then
-	git revert 9934ed1da4796ec247a0198bc1b8d09801e00bd4 --no-commit
+	git revert f3175e8d3c81aad80b91247575da1fc387f05ca4 --no-commit
 	fi
-	git revert f68079be11ae4959848e8a6d03a9d639772d6a57 --no-commit
+	git revert fb12aadd16d2ce49212e61f96c2b2bce3459b795 --no-commit
 	git commit -s -m "Back to stock freq"
 	if [ "$CODENAME" == "X00TD" ];then
 	CpuFreq="-Stock"
@@ -597,7 +597,7 @@ SwitchOFI()
 	fi
 	fi
 	if [ "$LVibration" == "1" ];then
-	git revert 633e6bc38956270bd01fbe0a6a9c1f7618f88ca8 --no-commit
+	git revert 944c3850b5c9db36c3b843728a9a51c05c571b4c --no-commit
 	git commit -s -m "Enable LED Vibration"
 	Vibrate="LV"
 	else
@@ -626,9 +626,9 @@ FixPieWifi()
     git reset --hard origin/$branch
     if [ "FreqOC" == "0" ];then
 	if [ "$branch" == "r3/eas" ] || [ "$branch" == "eas-test" ];then
-	git revert 9934ed1da4796ec247a0198bc1b8d09801e00bd4 --no-commit
+	git revert f3175e8d3c81aad80b91247575da1fc387f05ca4 --no-commit
 	fi
-	git revert f68079be11ae4959848e8a6d03a9d639772d6a57 --no-commit
+	git revert fb12aadd16d2ce49212e61f96c2b2bce3459b795 --no-commit
 	git commit -s -m "Back to stock freq"
 	if [ "$CODENAME" == "X00TD" ];then
 	CpuFreq="-Stock"
