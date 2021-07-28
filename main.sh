@@ -262,16 +262,16 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
 	if [ "FreqOC" == "0" ];then
 	if [ "$branch" == "r3/eas" ] || [ "$branch" == "eas-test" ];then
-	git revert f3175e8d3c81aad80b91247575da1fc387f05ca4 --no-commit
+	git revert af528a60ea56d212848539c47e8d56fb7e1f6d62 --no-commit
 	fi
-	git revert fb12aadd16d2ce49212e61f96c2b2bce3459b795 --no-commit
+	git revert 73e65b3e3574d2cf68caefbf0dc63a93ac6d336a --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="-Stock"
 	else
 	CpuFreq="-OC"
 	fi
 	if [ "$LVibration" == "1" ];then
-	git revert 944c3850b5c9db36c3b843728a9a51c05c571b4c --no-commit
+	git revert 82b39bb682ee8dbca38b7ca37e4f7c25303fd5ac --no-commit
 	git commit -s -m "Enable LED Vibration"
 	Vibrate="LV"
 	else
@@ -606,20 +606,20 @@ SwitchOFI()
     rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
     git commit -s -m "Remove R WLAN DRIVERS"
-    git revert 972771b38a3d1a4b1f2a2c3e550da48a29584b55 --no-commit
+    git revert a56e6c3e5bf1cb792c84daf5c902600c826f790c --no-commit
 	git commit -s -m "Switch to OFI"
 	if [ "FreqOC" == "0" ];then
 	if [ "$branch" == "r3/eas" ] || [ "$branch" == "eas-test" ];then
-	git revert f3175e8d3c81aad80b91247575da1fc387f05ca4 --no-commit
+	git revert af528a60ea56d212848539c47e8d56fb7e1f6d62 --no-commit
 	fi
-	git revert fb12aadd16d2ce49212e61f96c2b2bce3459b795 --no-commit
+	git revert 73e65b3e3574d2cf68caefbf0dc63a93ac6d336a --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="-Stock"
 	else
 	CpuFreq="-OC"
 	fi
 	if [ "$LVibration" == "1" ];then
-	git revert 944c3850b5c9db36c3b843728a9a51c05c571b4c --no-commit
+	git revert 82b39bb682ee8dbca38b7ca37e4f7c25303fd5ac --no-commit
 	git commit -s -m "Enable LED Vibration"
 	Vibrate="LV"
 	else
@@ -648,9 +648,9 @@ FixPieWifi()
     git reset --hard origin/$branch
     if [ "FreqOC" == "0" ];then
 	if [ "$branch" == "r3/eas" ] || [ "$branch" == "eas-test" ];then
-	git revert f3175e8d3c81aad80b91247575da1fc387f05ca4 --no-commit
+	git revert af528a60ea56d212848539c47e8d56fb7e1f6d62 --no-commit
 	fi
-	git revert fb12aadd16d2ce49212e61f96c2b2bce3459b795 --no-commit
+	git revert 73e65b3e3574d2cf68caefbf0dc63a93ac6d336a --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="-Stock"
 	else
@@ -659,7 +659,7 @@ FixPieWifi()
 	rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
     git commit -s -m "Remove R WLAN DRIVERS"
-    git revert 972771b38a3d1a4b1f2a2c3e550da48a29584b55 --no-commit
+    git revert a56e6c3e5bf1cb792c84daf5c902600c826f790c --no-commit
 	git commit -s -m "Switch to OFI"
 	git revert be578e2def2d7a67d6643335d016008f7bee8da8 --no-commit
 	git revert 5c27bb6d8547112a8b815742c5dbcaae520b4497 --no-commit
