@@ -141,8 +141,8 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		TypePrint="iRISxe"
     fi
 	if [ "$BuilderKernel" == "atom" ];then
-        getInfo ">> cloning Atom-X clang 13 . . . <<"
-        git clone https://gitlab.com/ElectroPerf/atom-x-clang -b atom-13 $clangDir --depth=1
+        getInfo ">> cloning Atom-X clang 14 . . . <<"
+        git clone https://gitlab.com/ElectroPerf/atom-x-clang -b atom-14 $clangDir --depth=1
 		allFromClang="Y"
 		Compiler="Atom-X Clang"
 		TypeBuilder="Atom-X"
