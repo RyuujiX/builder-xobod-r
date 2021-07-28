@@ -541,7 +541,7 @@ MakeZip(){
     cd $AnykernelDir
 	git reset --hard origin/$AKbranch
     if [ ! -z "$spectrumFile" ];then
-        cp -af $SpectrumDir/$spectrumFile init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" init.spectrum.rc
+        cp -af $SpectrumDir/$spectrumFile spectrum/init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" spectrum/init.spectrum.rc
     fi
     cp -af anykernel-real.sh anykernel.sh
 	cp -af $kernelDir/changelog META-INF/com/google/android/aroma/changelog.txt
