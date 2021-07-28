@@ -142,9 +142,8 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     fi
 	if [ "$BuilderKernel" == "atom" ];then
         getInfo ">> cloning Atom-X clang 13 . . . <<"
-        git clone https://github.com/Atom-X-Devs/Atom-X-Clang -b atom-13 $clangDir --depth=1
-		gcc10="Y"
-		SimpleClang="Y"
+        git clone https://gitlab.com/ElectroPerf/atom-x-clang -b atom-13 $clangDir --depth=1
+		allFromClang="Y"
 		Compiler="Atom-X Clang"
 		TypeBuilder="Atom-X"
 		TypePrint="Atom-X"
@@ -180,11 +179,13 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		tar -xf arm-zyc-linux-gnueabi-12.x-gnu-20210725.tar.gz -C $gcc32Dir
 		gcc64Dir="${gcc64Dir}/aarch64-zyc-linux-gnu"
 		gcc32Dir="${gcc32Dir}/arm-zyc-linux-gnueabi"
+		if [ "$BuilderKernel" == "gcc12" ];then
         for64=aarch64-zyc-linux-gnu
         for32=arm-zyc-linux-gnueabi
 		Compiler="ZyC GCC"
 		TypeBuilder="ZyC GCC"
 		TypePrint="ZyC GCC"
+		fi
     elif [ "$gcc10" == "Y" ];then
 	getInfo ">> cloning gcc64 10.2.0 . . . <<"
         git clone https://github.com/RyuujiX/aarch64-linux-gnu -b stable-gcc $gcc64Dir --depth=1
