@@ -549,7 +549,7 @@ MakeZip(){
     fi
     cp -af anykernel-real.sh anykernel.sh
 	cp -af $kernelDir/changelog META-INF/com/google/android/aroma/changelog.txt
-	if [ "$branch" = "hmp-test" ] || [ "$branch" = "eas-test" ];then
+	if [ "$branch" = "r3/eas" ] || [ "$branch" = "eas-test" ];then
 	AKNAME="KnightWalker-Arashi"
 	else
 	AKNAME="SkyWalker-Natsume"
@@ -560,7 +560,7 @@ MakeZip(){
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
-	sed -i "s/message.word=.*/message.word=Do not wait till tomorrow if u can do it Today./g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=To be a good loser is to learn how to win./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
