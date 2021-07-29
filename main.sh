@@ -552,7 +552,7 @@ MakeZip(){
 	if [ "$branch" = "hmp-test" ] || [ "$branch" = "eas-test" ];then
 	AKNAME="KnightWalker-Arashi"
 	else
-	AKNAME="SkyWalker-Hoshi-R2"
+	AKNAME="SkyWalker-Natsume"
 	fi
 	VibCpu="$VCFval-"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
