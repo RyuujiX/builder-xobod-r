@@ -515,12 +515,16 @@ CompileKernel(){
         exit -1
 	fi
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
-		if [ "$KernelFor" == "P" ];then
+		
+		if [ "$CODENAME" == "X00TD" ];then
+        VCFval="$Vibrate$CpuFreq"
+        else
+        VCFval="$Vibrate"
+        fi
+        if [ "$KernelFor" == "P" ];then
 		FilenameVC=""
-		elif [ "$CODENAME" == "X00TD" ];then
-		FilenameVC="[$Vibrate$CpuFreq]"
 		else
-		FilenameVC="[$Vibrate]"
+		FilenameVC="[$VCFval]"
 		fi
          if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
             ZipName="$FilenameVC$KName-$TypeBuildTag-$Driver-$KVer-$CODENAME.zip"
@@ -550,7 +554,7 @@ MakeZip(){
 	else
 	AKNAME="SkyWalker-Hoshi-R2"
 	fi
-	VibCpu="$Vibrate$CpuFreq-"
+	VibCpu="$VCFval-"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
 	sed -i "s/kernel.for=.*/kernel.for=$VibCpu$Driver/g" anykernel.sh
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
