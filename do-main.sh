@@ -1,4 +1,5 @@
 #! /bin/bash
+KranulVer="44"
 branch="r3/hmp"
 LVibration="1"
 FreqOC="1"
@@ -12,6 +13,8 @@ if [ "$BuilderKernel" != "proton" ] && [ "$BuilderKernel" != "dtc" ] && [ "$Buil
     exit;
 fi
 
+if [ "$KranulVer" = "44" ];then
+KranulLink="android_kernel_asus_sdm660"
 if [ "$branch" = "r3/eas" ] || [ "$branch" = "eas-test" ];then
 TypeBuildTag="EAS"
 TypeScript="EAS Advanced Configuration"
@@ -33,6 +36,13 @@ AKbranch="injectorx"
 	spectrumFile="ryuu.rc"
 	fi
 fi
+elif [ "$KranulVer" = "419" ];then
+KranulLink="android_kernel_asus_sdm660_4.19"
+TypeBuildTag="EAS"
+AKbranch="injectorx"
+spectrumFile=""
+fi
+
 . main.sh 'initial' 'full'
 
 getInfo ">> Building kernel . . . . <<"
@@ -42,6 +52,8 @@ CompileKernel
 # CompileKernel "68"
 # CompileKernel "71"
 # CompileKernel "72"
+
+if [ "$KranulVer" = "44" ];then
 
 SwitchOFI
 
@@ -58,3 +70,5 @@ CompileKernel
 # CompileKernel "68"
 # CompileKernel "71"
 # CompileKernel "72"
+
+fi

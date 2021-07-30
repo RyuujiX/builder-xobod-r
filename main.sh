@@ -53,10 +53,10 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	
     if [ ! -z "$2" ] && [ "$2" == 'full' ];then
         getInfo ">> cloning kernel full . . . <<"
-        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/kernel-x01bd-r -b "$branch" $kernelDir
+        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/$KranulLink -b "$branch" $kernelDir
     else
         getInfo ">> cloning kernel . . . <<"
-        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/kernel-x01bd-r -b "$branch" $kernelDir --depth=1 
+        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/$KranulLink -b "$branch" $kernelDir --depth=1 
     fi
     [ -z "$BuilderKernel" ] && BuilderKernel="storm"
     if [ "$BuilderKernel" == "proton" ];then
@@ -221,9 +221,6 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     TotalCores=$(nproc --all)
     KernelFor='R'
     RefreshRate="60"
-    SetTag="LA.UM.9.2.r1"
-    SetLastTag="SDMxx0.0"
-	Driver="NFI"
 	CpuFreq=""
 	if [ "$CODENAME" == "X00TD" ];then
 	DEVICE="Asus Max Pro M1"
@@ -231,6 +228,15 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	elif [ "$CODENAME" == "X01BD" ];then
 	DEVICE="Asus Max Pro M2"
 	DEFFCONFIG="X01BD_defconfig"
+	fi
+	if [ "$KranulVer" = "44" ];then
+    SetTag="LA.UM.9.2.r1"
+    SetLastTag="SDMxx0.0"
+	Driver="NFI"
+	elif [ "$KranulVer" = "419" ];then
+	SetTag="LA.UM.9.2.1.r1"
+    SetLastTag="sdm660.0"
+	DEFCONFIGPATH="asus/$DEFFCONFIG"
 	fi
 
     export KBUILD_BUILD_USER="RyuujiX"
@@ -261,6 +267,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     fi
     cd $kernelDir
 	HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
+	if [ "$KranulVer" = "44" ];then
 	if [ "$FreqOC" == "0" ];then
 	if [ "$branch" == "r3/eas" ] || [ "$branch" == "eas-test" ];then
 	git revert af528a60ea56d212848539c47e8d56fb7e1f6d62 --no-commit
@@ -278,8 +285,21 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	else
 	Vibrate="NLV"
 	fi
+	elif [ "$KranulVer" = "419" ];then
+	if [ "$FreqOC" == "0" ];then
+	# git revert xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx --no-commit
+	# git commit -s -m "Back to stock freq"
+	CpuFreq="Stock"
+	else
+	CpuFreq="OC"
+	fi
+	fi
+	if [ "$KranulVer" = "44" ];then
 	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
-    KVer=$(make kernelversion)
+    elif [ "$KranulVer" = "419" ];then
+	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFCONFIGPATH" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
+	fi
+	KVer=$(make kernelversion)
     HeadCommitId=$(git log --pretty=format:'%h' -n1)
     cd $mainDir
 fi
@@ -419,10 +439,13 @@ CompileKernel(){
             BuildNumber="${DRONE_BUILD_NUMBER}"
             ProgLink="https://cloud.drone.io/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/1/2"
         fi
+		if [ "$KranulVer" = "44" ];then
+		VibDrivTag="#$Vibrate #$Driver"
+		fi
         if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
-            MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild  #$Vibrate #$Driver"
+            MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild  $VibDrivTag"
         else
-            MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild  #$Vibrate #$Driver"
+            MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild  $VibDrivTag"
         fi
         if [ ! -z "$1" ];then
             tg_send_info "$MSG" "$1"
@@ -441,9 +464,24 @@ CompileKernel(){
     LastHeadCommitId=$(git log --pretty=format:'%h' -n1)
     TAGKENEL="$(git log | grep "${SetTag}" | head -n 1 | awk -F '\\'${SetLastTag}'' '{print $1"'${SetLastTag}'"}' | awk -F '\\'${SetTag}'' '{print "'${SetTag}'"$2}')"
     if [ ! -z "$TAGKENEL" ];then
+	if [ "$KranulVer" = "44" ];then
         export KBUILD_BUILD_HOST="StaySafe-$Driver-$Vibrate-$TAGKENEL"
+	elif [ "$KranulVer" = "419" ];then
+		export KBUILD_BUILD_HOST="StaySafe-$TAGKENEL"
     fi
+	fi
+	if [ "$KranulVer" = "44" ];then
     make -j${TotalCores}  O=out ARCH="$ARCH" "$DEFFCONFIG"
+	elif [ "$KranulVer" = "419" ];then
+	make -j${TotalCores}  O=out "$DEFCONFIGPATH" \
+		ARCH=$ARCH \
+		PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+		CROSS_COMPILE=$for64- \
+        CROSS_COMPILE_ARM32=$for32- \
+		CC=clang \
+		LLVM=1
+	fi
+	
     if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
         make -j${TotalCores}  O=out \
             ARCH=$ARCH \
@@ -516,6 +554,7 @@ CompileKernel(){
 	fi
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
 		
+	if [ "$KranulVer" = "44" ];then
 		if [ "$CODENAME" == "X00TD" ];then
         VCFval="$Vibrate$CpuFreq"
         else
@@ -526,11 +565,23 @@ CompileKernel(){
 		else
 		FilenameVC="[$VCFval]"
 		fi
-         if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
+		 if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
             ZipName="$FilenameVC$KName-$TypeBuildTag-$Driver-$KVer-$CODENAME.zip"
          else
             ZipName="$FilenameVC$KName-$TypeBuildTag-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
          fi
+	elif [ "$KranulVer" = "419" ];then
+		if [ "$CODENAME" == "X00TD" ];then
+		FilenameVC="[$CpuFreq]"
+		else
+		FilenameVC=""
+		fi
+		 if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
+            ZipName="$FilenameVC$KName-$KVer-$CODENAME.zip"
+         else
+            ZipName="$FilenameVC$KName-$TypeBuild-$KVer-$CODENAME.zip"
+         fi
+	fi
         # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
         RealZipName="$ZipName"
         if [ ! -z "$2" ];then
@@ -556,7 +607,9 @@ MakeZip(){
 	fi
 	VibCpu="$VCFval-"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
+	if [ "$KranulVer" = "44" ];then
 	sed -i "s/kernel.for=.*/kernel.for=$VibCpu$Driver/g" anykernel.sh
+	fi
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
@@ -567,7 +620,7 @@ MakeZip(){
 	sed -i "s/script.type=.*/script.type=$TypeScript/g" anykernel.sh
 	if [ "$KernelFor" == "P" ];then
 	sed -i "s/supported.versions=.*/supported.versions=9/g" anykernel.sh
-	elif [ "$Vibrate" == "LV" ];then
+	elif [ "$Vibrate" == "LV" ] || [ "$KranulVer" = "419" ];then
 	sed -i "s/supported.versions=.*/supported.versions=11-12/g" anykernel.sh
 	elif [ "$Vibrate" == "NLV" ];then
 	sed -i "s/supported.versions=.*/supported.versions=9-12/g" anykernel.sh
@@ -586,7 +639,9 @@ MakeZip(){
 	sed -i "s/KAUTHOR/Ryuuji @ItsRyuujiX/g" aroma-config
 	sed -i "s/KDEVICE/$DEVICE - $CODENAME/g" aroma-config
 	sed -i "s/KBDATE/$GetCBD/g" aroma-config
+	if [ "$KranulVer" = "44" ];then
 	sed -i "s/KVARIANT/$VibCpu$Driver/g" aroma-config
+	fi
 	cd $AnykernelDir
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
@@ -642,6 +697,7 @@ SwitchOFI()
 	DEVICE="Asus Max Pro M2"
 	DEFFCONFIG="X01BD_defconfig"
 	fi
+	
 	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
     rm -rf out
     cd $mainDir
