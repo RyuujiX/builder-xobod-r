@@ -22,12 +22,12 @@ KranulLink="android_kernel_asus_sdm660"
 if [ "$branch" = "r3/eas" ] || [ "$branch" = "eas-test" ];then
 TypeBuildTag="EAS"
 TypeScript="EAS Advanced Configuration"
-AKbranch="injectorx-eas"
+AKbranch="4.4-eas"
 	spectrumFile=""
 else
 TypeBuildTag="HMP"
 TypeScript="Spectrum"
-AKbranch="injectorx"
+AKbranch="4.4-hmp"
 	if [ "WithSpec" == "N" ];then
 	spectrumFile=""
 	elif [ "$CODENAME" == "X00TD" ];then
@@ -43,7 +43,7 @@ fi
 elif [ "$KranulVer" = "419" ];then
 KranulLink="android_kernel_asus_sdm660_4.19"
 TypeBuildTag="EAS"
-AKbranch="injectorx"
+AKbranch="4.19"
 spectrumFile=""
 fi
 
