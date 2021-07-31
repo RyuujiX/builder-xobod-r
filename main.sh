@@ -610,8 +610,8 @@ MakeZip(){
     fi
     cp -af anykernel-real.sh anykernel.sh
 	cp -af $kernelDir/changelog META-INF/com/google/android/aroma/changelog.txt
-	if [ "$branch" = "r3/eas" ] || [ "$branch" = "eas-test" ];then
-	AKNAME="KnightWalker-Arashi"
+	if [ "$KranulVer" = "419" ];then
+	AKNAME="KnightWalker-Akira"
 	else
 	AKNAME="SkyWalker-Natsume"
 	fi
