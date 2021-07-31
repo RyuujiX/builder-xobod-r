@@ -268,6 +268,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     cd $kernelDir
 	HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
 	if [ "$KranulVer" = "44" ];then
+	CUSDEFPATH="arch/$ARCH/configs/$DEFFCONFIG"
 	if [ "$FreqOC" == "0" ];then
 	if [ "$branch" == "r3/eas" ] || [ "$branch" == "eas-test" ];then
 	git revert af528a60ea56d212848539c47e8d56fb7e1f6d62 --no-commit
@@ -286,6 +287,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	Vibrate="NLV"
 	fi
 	elif [ "$KranulVer" = "419" ];then
+	CUSDEFPATH="arch/$ARCH/configs/$DEFCONFIGPATH"
 	if [ "$FreqOC" == "0" ];then
 	# git revert xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx --no-commit
 	# git commit -s -m "Back to stock freq"
@@ -294,13 +296,17 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	CpuFreq="OC"
 	fi
 	fi
+	KVer=$(make kernelversion)
+    HeadCommitId=$(git log --pretty=format:'%h' -n1)
+	if [ ! -z "$CUSKERNAME" ];then
+	sed -i "s/CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION=-$CUSKERNAME/g" $CUSDEFPATH
+	git commit -a -s -m "Change Kernel Name"
+	fi
 	if [ "$KranulVer" = "44" ];then
 	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
     elif [ "$KranulVer" = "419" ];then
 	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFCONFIGPATH" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
 	fi
-	KVer=$(make kernelversion)
-    HeadCommitId=$(git log --pretty=format:'%h' -n1)
     cd $mainDir
 fi
 

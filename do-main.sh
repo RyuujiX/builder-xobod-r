@@ -6,6 +6,7 @@ FreqOC="1"
 WithSpec="Y"
 CODENAME="X01BD"
 FolderUp=""
+CUSKERNAME=""
 TypeBuild="RELEASE"
 BuilderKernel="00000"
 
