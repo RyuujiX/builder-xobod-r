@@ -462,8 +462,12 @@ CompileKernel(){
         RefreshRate="$1"
     fi
     LastHeadCommitId=$(git log --pretty=format:'%h' -n1)
+	if [ ! -z "$CAFTAG" ];then
+	TAGKENEL="$SetTag-$CAFTAG-$SetLastTag"
+	else
     TAGKENEL="$(git log | grep "${SetTag}" | head -n 1 | awk -F '\\'${SetLastTag}'' '{print $1"'${SetLastTag}'"}' | awk -F '\\'${SetTag}'' '{print "'${SetTag}'"$2}')"
-    if [ ! -z "$TAGKENEL" ];then
+    fi
+	if [ ! -z "$TAGKENEL" ];then
 	if [ "$KranulVer" = "44" ];then
         export KBUILD_BUILD_HOST="StaySafe-$Driver-$Vibrate-$TAGKENEL"
 	elif [ "$KranulVer" = "419" ];then
