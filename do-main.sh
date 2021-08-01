@@ -7,6 +7,7 @@ WithSpec="Y"
 CODENAME="X01BD"
 FolderUp=""
 CUSKERNAME=""
+CUSKERLINK=""
 TypeBuild="RELEASE"
 BuilderKernel="00000"
 

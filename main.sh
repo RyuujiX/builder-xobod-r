@@ -49,14 +49,20 @@ GdriveDir=$mainDir/Gdrive-Uploader
 
 useGdrive='N'
 
+if [ ! -z "$CUSKERLINK" ];then
+KERNLINK="$CUSKERLINK"
+else
+KERNLINK="https://$GIT_SECRET@github.com/$GIT_USERNAME/$KranulLink"
+fi
+
 if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	
     if [ ! -z "$2" ] && [ "$2" == 'full' ];then
         getInfo ">> cloning kernel full . . . <<"
-        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/$KranulLink -b "$branch" $kernelDir
+        git clone $KERNLINK -b "$branch" $kernelDir
     else
         getInfo ">> cloning kernel . . . <<"
-        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/$KranulLink -b "$branch" $kernelDir --depth=1 
+        git clone $KERNLINK -b "$branch" $kernelDir --depth=1 
     fi
     [ -z "$BuilderKernel" ] && BuilderKernel="storm"
     if [ "$BuilderKernel" == "proton" ];then
