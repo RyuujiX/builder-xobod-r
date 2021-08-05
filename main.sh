@@ -582,9 +582,9 @@ CompileKernel(){
 		FilenameVC="[$VCFval]"
 		fi
 		 if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="$FilenameVC$KName-$TypeBuildTag-$Driver-$KVer-$CODENAME.zip"
+            ZipName="$FilenameVC$KName-$Driver-$KVer-$CODENAME.zip"
          else
-            ZipName="$FilenameVC$KName-$TypeBuildTag-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
+            ZipName="$FilenameVC$KName-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
          fi
 	elif [ "$KranulVer" = "419" ];then
 		if [ "$CODENAME" == "X00TD" ];then
