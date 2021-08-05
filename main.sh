@@ -615,7 +615,9 @@ MakeZip(){
         cp -af $SpectrumDir/$spectrumFile spectrum/init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" spectrum/init.spectrum.rc
     fi
     cp -af anykernel-real.sh anykernel.sh
+	if [ "$TypeBuild" = "RELEASE" ];then
 	cp -af $kernelDir/changelog META-INF/com/google/android/aroma/changelog.txt
+	fi
 	if [ "$KranulVer" = "419" ];then
 	AKNAME="KnightWalker-Akira"
 	else
