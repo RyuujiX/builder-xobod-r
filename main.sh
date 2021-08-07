@@ -621,7 +621,7 @@ MakeZip(){
 	if [ "$KranulVer" = "419" ];then
 	AKNAME="KnightWalker-Akira"
 	else
-	AKNAME="SkyWalker-Natsume"
+	AKNAME="SkyWalker-Yuuki"
 	fi
 	VibCpu="$VCFval-"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
