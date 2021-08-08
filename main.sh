@@ -171,18 +171,18 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		fi
 		mkdir "${gcc64Dir}"
         mkdir "${gcc32Dir}"
-		if [ ! -e "${mainDir}/aarch64-zyc-linux-gnu-12.x-gnu-20210725.tar.gz" ];then
-		getInfo ">> Downloading aarch64-zyc-linux-gnu-12.x-gnu-20210725 (gcc64) . . . <<"
-        wget -q https://toolchain.lynxcloud.workers.dev/0:/ZyC%20GCC/GCC%2012/aarch64-zyc-linux-gnu-12.x-gnu-20210725.tar.gz
+		if [ ! -e "${mainDir}/aarch64-zyc-linux-gnu-12.x-gnu-20210808.tar.gz" ];then
+		getInfo ">> Downloading aarch64-zyc-linux-gnu-12.x-gnu-20210808 (gcc64) . . . <<"
+        wget -q https://toolchain.lynxcloud.workers.dev/0:/ZyC%20GCC/GCC%2012/aarch64-zyc-linux-gnu-12.x-gnu-20210808.tar.gz
         fi
-		if [ ! -e "${mainDir}/arm-zyc-linux-gnueabi-12.x-gnu-20210725.tar.gz" ];then
-        getInfo ">> Downloading arm-zyc-linux-gnueabi-12.x-gnu-20210725 (gcc32) . . . <<"
-        wget -q https://toolchain.lynxcloud.workers.dev/0:/ZyC%20GCC/GCC%2012/arm-zyc-linux-gnueabi-12.x-gnu-20210725.tar.gz
+		if [ ! -e "${mainDir}/arm-zyc-linux-gnueabi-12.x-gnu-20210808.tar.gz" ];then
+        getInfo ">> Downloading arm-zyc-linux-gnueabi-12.x-gnu-20210808 (gcc32) . . . <<"
+        wget -q https://toolchain.lynxcloud.workers.dev/0:/ZyC%20GCC/GCC%2012/arm-zyc-linux-gnueabi-12.x-gnu-20210808.tar.gz
         fi
-		getInfo ">> Extracting aarch64-zyc-linux-gnu-12.x-gnu-20210725 (gcc64) . . . <<"
-		tar -xf aarch64-zyc-linux-gnu-12.x-gnu-20210725.tar.gz -C $gcc64Dir
-		getInfo ">> Extracting arm-zyc-linux-gnueabi-12.x-gnu-20210725 (gcc32) . . . <<"
-		tar -xf arm-zyc-linux-gnueabi-12.x-gnu-20210725.tar.gz -C $gcc32Dir
+		getInfo ">> Extracting aarch64-zyc-linux-gnu-12.x-gnu-20210808 (gcc64) . . . <<"
+		tar -xf aarch64-zyc-linux-gnu-12.x-gnu-20210808.tar.gz -C $gcc64Dir
+		getInfo ">> Extracting arm-zyc-linux-gnueabi-12.x-gnu-20210808 (gcc32) . . . <<"
+		tar -xf arm-zyc-linux-gnueabi-12.x-gnu-20210808.tar.gz -C $gcc32Dir
 		gcc64Dir="${gcc64Dir}/aarch64-zyc-linux-gnu"
 		gcc32Dir="${gcc32Dir}/arm-zyc-linux-gnueabi"
 		if [ "$BuilderKernel" == "gcc12" ];then
