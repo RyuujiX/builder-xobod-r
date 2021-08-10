@@ -23,12 +23,10 @@ if [ "$KranulVer" = "44" ];then
 KranulLink="android_kernel_asus_sdm660"
 if [ "$branch" = "r3/eas" ] || [ "$branch" = "eas-test" ];then
 TypeBuildTag="EAS"
-TypeScript="EAS Advanced Configuration"
 AKbranch="4.4-eas"
 	spectrumFile=""
 else
 TypeBuildTag="HMP"
-TypeScript="Spectrum"
 AKbranch="4.4-hmp"
 	if [ "WithSpec" == "N" ];then
 	spectrumFile=""
