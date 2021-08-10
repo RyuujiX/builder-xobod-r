@@ -24,7 +24,17 @@ KranulLink="android_kernel_asus_sdm660"
 if [ "$branch" = "r3/eas" ] || [ "$branch" = "eas-test" ];then
 TypeBuildTag="EAS"
 AKbranch="4.4-eas"
+	if [ "WithSpec" == "N" ];then
 	spectrumFile=""
+	elif [ "$CODENAME" == "X00TD" ];then
+	if [ "$FreqOC" == "1" ];then
+	spectrumFile="eas-x00t-oc.rc"
+	else
+	spectrumFile="eas-x00t.rc"
+	fi
+	else
+	spectrumFile="eas.rc"
+	fi
 else
 TypeBuildTag="HMP"
 AKbranch="4.4-hmp"
