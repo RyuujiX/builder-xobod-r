@@ -222,8 +222,8 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     
     SaveChatID="-275630226"
     ARCH="arm64"
-    GetBD=$(date +"%m%d")
-    GetCBD=$(date +"%Y-%m-%d")
+    GetBD=$(TZ=Asia/Jakarta date +"%m%d")
+    GetCBD=$(TZ=Asia/Jakarta date +"%Y-%m-%d")
     TotalCores=$(nproc --all)
     KernelFor='R'
     RefreshRate="60"
@@ -362,7 +362,7 @@ tg_send_files(){
         currentFolder="$(pwd)"
         cd $GdriveDir
         chmod +x run.sh
-        . run.sh "$KernelFiles" "x01bd" "$(date +"%m-%d-%Y")" "$FolderUp"
+        . run.sh "$KernelFiles" "x01bd" "$(TZ=Asia/Jakarta date +"%m-%d-%Y")" "$FolderUp"
         cd $currentFolder
 		if [ ! -z "$1" ];then
             tg_send_info "$MSG" "$1"
@@ -443,7 +443,7 @@ CompileKernel(){
 		fi
     fi
     # rm -rf out # always remove out directory :V
-    BUILD_START=$(date +"%s")
+    BUILD_START=$(TZ=Asia/Jakarta date +"%s")
 		if [ ! -z "${CIRCLE_BRANCH}" ];then
             BuildNumber="${CIRCLE_BUILD_NUM}"
             ProgLink="${CIRCLE_BUILD_URL}"
@@ -558,7 +558,7 @@ CompileKernel(){
 			fi
 		fi
     fi
-    BUILD_END=$(date +"%s")
+    BUILD_END=$(TZ=Asia/Jakarta date +"%s")
     DIFF=$((BUILD_END - BUILD_START))
 	if [[ ! -e $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb ]];then
 		SID="CAACAgUAAxkBAAIb12By2GpymhVy7G9g1Y5D2FcgvYr7AALZAQAC4dzJVslZcFisbk9nHgQ"
