@@ -621,7 +621,7 @@ MakeZip(){
 	if [ "$KranulVer" = "419" ];then
 	AKNAME="KnightWalker-Akira"
 	else
-	AKNAME="SkyWalker-Yuuki"
+	AKNAME="SkyWalker-Izumi"
 	fi
 	VibCpu="$VCFval-"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
@@ -631,7 +631,7 @@ MakeZip(){
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
-	sed -i "s/message.word=.*/message.word=To be a good loser is to learn how to win./g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=Do not dream about your success. You have to work for it./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
