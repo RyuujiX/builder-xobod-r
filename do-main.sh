@@ -51,7 +51,7 @@ AKbranch="4.4-hmp"
 	fi
 fi
 elif [ "$KranulVer" = "419" ];then
-KranulLink="android_kernel_asus_sdm660_4.19"
+KranulLink="android_kernel_asus_sdm660-4.19"
 TypeBuildTag="EAS"
 AKbranch="4.19"
 spectrumFile=""
