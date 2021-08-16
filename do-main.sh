@@ -8,6 +8,7 @@ CODENAME="X01BD"
 FolderUp=""
 CUSKERNAME=""
 CUSKERLINK=""
+CUSBUILDDATE=""
 TypeBuild="RELEASE"
 BuilderKernel="00000"
 

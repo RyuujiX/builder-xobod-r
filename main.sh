@@ -618,6 +618,11 @@ MakeZip(){
 	if [ "$TypeBuild" = "RELEASE" ];then
 	cp -af $kernelDir/changelog META-INF/com/google/android/aroma/changelog.txt
 	fi
+	if [ ! -z "$CUSBUILDDATE" ];then
+	BDate="$CUSBUILDDATE"
+	else
+	BDate="$GetCBD"
+	fi
 	if [ "$KranulVer" = "419" ];then
 	AKNAME="KnightWalker-Akira"
 	else
@@ -632,7 +637,7 @@ MakeZip(){
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
 	sed -i "s/message.word=.*/message.word=Do not dream about your success. You have to work for it./g" anykernel.sh
-	sed -i "s/build.date=.*/build.date=$GetCBD/g" anykernel.sh
+	sed -i "s/build.date=.*/build.date=$BDate/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
 	if [ "$KernelFor" == "P" ];then
@@ -655,7 +660,7 @@ MakeZip(){
 	sed -i "s/KVER/$KVer/g" aroma-config
 	sed -i "s/KAUTHOR/Ryuuji @ItsRyuujiX/g" aroma-config
 	sed -i "s/KDEVICE/$DEVICE - $CODENAME/g" aroma-config
-	sed -i "s/KBDATE/$GetCBD/g" aroma-config
+	sed -i "s/KBDATE/$BDate/g" aroma-config
 	if [ "$KranulVer" = "44" ];then
 	sed -i "s/KVARIANT/$VibCpu$Driver/g" aroma-config
 	fi
