@@ -33,8 +33,12 @@ AKbranch="4.4-eas"
 	else
 	spectrumFile="eas-x00t.rc"
 	fi
+	elif [ "$CODENAME" == "X01BD" ];then
+	if [ "$FreqOC" == "1" ];then
+	spectrumFile="eas-x01bd-oc.rc"
 	else
-	spectrumFile="eas.rc"
+	spectrumFile="eas-x01bd.rc"
+	fi
 	fi
 else
 TypeBuildTag="HMP"
@@ -47,8 +51,12 @@ AKbranch="4.4-hmp"
 	else
 	spectrumFile="ryuu-x00t.rc"
 	fi
+	elif [ "$CODENAME" == "X01BD" ];then
+	if [ "$FreqOC" == "1" ];then
+	spectrumFile="ryuu-x01bd-oc.rc"
 	else
-	spectrumFile="ryuu.rc"
+	spectrumFile="ryuu-x01bd.rc"
+	fi
 	fi
 fi
 elif [ "$KranulVer" = "419" ];then
