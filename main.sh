@@ -284,9 +284,9 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	fi
 	git revert 73e65b3e3574d2cf68caefbf0dc63a93ac6d336a --no-commit
 	git commit -s -m "Back to stock freq"
-	CpuFreq="-Stock"
+	CpuFreq="Stock"
 	else
-	CpuFreq="-OC"
+	CpuFreq="OC"
 	fi
 	if [ "$LVibration" == "1" ];then
 	git revert 82b39bb682ee8dbca38b7ca37e4f7c25303fd5ac --no-commit
@@ -455,12 +455,16 @@ CompileKernel(){
             ProgLink="https://cloud.drone.io/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/1/2"
         fi
 		if [ "$KranulVer" = "44" ];then
+		if [ "$KernelFor" == "P" ];then
+		VibDrivTag="#$Driver"
+		else
 		VibDrivTag="#$Vibrate #$Driver"
 		fi
+		fi
         if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
-            MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild  $VibDrivTag"
+            MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$CpuFreq $VibDrivTag"
         else
-            MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag  #$TypeBuild  $VibDrivTag"
+            MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$CpuFreq $VibDrivTag"
         fi
         if [ ! -z "$1" ];then
             tg_send_info "$MSG" "$1"
@@ -573,28 +577,19 @@ CompileKernel(){
 	fi
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
 		
-	if [ "$KranulVer" = "44" ];then
-		if [ "$CODENAME" == "X00TD" ];then
-        VCFval="$Vibrate$CpuFreq"
-        else
-        VCFval="$Vibrate"
-        fi
         if [ "$KernelFor" == "P" ];then
-		FilenameVC=""
+		FilenameVC="[$CpuFreq]"
 		else
-		FilenameVC="[$VCFval]"
+		FilenameVC="[$Vibrate$CpuFreq]"
 		fi
+	if [ "$KranulVer" = "44" ];then
 		 if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
             ZipName="$FilenameVC$KName-$Driver-$KVer-$CODENAME.zip"
          else
             ZipName="$FilenameVC$KName-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
          fi
 	elif [ "$KranulVer" = "419" ];then
-		if [ "$CODENAME" == "X00TD" ];then
 		FilenameVC="[$CpuFreq]"
-		else
-		FilenameVC=""
-		fi
 		 if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
             ZipName="$FilenameVC$KName-$KVer-$CODENAME.zip"
          else
@@ -631,10 +626,14 @@ MakeZip(){
 	else
 	AKNAME="SkyWalker-Izumi"
 	fi
-	VibCpu="$VCFval-"
+	CpuFrag="-$CpuFreq"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
 	if [ "$KranulVer" = "44" ];then
-	sed -i "s/kernel.for=.*/kernel.for=$VibCpu$Driver/g" anykernel.sh
+	if [ "$KernelFor" == "P" ];then
+	sed -i "s/kernel.for=.*/kernel.for=$CpuFreq-$Driver/g" anykernel.sh
+	else
+	sed -i "s/kernel.for=.*/kernel.for=$Vibrate$CpuFrag-$Driver/g" anykernel.sh
+	fi
 	fi
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
@@ -665,7 +664,11 @@ MakeZip(){
 	sed -i "s/KDEVICE/$DEVICE - $CODENAME/g" aroma-config
 	sed -i "s/KBDATE/$BDate/g" aroma-config
 	if [ "$KranulVer" = "44" ];then
-	sed -i "s/KVARIANT/$VibCpu$Driver/g" aroma-config
+	if [ "$KernelFor" == "P" ];then
+	sed -i "s/KVARIANT/$CpuFreq-$Driver/g" aroma-config
+	else
+	sed -i "s/KVARIANT/$Vibrate$CpuFrag-$Driver/g" aroma-config
+	fi
 	fi
 	cd $AnykernelDir
 
@@ -699,9 +702,9 @@ SwitchOFI()
 	fi
 	git revert 73e65b3e3574d2cf68caefbf0dc63a93ac6d336a --no-commit
 	git commit -s -m "Back to stock freq"
-	CpuFreq="-Stock"
+	CpuFreq="Stock"
 	else
-	CpuFreq="-OC"
+	CpuFreq="OC"
 	fi
 	if [ "$LVibration" == "1" ];then
 	git revert 82b39bb682ee8dbca38b7ca37e4f7c25303fd5ac --no-commit
@@ -738,9 +741,9 @@ FixPieWifi()
 	fi
 	git revert 73e65b3e3574d2cf68caefbf0dc63a93ac6d336a --no-commit
 	git commit -s -m "Back to stock freq"
-	CpuFreq="-Stock"
+	CpuFreq="Stock"
 	else
-	CpuFreq="-OC"
+	CpuFreq="OC"
 	fi
 	rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
