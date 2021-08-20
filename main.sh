@@ -577,7 +577,7 @@ CompileKernel(){
         if [ "$KernelFor" == "P" ];then
 		FilenameVC="[$CpuFreq]"
 		else
-		FilenameVC="[$Vibrate$CpuFreq]"
+		FilenameVC="[$Vibrate-$CpuFreq]"
 		fi
 	if [ "$KranulVer" = "44" ];then
 		 if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
