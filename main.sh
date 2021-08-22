@@ -279,9 +279,6 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	if [ "$KranulVer" = "44" ];then
 	CUSDEFPATH="arch/$ARCH/configs/$DEFFCONFIG"
 	if [ "$FreqOC" == "0" ];then
-	if [ "$branch" == "r3/eas" ] || [ "$branch" == "eas-test" ];then
-	git revert af528a60ea56d212848539c47e8d56fb7e1f6d62 --no-commit
-	fi
 	git revert 73e65b3e3574d2cf68caefbf0dc63a93ac6d336a --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
@@ -700,9 +697,6 @@ SwitchOFI()
     git revert a56e6c3e5bf1cb792c84daf5c902600c826f790c --no-commit
 	git commit -s -m "Switch to OFI"
 	if [ "$FreqOC" == "0" ];then
-	if [ "$branch" == "r3/eas" ] || [ "$branch" == "eas-test" ];then
-	git revert af528a60ea56d212848539c47e8d56fb7e1f6d62 --no-commit
-	fi
 	git revert 73e65b3e3574d2cf68caefbf0dc63a93ac6d336a --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
@@ -739,9 +733,6 @@ FixPieWifi()
 	cd $kernelDir
     git reset --hard origin/$branch
     if [ "$FreqOC" == "0" ];then
-	if [ "$branch" == "r3/eas" ] || [ "$branch" == "eas-test" ];then
-	git revert af528a60ea56d212848539c47e8d56fb7e1f6d62 --no-commit
-	fi
 	git revert 73e65b3e3574d2cf68caefbf0dc63a93ac6d336a --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
