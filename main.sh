@@ -222,8 +222,11 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     
     SaveChatID="-275630226"
     ARCH="arm64"
-    GetBD=$(TZ=Asia/Jakarta date +"%m%d")
-    GetCBD=$(TZ=Asia/Jakarta date +"%Y-%m-%d")
+	TZ="Asia/Jakarta"
+    GetBD=$(date +"%m%d")
+    GetCBD=$(date +"%Y-%m-%d")
+	GetTime=$(date "+%T")
+	GetDateTime=$(date)
     TotalCores=$(nproc --all)
     KernelFor='R'
     RefreshRate="60"
@@ -341,7 +344,10 @@ tg_send_files(){
 	MD5CHECK=$(md5sum "$KernelFiles" | cut -d' ' -f1)
 	SID="CAACAgUAAxkBAAIb0mBy2DMFsj1kyc5H-sxMRU4uGq4XAAJxAwACckHJVoQTT9R9yDxQHgQ"
     MSG="✅ <b>Kernel Compiled Succesfully</b> 
-- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s) </code> 
+- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s) </code>
+
+<b>Compiled at</b>
+- <code>$GetDateTime</code>
 
 <b>MD5 Checksum</b>
 - <code>$MD5CHECK</code>
@@ -362,7 +368,7 @@ tg_send_files(){
         currentFolder="$(pwd)"
         cd $GdriveDir
         chmod +x run.sh
-        . run.sh "$KernelFiles" "x01bd" "$(TZ=Asia/Jakarta date +"%m-%d-%Y")" "$FolderUp"
+        . run.sh "$KernelFiles" "x01bd" "$(date +"%m-%d-%Y")" "$FolderUp"
         cd $currentFolder
 		if [ ! -z "$1" ];then
             tg_send_info "$MSG" "$1"
@@ -443,7 +449,7 @@ CompileKernel(){
 		fi
     fi
     # rm -rf out # always remove out directory :V
-    BUILD_START=$(TZ=Asia/Jakarta date +"%s")
+    BUILD_START=$(date +"%s")
 		if [ ! -z "${CIRCLE_BRANCH}" ];then
             BuildNumber="${CIRCLE_BUILD_NUM}"
             ProgLink="${CIRCLE_BUILD_URL}"
@@ -562,7 +568,7 @@ CompileKernel(){
 			fi
 		fi
     fi
-    BUILD_END=$(TZ=Asia/Jakarta date +"%s")
+    BUILD_END=$(date +"%s")
     DIFF=$((BUILD_END - BUILD_START))
 	if [[ ! -e $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb ]];then
 		SID="CAACAgUAAxkBAAIb12By2GpymhVy7G9g1Y5D2FcgvYr7AALZAQAC4dzJVslZcFisbk9nHgQ"
