@@ -153,6 +153,8 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		Compiler="Atom-X Clang"
 		TypeBuilder="Atom-X"
 		TypePrint="Atom-X"
+		export LD=ld.lld
+        export LD_LIBRARY_PATH=$clangDir/lib
     fi
     if [ "$BuilderKernel" == "gcc" ];then
         getInfo ">> cloning gcc64 . . . <<"
