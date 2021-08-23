@@ -80,6 +80,8 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		Compiler="DragonTC Clang"
 		TypeBuilder="DTC"
 		TypePrint="DragonTC"
+		export LD=ld.lld
+        export LD_LIBRARY_PATH=$clangDir/lib64
     fi
 	if [ "$BuilderKernel" == "storm" ];then
         getInfo ">> cloning StormBreaker clang 11 . . . <<"
