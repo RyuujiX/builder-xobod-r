@@ -2,15 +2,15 @@
 KranulVer="44"
 branch="r4/hmp"
 LVibration="1"
-FreqOC="1"
+FreqOC="0"
 WithSpec="Y"
 CODENAME="X01BD"
 FolderUp=""
 CUSKERNAME=""
 CUSKERLINK=""
 CUSBUILDDATE=""
-TypeBuild="RELEASE"
-BuilderKernel="00000"
+TypeBuild="TEST"
+BuilderKernel="dtc"
 
 if [ "$KranulVer" = "419" ];then
 CAFTAG="07900"
@@ -70,7 +70,7 @@ fi
 
 getInfo ">> Building kernel . . . . <<"
 
-CompileKernel
+# CompileKernel
 # CompileKernel "65"
 # CompileKernel "68"
 # CompileKernel "71"
@@ -86,9 +86,6 @@ CompileKernel
 # CompileKernel "71"
 # CompileKernel "72"
 
-FixPieWifi
-
-CompileKernel
 # CompileKernel "65"
 # CompileKernel "68"
 # CompileKernel "71"
