@@ -1,6 +1,6 @@
 #! /bin/bash
 KranulVer="44"
-branch="r4/hmp"
+branch="r3/hmp"
 LVibration="1"
 FreqOC="1"
 WithSpec="Y"
@@ -22,7 +22,7 @@ fi
 
 if [ "$KranulVer" = "44" ];then
 KranulLink="android_kernel_asus_sdm660"
-if [ "$branch" = "r4/eas" ] || [ "$branch" = "eas-test" ];then
+if [ "$branch" = "r3/eas" ] || [ "$branch" = "eas-test" ];then
 TypeBuildTag="EAS"
 AKbranch="4.4-eas"
 	if [ "WithSpec" == "N" ];then

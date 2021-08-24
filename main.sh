@@ -283,14 +283,14 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	if [ "$KranulVer" = "44" ];then
 	CUSDEFPATH="arch/$ARCH/configs/$DEFFCONFIG"
 	if [ "$FreqOC" == "0" ];then
-	git revert 84c829b75cf44de2422c010af4472c2630d249a0 --no-commit
+	git revert 73e65b3e3574d2cf68caefbf0dc63a93ac6d336a --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
 	else
 	CpuFreq="OC"
 	fi
 	if [ "$LVibration" == "1" ];then
-	git revert 3f6e420279a8a6ac1f1ced36a7150bd753cd5696 --no-commit
+	git revert 82b39bb682ee8dbca38b7ca37e4f7c25303fd5ac --no-commit
 	git commit -s -m "Enable LED Vibration"
 	Vibrate="LV"
 	else
@@ -698,17 +698,17 @@ SwitchOFI()
     rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
     git commit -s -m "Remove R WLAN DRIVERS"
-    git revert 20eb9f7fa020e2bb6a7f06ec25723ac6743941b2 --no-commit
+    git revert a56e6c3e5bf1cb792c84daf5c902600c826f790c --no-commit
 	git commit -s -m "Switch to OFI"
 	if [ "$FreqOC" == "0" ];then
-	git revert 84c829b75cf44de2422c010af4472c2630d249a0 --no-commit
+	git revert 73e65b3e3574d2cf68caefbf0dc63a93ac6d336a --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
 	else
 	CpuFreq="OC"
 	fi
 	if [ "$LVibration" == "1" ];then
-	git revert 3f6e420279a8a6ac1f1ced36a7150bd753cd5696 --no-commit
+	git revert 82b39bb682ee8dbca38b7ca37e4f7c25303fd5ac --no-commit
 	git commit -s -m "Enable LED Vibration"
 	Vibrate="LV"
 	else
@@ -737,7 +737,7 @@ FixPieWifi()
 	cd $kernelDir
     git reset --hard origin/$branch
     if [ "$FreqOC" == "0" ];then
-	git revert 84c829b75cf44de2422c010af4472c2630d249a0 --no-commit
+	git revert 73e65b3e3574d2cf68caefbf0dc63a93ac6d336a --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
 	else
@@ -746,11 +746,11 @@ FixPieWifi()
 	rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
     git commit -s -m "Remove R WLAN DRIVERS"
-    git revert 20eb9f7fa020e2bb6a7f06ec25723ac6743941b2 --no-commit
+    git revert a56e6c3e5bf1cb792c84daf5c902600c826f790c --no-commit
 	git commit -s -m "Switch to OFI"
 	git revert be578e2def2d7a67d6643335d016008f7bee8da8 --no-commit
 	git revert 5c27bb6d8547112a8b815742c5dbcaae520b4497 --no-commit
-	git commit -s -m "Fix Pie WiFi"
+	git commit -s -m "Building for Android Pie"
     KVer=$(make kernelversion)
     HeadCommitId=$(git log --pretty=format:'%h' -n1)
     KernelFor='P'
