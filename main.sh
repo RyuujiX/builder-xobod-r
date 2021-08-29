@@ -224,7 +224,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/gd-up -b master $GdriveDir --depth=1 
     fi
     
-    SaveChatID="-275630226"
+    SaveChatID="-1001552964925"
     ARCH="arm64"
 	TZ="Asia/Jakarta"
     GetBD=$(date +"%m%d")
