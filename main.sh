@@ -49,6 +49,9 @@ GdriveDir=$mainDir/Gdrive-Uploader
 
 useGdrive='N'
 
+git config --global user.name "$GIT_USERNAME"
+git config --global user.email "$GIT_EMAIL"
+
 if [ ! -z "$CUSKERLINK" ];then
 KERNLINK="$CUSKERLINK"
 else
