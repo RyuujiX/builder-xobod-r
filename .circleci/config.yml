@@ -13,6 +13,7 @@ jobs:
             git clone https://$githubKey@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git -b $branch builder_kernel --depth=1
             cd builder_kernel
             source do-main.sh
+          when: always
           no_output_timeout : 5h
 workflows:
   version: 2.1
