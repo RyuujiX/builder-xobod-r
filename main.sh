@@ -153,7 +153,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     fi
 	if [ "$BuilderKernel" == "atom" ];then
         getInfo ">> cloning Atom-X clang 14 . . . <<"
-        git clone https://github.com/Atom-X-Devs/The-Atom-X-Toolchain -b atom-14 $clangDir --depth=1
+        git clone https://gitlab.com/ElectroPerf/atom-x-clang -b atom-14 $clangDir --depth=1
 		allFromClang="Y"
 		Compiler="Atom-X Clang"
 		TypeBuilder="Atom-X"
