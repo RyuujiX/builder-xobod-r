@@ -174,7 +174,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     elif [ "$BuilderKernel" == "gcc12" ] || [ "$gcc12" == "Y" ];then
         [[ "$(pwd)" != "${mainDir}" ]] && cd "${mainDir}"
 		if [ -e "${gcc64Dir}/aarch64-linux-gnu" ] || [ -e "${gcc32Dir}/arm-linux-gnueabi" ];then
-		rm -rf ${GCCaPath}/aarch64-linux-gnu ${GCCbPath}/arm-linux-gnueabi
+		rm -rf ${gcc64Dir}/aarch64-linux-gnu ${gcc32Dir}/arm-linux-gnueabi
 		fi
 		mkdir "${gcc64Dir}"
         mkdir "${gcc32Dir}"
@@ -631,7 +631,7 @@ MakeZip(){
 	if [ "$KranulVer" = "419" ];then
 	AKNAME="KnightWalker-Akira"
 	else
-	AKNAME="SkyWalker-Izumi"
+	AKNAME="SkyWalker-Kamado"
 	fi
 	CpuFrag="-$CpuFreq"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
@@ -645,7 +645,7 @@ MakeZip(){
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
-	sed -i "s/message.word=.*/message.word=Do not dream about your success. You have to work for it./g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=When the pain of an obstacle is too great, challenge yourself to be stronger./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$BDate/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
