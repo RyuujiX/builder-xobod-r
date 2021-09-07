@@ -4,13 +4,13 @@ branch="r4/hmp"
 LVibration="1"
 FreqOC="1"
 WithSpec="Y"
-CODENAME="X01BD"
+CODENAME="X00TD"
 FolderUp=""
 CUSKERNAME=""
 CUSKERLINK=""
 CUSBUILDDATE=""
-TypeBuild="RELEASE"
-BuilderKernel="00000"
+TypeBuild="TEST"
+BuilderKernel="strix"
 
 if [ "$KranulVer" = "419" ];then
 CAFTAG="07900"
@@ -70,7 +70,7 @@ fi
 
 getInfo ">> Building kernel . . . . <<"
 
-CompileKernel
+# CompileKernel
 # CompileKernel "65"
 # CompileKernel "68"
 # CompileKernel "71"
@@ -86,9 +86,6 @@ CompileKernel
 # CompileKernel "71"
 # CompileKernel "72"
 
-FixPieWifi
-
-CompileKernel
 # CompileKernel "65"
 # CompileKernel "68"
 # CompileKernel "71"
