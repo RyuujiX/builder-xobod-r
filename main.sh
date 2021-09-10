@@ -227,7 +227,12 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/gd-up -b master $GdriveDir --depth=1 
     fi
     
-    SaveChatID="-1001552964925"
+    FileChatID="-1001552964925"
+	if [ "$PrivBuild" == "Y" ];then
+	InfoChatID="-1001561722193"
+	else
+	InfoChatID="-1001407005109"
+	fi
     ARCH="arm64"
 	TZ="Asia/Jakarta"
     GetBD=$(date +"%m%d")
@@ -330,7 +335,7 @@ tg_send_info(){
         -d "parse_mode=html" \
         -d text="$1"
     else
-        curl -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" -d chat_id="-1001407005109" \
+        curl -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" -d chat_id="$InfoChatID" \
         -d "disable_web_page_preview=true" \
         -d "parse_mode=html" \
         -d text="$1"
@@ -340,7 +345,7 @@ tg_send_info(){
 tg_send_sticker() {
     curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendSticker" \
         -d sticker="$1" \
-        -d chat_id="-1001407005109"
+        -d chat_id="$InfoChatID"
 }
 
 tg_send_files(){
@@ -360,7 +365,7 @@ tg_send_files(){
 - <code>$ZipName</code>"
 	
         curl --progress-bar -F document=@"$KernelFiles" "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
-        -F chat_id="$SaveChatID"  \
+        -F chat_id="$FileChatID"  \
         -F "disable_web_page_preview=true" \
         -F "parse_mode=html" \
         -F caption="$MSG"
