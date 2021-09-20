@@ -64,7 +64,21 @@ elif [ "$KranulVer" = "419" ];then
 KranulLink="android_kernel_asus_sdm660-4.19"
 TypeBuildTag="EAS"
 AKbranch="4.19"
-spectrumFile=""
+	if [ "WithSpec" == "N" ];then
+	spectrumFile=""
+	elif [ "$CODENAME" == "X00TD" ];then
+	if [ "$FreqOC" == "1" ];then
+	spectrumFile="419-x00t-oc.rc"
+	else
+	spectrumFile="419-x00t.rc"
+	fi
+	elif [ "$CODENAME" == "X01BD" ];then
+	if [ "$FreqOC" == "1" ];then
+	spectrumFile="419-x01bd-oc.rc"
+	else
+	spectrumFile="419-x01bd.rc"
+	fi
+	fi
 fi
 
 . main.sh 'initial' 'full'

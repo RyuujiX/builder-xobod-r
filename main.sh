@@ -641,11 +641,14 @@ MakeZip(){
 	CpuFrag="-$CpuFreq"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
 	if [ "$KranulVer" = "44" ];then
+	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
 	if [ "$KernelFor" == "P" ];then
 	sed -i "s/kernel.for=.*/kernel.for=$CpuFreq-$Driver/g" anykernel.sh
 	else
 	sed -i "s/kernel.for=.*/kernel.for=$Vibrate$CpuFrag-$Driver/g" anykernel.sh
 	fi
+	elif [ "$KranulVer" = "419" ];then
+	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag$CpuFrag/g" anykernel.sh
 	fi
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
@@ -653,7 +656,6 @@ MakeZip(){
 	sed -i "s/message.word=.*/message.word=When the pain of an obstacle is too great, challenge yourself to be stronger./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$BDate/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
-	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
 	if [ "$KernelFor" == "P" ];then
 	sed -i "s/supported.versions=.*/supported.versions=9/g" anykernel.sh
 	elif [ "$Vibrate" == "LV" ] || [ "$KranulVer" = "419" ];then
@@ -681,6 +683,8 @@ MakeZip(){
 	else
 	sed -i "s/KVARIANT/$Vibrate$CpuFrag-$Driver/g" aroma-config
 	fi
+	elif [ "$KranulVer" = "419" ];then
+	sed -i "s/KVARIANT/$TypeBuildTag$CpuFrag/g" aroma-config
 	fi
 	cd $AnykernelDir
 
