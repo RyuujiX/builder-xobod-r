@@ -307,8 +307,8 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	elif [ "$KranulVer" = "419" ];then
 	CUSDEFPATH="arch/$ARCH/configs/$DEFCONFIGPATH"
 	if [ "$FreqOC" == "0" ];then
-	# git revert xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx --no-commit
-	# git commit -s -m "Back to stock freq"
+	git revert 2d2f4f48e5744f9adc8cb009421455e5f3563536 --no-commit
+	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
 	else
 	CpuFreq="OC"
