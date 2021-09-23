@@ -634,9 +634,9 @@ MakeZip(){
 	BDate="$GetCBD"
 	fi
 	if [ "$KranulVer" = "419" ];then
-	AKNAME="KnightWalker-Akira"
+	AKNAME="KnightWalker-Hajime"
 	else
-	AKNAME="SkyWalker-Kamado"
+	AKNAME="SkyWalker-Saitou"
 	fi
 	CpuFrag="-$CpuFreq"
 	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
@@ -653,7 +653,7 @@ MakeZip(){
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
-	sed -i "s/message.word=.*/message.word=When the pain of an obstacle is too great, challenge yourself to be stronger./g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=Great things are not done by impulse, but by a series of small things brought together./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$BDate/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	if [ "$KernelFor" == "P" ];then
