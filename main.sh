@@ -291,6 +291,11 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	if [ "$KranulVer" = "44" ];then
 	CUSDEFPATH="arch/$ARCH/configs/$DEFFCONFIG"
 	if [ "$FreqOC" == "0" ];then
+	if [ "$branch" = "r4/eas" ] || [ "$branch" = "eas-test" ];then
+	git revert 930d2e55af90c889a443e57d3c9541fb9862f8d9 --no-commit
+	else
+	git revert 99322c7380c9112eccd1df203bf9c3f96bf09044 --no-commit
+	fi
 	git revert ed24c54bb313ede6c2d0a0575cb346af8b361922 --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
@@ -307,6 +312,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	elif [ "$KranulVer" = "419" ];then
 	CUSDEFPATH="arch/$ARCH/configs/$DEFCONFIGPATH"
 	if [ "$FreqOC" == "0" ];then
+	git revert 51764560768a080c6215902fd9260035ac331edc --no-commit
 	git revert 2d2f4f48e5744f9adc8cb009421455e5f3563536 --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
@@ -713,6 +719,11 @@ SwitchOFI()
     git revert 529713d691506617320747f7330c7acf0fe1fa5b --no-commit
 	git commit -s -m "Switch to OFI"
 	if [ "$FreqOC" == "0" ];then
+	if [ "$branch" = "r4/eas" ] || [ "$branch" = "eas-test" ];then
+	git revert 930d2e55af90c889a443e57d3c9541fb9862f8d9 --no-commit
+	else
+	git revert 99322c7380c9112eccd1df203bf9c3f96bf09044 --no-commit
+	fi
 	git revert ed24c54bb313ede6c2d0a0575cb346af8b361922 --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
@@ -749,6 +760,11 @@ FixPieWifi()
 	cd $kernelDir
     git reset --hard origin/$branch
     if [ "$FreqOC" == "0" ];then
+	if [ "$branch" = "r4/eas" ] || [ "$branch" = "eas-test" ];then
+	git revert 930d2e55af90c889a443e57d3c9541fb9862f8d9 --no-commit
+	else
+	git revert 99322c7380c9112eccd1df203bf9c3f96bf09044 --no-commit
+	fi
 	git revert ed24c54bb313ede6c2d0a0575cb346af8b361922 --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
