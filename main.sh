@@ -645,7 +645,7 @@ MakeZip(){
 	AKNAME="SkyWalker-Saitou"
 	fi
 	CpuFrag="-$CpuFreq"
-	sed -i "s/kernel.string=.*/kernel.string=$AKNAME/g" anykernel.sh
+	sed -i "s/kernel.string=.*/kernel.string=$KName/g" anykernel.sh
 	if [ "$KranulVer" = "44" ];then
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
 	if [ "$KernelFor" == "P" ];then
@@ -678,7 +678,7 @@ MakeZip(){
 	sed -i "s/X00TD=.*/X00TD=1/g" anykernel.sh
 	fi
 	cd $AnykernelDir/META-INF/com/google/android
-	sed -i "s/KNAME/$AKNAME/g" aroma-config
+	sed -i "s/KNAME/$KName/g" aroma-config
 	sed -i "s/KVER/$KVer/g" aroma-config
 	sed -i "s/KAUTHOR/Ryuuji @ItsRyuujiX/g" aroma-config
 	sed -i "s/KDEVICE/$DEVICE - $CODENAME/g" aroma-config
