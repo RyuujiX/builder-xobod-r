@@ -141,6 +141,8 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		Compiler="Elastics Clang"
 		TypeBuilder="Elastics"
 		TypePrint="Elastics"
+		export LD=ld.lld
+        export LD_LIBRARY_PATH=$clangDir/lib
     fi
     if [ "$BuilderKernel" == "iris" ];then
         getInfo ">> cloning iRISxe clang 13 . . . <<"
