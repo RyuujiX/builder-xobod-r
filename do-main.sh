@@ -1,17 +1,17 @@
 #! /bin/bash
-KranulVer="44"
-branch="r4/hmp"
+KranulVer="419"
+branch="r1/stable"
 LVibration="1"
-FreqOC="1"
+FreqOC="0"
 WithSpec="Y"
 CODENAME="X01BD"
 FolderUp=""
-PrivBuild="N"
+PrivBuild="Y"
 CUSKERNAME=""
 CUSKERLINK=""
 CUSBUILDDATE=""
-TypeBuild="RELEASE"
-BuilderKernel="00000"
+TypeBuild="TEST"
+BuilderKernel="elas"
 
 if [ "$KranulVer" = "419" ];then
 CAFTAG="07900"
