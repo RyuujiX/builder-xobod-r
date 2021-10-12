@@ -322,6 +322,8 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	Vibrate="NLV"
 	fi
 	elif [ "$KranulVer" = "419" ];then
+	export LLVM=1
+	export LLVM_IAS=1
 	CUSDEFPATH="arch/$ARCH/configs/$DEFCONFIGPATH"
 	if [ "$FreqOC" == "0" ];then
 	git revert 51764560768a080c6215902fd9260035ac331edc --no-commit
