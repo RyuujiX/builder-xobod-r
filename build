@@ -56,4 +56,8 @@ do
     fi
 done
 
+if [ "$2" == "drone" ];then
+git push -f rmt2 $ListBranch
+else
 git push -f origin $ListBranch
+fi
