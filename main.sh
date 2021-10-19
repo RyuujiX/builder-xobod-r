@@ -239,7 +239,11 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/gd-up -b master $GdriveDir --depth=1 
     fi
     
+	if [ "$TypeBuild" == "RELEASE" ];then
+	FileChatID="-1001538380925"
+	else
     FileChatID="-1001552964925"
+	fi
 	if [ "$PrivBuild" == "Y" ];then
 	InfoChatID="-1001561722193"
 	else
