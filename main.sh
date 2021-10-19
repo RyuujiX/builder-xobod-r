@@ -253,6 +253,9 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	else
 	InfoChatID="-1001407005109"
 	fi
+	if [ "$branch" == "r1/s-s2" ] || [ "$branch" == "r4/eas-s2" ] || [ "$branch" == "r4/hmp-s2" ];then
+	SixTwo="Y"
+	fi
     ARCH="arm64"
 	TZ="Asia/Jakarta"
     GetBD=$(date +"%m%d")
@@ -310,7 +313,9 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
 	if [ "$KranulVer" = "44" ];then
 	CUSDEFPATH="arch/$ARCH/configs/$DEFFCONFIG"
-	if [ "$FreqOC" == "0" ];then
+	if [ "$SixTwo" == "Y" ];then
+	CpuFreq="SiX2"
+	elif [ "$FreqOC" == "0" ];then
 	if [ "$branch" = "r4/eas" ] || [ "$branch" = "eas-test" ];then
 	git revert 930d2e55af90c889a443e57d3c9541fb9862f8d9 --no-commit
 	else
@@ -333,7 +338,9 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	export LLVM=1
 	export LLVM_IAS=1
 	CUSDEFPATH="arch/$ARCH/configs/$DEFCONFIGPATH"
-	if [ "$FreqOC" == "0" ];then
+	if [ "$SixTwo" == "Y" ];then
+	CpuFreq="SiX2"
+	elif [ "$FreqOC" == "0" ];then
 	git revert 51764560768a080c6215902fd9260035ac331edc --no-commit
 	git revert 2d2f4f48e5744f9adc8cb009421455e5f3563536 --no-commit
 	git commit -s -m "Back to stock freq"
@@ -740,7 +747,9 @@ SwitchOFI()
     git commit -s -m "Remove R WLAN DRIVERS"
     git revert 529713d691506617320747f7330c7acf0fe1fa5b --no-commit
 	git commit -s -m "Switch to OFI"
-	if [ "$FreqOC" == "0" ];then
+	if [ "$SixTwo" == "Y" ];then
+	CpuFreq="SiX2"
+	elif [ "$FreqOC" == "0" ];then
 	if [ "$branch" = "r4/eas" ] || [ "$branch" = "eas-test" ];then
 	git revert 930d2e55af90c889a443e57d3c9541fb9862f8d9 --no-commit
 	else
@@ -781,7 +790,9 @@ FixPieWifi()
 {
 	cd $kernelDir
     git reset --hard origin/$branch
-    if [ "$FreqOC" == "0" ];then
+    if [ "$SixTwo" == "Y" ];then
+	CpuFreq="SiX2"
+	elif [ "$FreqOC" == "0" ];then
 	if [ "$branch" = "r4/eas" ] || [ "$branch" = "eas-test" ];then
 	git revert 930d2e55af90c889a443e57d3c9541fb9862f8d9 --no-commit
 	else
