@@ -155,13 +155,17 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     fi
 	if [ "$BuilderKernel" == "atom" ];then
         getInfo ">> cloning Atom-X clang 14 . . . <<"
-        git clone https://gitlab.com/ElectroPerf/atom-x-clang -b atom-14 $clangDir --depth=1
+        git clone https://gitlab.com/ElectroPerf/atom-x-clang -b atom-14 $clangDir
 		allFromClang="Y"
 		Compiler="Atom-X Clang"
 		TypeBuilder="Atom-X"
 		TypePrint="Atom-X"
 		export LD=ld.lld
         export LD_LIBRARY_PATH=$clangDir/lib
+		
+		cd $clangDir
+		git reset --hard 06c20aff3cd0b463a5603dc7dedd47d64a6a8b8b
+		cd $mainDir
     fi
 	if [ "$BuilderKernel" == "otaku" ];then
         getInfo ">> cloning Otaku clang 14 . . . <<"
