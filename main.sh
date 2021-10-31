@@ -313,6 +313,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
 	if [ "$KranulVer" = "44" ];then
 	CUSDEFPATH="arch/$ARCH/configs/$DEFFCONFIG"
+	if [ "$PureKernel" == "N" ];then
 	if [ "$SixTwo" == "Y" ];then
 	CpuFreq="SiX2"
 	elif [ "$FreqOC" == "0" ];then
@@ -334,10 +335,12 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	else
 	Vibrate="NLV"
 	fi
+	fi
 	elif [ "$KranulVer" = "419" ];then
 	export LLVM=1
 	export LLVM_IAS=1
 	CUSDEFPATH="arch/$ARCH/configs/$DEFCONFIGPATH"
+	if [ "$PureKernel" == "N" ];then
 	if [ "$SixTwo" == "Y" ];then
 	CpuFreq="SiX2"
 	elif [ "$FreqOC" == "0" ];then
@@ -347,6 +350,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	CpuFreq="Stock"
 	else
 	CpuFreq="OC"
+	fi
 	fi
 	fi
 	KVer=$(make kernelversion)
@@ -624,19 +628,20 @@ CompileKernel(){
 	fi
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
 		
-        if [ "$KernelFor" == "P" ];then
+        if [ "$KernelFor" == "P" ] || [ "$KranulVer" = "419" ];then
 		FilenameVC="[$CpuFreq]"
 		else
 		FilenameVC="[$Vibrate-$CpuFreq]"
 		fi
-	if [ "$KranulVer" = "44" ];then
+	if [ "$PureKernel" == "Y" ];then
+			ZipName="$KName-$KVer-$CODENAME.zip"
+	elif [ "$KranulVer" = "44" ];then
 		 if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
             ZipName="$FilenameVC$KName-$Driver-$KVer-$CODENAME.zip"
          else
             ZipName="$FilenameVC$KName-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
          fi
 	elif [ "$KranulVer" = "419" ];then
-		FilenameVC="[$CpuFreq]"
 		 if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
             ZipName="$FilenameVC$KName-$KVer-$CODENAME.zip"
          else
@@ -668,13 +673,9 @@ MakeZip(){
 	else
 	BDate="$GetCBD"
 	fi
-	if [ "$KranulVer" = "419" ];then
-	AKNAME="KnightWalker-Hajime"
-	else
-	AKNAME="SkyWalker-Saitou"
-	fi
 	CpuFrag="-$CpuFreq"
 	sed -i "s/kernel.string=.*/kernel.string=$KName/g" anykernel.sh
+	if [ "$PureKernel" == "N" ];then
 	if [ "$KranulVer" = "44" ];then
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
 	if [ "$KernelFor" == "P" ];then
@@ -685,18 +686,21 @@ MakeZip(){
 	elif [ "$KranulVer" = "419" ];then
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag$CpuFrag/g" anykernel.sh
 	fi
+	fi
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
 	sed -i "s/message.word=.*/message.word=You will never fall if you are afraid to climb. But there is no joy in living your entire life on the ground./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$BDate/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
+	if [ "$PureKernel" == "Y" ];then
 	if [ "$KernelFor" == "P" ];then
 	sed -i "s/supported.versions=.*/supported.versions=9/g" anykernel.sh
 	elif [ "$Vibrate" == "LV" ] || [ "$KranulVer" = "419" ];then
 	sed -i "s/supported.versions=.*/supported.versions=11-12/g" anykernel.sh
 	elif [ "$Vibrate" == "NLV" ];then
 	sed -i "s/supported.versions=.*/supported.versions=9-12/g" anykernel.sh
+	fi
 	fi
 	if [ "$CODENAME" == "X00TD" ];then
 	sed -i "s/device.name1=.*/device.name1=X00TD/g" anykernel.sh
@@ -712,6 +716,7 @@ MakeZip(){
 	sed -i "s/KAUTHOR/Ryuuji @ItsRyuujiX/g" aroma-config
 	sed -i "s/KDEVICE/$DEVICE - $CODENAME/g" aroma-config
 	sed -i "s/KBDATE/$BDate/g" aroma-config
+	if [ "$PureKernel" == "N" ];then
 	if [ "$KranulVer" = "44" ];then
 	if [ "$KernelFor" == "P" ];then
 	sed -i "s/KVARIANT/$CpuFreq-$Driver/g" aroma-config
@@ -720,6 +725,7 @@ MakeZip(){
 	fi
 	elif [ "$KranulVer" = "419" ];then
 	sed -i "s/KVARIANT/$TypeBuildTag$CpuFrag/g" aroma-config
+	fi
 	fi
 	cd $AnykernelDir
 

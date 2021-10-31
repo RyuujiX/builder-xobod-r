@@ -7,6 +7,7 @@ WithSpec="Y"
 CODENAME="X01BD"
 FolderUp=""
 PrivBuild="N"
+PureKernel="N"
 CUSKERNAME=""
 CUSKERLINK=""
 CUSBUILDDATE=""
@@ -103,7 +104,7 @@ CompileKernel
 # CompileKernel "71"
 # CompileKernel "72"
 
-if [ "$KranulVer" = "44" ];then
+if [ "$KranulVer" = "44" ] && [ "$PureKernel" == "N" ];then
 
 SwitchOFI
 
