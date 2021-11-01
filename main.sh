@@ -246,7 +246,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	if [ "$TypeBuild" == "RELEASE" ];then
 	FileChatID="-1001538380925"
 	else
-    FileChatID="-1001552964925"
+    FileChatID="-1001756316778"
 	fi
 	if [ "$PrivBuild" == "Y" ];then
 	InfoChatID="-1001561722193"
