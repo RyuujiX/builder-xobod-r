@@ -11,6 +11,7 @@ PureKernel="N"
 CUSKERNAME=""
 CUSKERLINK=""
 CUSBUILDDATE=""
+CUSSPEC=""
 TypeBuild="RELEASE"
 BuilderKernel="00000"
 
@@ -29,6 +30,8 @@ TypeBuildTag="EAS"
 AKbranch="4.4-eas"
 	if [ "WithSpec" == "N" ];then
 	spectrumFile=""
+	elif [ ! -z "$CUSSPEC" ];then
+	spectrumFile="$CUSSPEC"
 	elif [ "$CODENAME" == "X00TD" ];then
 	if [ "$branch" == "r4/eas-s2" ];then
 	spectrumFile="eas-x00t-sixtwo.rc"
@@ -51,6 +54,8 @@ TypeBuildTag="HMP"
 AKbranch="4.4-hmp"
 	if [ "WithSpec" == "N" ];then
 	spectrumFile=""
+	elif [ ! -z "$CUSSPEC" ];then
+	spectrumFile="$CUSSPEC"
 	elif [ "$CODENAME" == "X00TD" ];then
 	if [ "$branch" == "r4/hmp-s2" ];then
 	spectrumFile="ryuu-x00t-sixtwo.rc"
@@ -75,6 +80,8 @@ TypeBuildTag="EAS"
 AKbranch="4.19"
 	if [ "WithSpec" == "N" ];then
 	spectrumFile=""
+	elif [ ! -z "$CUSSPEC" ];then
+	spectrumFile="$CUSSPEC"
 	elif [ "$CODENAME" == "X00TD" ];then
 	if [ "$branch" == "r1/s-s2" ];then
 	spectrumFile="419-x00t-sixtwo.rc"
