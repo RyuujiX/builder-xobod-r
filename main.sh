@@ -253,7 +253,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	else
 	InfoChatID="-1001407005109"
 	fi
-	if [ "$branch" == "r1/s-s2" ] || [ "$branch" == "r4/eas-s2" ] || [ "$branch" == "r4/hmp-s2" ];then
+	if [ "$branch" == "r1/s-s2" ] || [ "$branch" == "r5/eas-s2" ] || [ "$branch" == "r5/hmp-s2" ];then
 	SixTwo="Y"
 	fi
     ARCH="arm64"
@@ -317,19 +317,14 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	if [ "$SixTwo" == "Y" ];then
 	CpuFreq="SiX2"
 	elif [ "$FreqOC" == "0" ];then
-	if [ "$branch" = "r4/eas" ] || [ "$branch" = "eas-test" ];then
-	git revert 930d2e55af90c889a443e57d3c9541fb9862f8d9 --no-commit
-	else
-	git revert 99322c7380c9112eccd1df203bf9c3f96bf09044 --no-commit
-	fi
-	git revert ed24c54bb313ede6c2d0a0575cb346af8b361922 --no-commit
+	git revert 94d9e96fd152226183b48ac64aefcee3dc7d1393 --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
 	else
 	CpuFreq="OC"
 	fi
 	if [ "$LVibration" == "1" ];then
-	git revert 217db372accfa0154858e8407c258a6fa1e14ae3 --no-commit
+	git revert e7ea2a83ab6c55e62148309eeb6fe9a54bbf8a20 --no-commit
 	git commit -s -m "Enable LED Vibration"
 	Vibrate="LV"
 	else
@@ -344,8 +339,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	if [ "$SixTwo" == "Y" ];then
 	CpuFreq="SiX2"
 	elif [ "$FreqOC" == "0" ];then
-	git revert 51764560768a080c6215902fd9260035ac331edc --no-commit
-	git revert 2d2f4f48e5744f9adc8cb009421455e5f3563536 --no-commit
+	git revert 59e887a5fb7026e9ccb99365ffe5d91b6286307c --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
 	else
@@ -751,24 +745,19 @@ SwitchOFI()
     rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
     git commit -s -m "Remove R WLAN DRIVERS"
-    git revert 529713d691506617320747f7330c7acf0fe1fa5b --no-commit
+    git revert ec8656af53d9ee2eb544cc56654ca40f24934e67 --no-commit
 	git commit -s -m "Switch to OFI"
 	if [ "$SixTwo" == "Y" ];then
 	CpuFreq="SiX2"
 	elif [ "$FreqOC" == "0" ];then
-	if [ "$branch" = "r4/eas" ] || [ "$branch" = "eas-test" ];then
-	git revert 930d2e55af90c889a443e57d3c9541fb9862f8d9 --no-commit
-	else
-	git revert 99322c7380c9112eccd1df203bf9c3f96bf09044 --no-commit
-	fi
-	git revert ed24c54bb313ede6c2d0a0575cb346af8b361922 --no-commit
+	git revert 94d9e96fd152226183b48ac64aefcee3dc7d1393 --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
 	else
 	CpuFreq="OC"
 	fi
 	if [ "$LVibration" == "1" ];then
-	git revert 217db372accfa0154858e8407c258a6fa1e14ae3 --no-commit
+	git revert e7ea2a83ab6c55e62148309eeb6fe9a54bbf8a20 --no-commit
 	git commit -s -m "Enable LED Vibration"
 	Vibrate="LV"
 	else
@@ -799,12 +788,7 @@ FixPieWifi()
     if [ "$SixTwo" == "Y" ];then
 	CpuFreq="SiX2"
 	elif [ "$FreqOC" == "0" ];then
-	if [ "$branch" = "r4/eas" ] || [ "$branch" = "eas-test" ];then
-	git revert 930d2e55af90c889a443e57d3c9541fb9862f8d9 --no-commit
-	else
-	git revert 99322c7380c9112eccd1df203bf9c3f96bf09044 --no-commit
-	fi
-	git revert ed24c54bb313ede6c2d0a0575cb346af8b361922 --no-commit
+	git revert 94d9e96fd152226183b48ac64aefcee3dc7d1393 --no-commit
 	git commit -s -m "Back to stock freq"
 	CpuFreq="Stock"
 	else
@@ -813,7 +797,7 @@ FixPieWifi()
 	rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
     git commit -s -m "Remove R WLAN DRIVERS"
-    git revert 529713d691506617320747f7330c7acf0fe1fa5b --no-commit
+    git revert ec8656af53d9ee2eb544cc56654ca40f24934e67 --no-commit
 	git commit -s -m "Switch to OFI"
 	git revert be578e2def2d7a67d6643335d016008f7bee8da8 --no-commit
 	git revert 5c27bb6d8547112a8b815742c5dbcaae520b4497 --no-commit

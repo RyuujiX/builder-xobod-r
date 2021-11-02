@@ -1,6 +1,6 @@
 #! /bin/bash
 KranulVer="44"
-branch="r4/hmp"
+branch="r5/hmp"
 LVibration="1"
 FreqOC="1"
 WithSpec="Y"
@@ -25,7 +25,7 @@ fi
 
 if [ "$KranulVer" = "44" ];then
 KranulLink="android_kernel_asus_sdm660"
-if [ "$branch" = "r4/eas" ] || [ "$branch" == "r4/eas-s2" ] || [ "$branch" = "eas-test" ];then
+if [ "$branch" = "r5/eas" ] || [ "$branch" == "r5/eas-s2" ] || [ "$branch" = "eas-test" ];then
 TypeBuildTag="EAS"
 AKbranch="4.4-eas"
 	if [ "WithSpec" == "N" ];then
@@ -33,7 +33,7 @@ AKbranch="4.4-eas"
 	elif [ ! -z "$CUSSPEC" ];then
 	spectrumFile="$CUSSPEC"
 	elif [ "$CODENAME" == "X00TD" ];then
-	if [ "$branch" == "r4/eas-s2" ];then
+	if [ "$branch" == "r5/eas-s2" ];then
 	spectrumFile="eas-x00t-sixtwo.rc"
 	elif [ "$FreqOC" == "1" ];then
 	spectrumFile="eas-x00t-oc.rc"
@@ -41,7 +41,7 @@ AKbranch="4.4-eas"
 	spectrumFile="eas-x00t.rc"
 	fi
 	elif [ "$CODENAME" == "X01BD" ];then
-	if [ "$branch" == "r4/eas-s2" ];then
+	if [ "$branch" == "r5/eas-s2" ];then
 	spectrumFile="eas-x01bd-sixtwo.rc"
 	elif [ "$FreqOC" == "1" ];then
 	spectrumFile="eas-x01bd-oc.rc"
@@ -57,7 +57,7 @@ AKbranch="4.4-hmp"
 	elif [ ! -z "$CUSSPEC" ];then
 	spectrumFile="$CUSSPEC"
 	elif [ "$CODENAME" == "X00TD" ];then
-	if [ "$branch" == "r4/hmp-s2" ];then
+	if [ "$branch" == "r5/hmp-s2" ];then
 	spectrumFile="ryuu-x00t-sixtwo.rc"
 	elif [ "$FreqOC" == "1" ];then
 	spectrumFile="ryuu-x00t-oc.rc"
@@ -65,7 +65,7 @@ AKbranch="4.4-hmp"
 	spectrumFile="ryuu-x00t.rc"
 	fi
 	elif [ "$CODENAME" == "X01BD" ];then
-	if [ "$branch" == "r4/hmp-s2" ];then
+	if [ "$branch" == "r5/hmp-s2" ];then
 	spectrumFile="ryuu-x01bd-sixtwo.rc"
 	elif [ "$FreqOC" == "1" ];then
 	spectrumFile="ryuu-x01bd-oc.rc"
