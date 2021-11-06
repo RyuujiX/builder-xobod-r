@@ -1,8 +1,6 @@
 #! /bin/bash
 KranulVer="44"
 branch="r5/hmp"
-LVibration="1"
-FreqOC="1"
 WithSpec="Y"
 CODENAME="X01BD"
 FolderUp=""
@@ -28,105 +26,56 @@ KranulLink="android_kernel_asus_sdm660"
 if [ "$branch" = "r5/eas" ] || [ "$branch" == "r5/eas-s2" ] || [ "$branch" = "eas-test" ];then
 TypeBuildTag="EAS"
 AKbranch="4.4-eas"
-	if [ "WithSpec" == "N" ];then
-	spectrumFile=""
-	elif [ ! -z "$CUSSPEC" ];then
-	spectrumFile="$CUSSPEC"
-	elif [ "$CODENAME" == "X00TD" ];then
-	if [ "$branch" == "r5/eas-s2" ];then
-	spectrumFile="eas-x00t-sixtwo.rc"
-	elif [ "$FreqOC" == "1" ];then
-	spectrumFile="eas-x00t-oc.rc"
-	else
-	spectrumFile="eas-x00t.rc"
-	fi
-	elif [ "$CODENAME" == "X01BD" ];then
-	if [ "$branch" == "r5/eas-s2" ];then
-	spectrumFile="eas-x01bd-sixtwo.rc"
-	elif [ "$FreqOC" == "1" ];then
-	spectrumFile="eas-x01bd-oc.rc"
-	else
-	spectrumFile="eas-x01bd.rc"
-	fi
-	fi
 else
 TypeBuildTag="HMP"
 AKbranch="4.4-hmp"
-	if [ "WithSpec" == "N" ];then
-	spectrumFile=""
-	elif [ ! -z "$CUSSPEC" ];then
-	spectrumFile="$CUSSPEC"
-	elif [ "$CODENAME" == "X00TD" ];then
-	if [ "$branch" == "r5/hmp-s2" ];then
-	spectrumFile="ryuu-x00t-sixtwo.rc"
-	elif [ "$FreqOC" == "1" ];then
-	spectrumFile="ryuu-x00t-oc.rc"
-	else
-	spectrumFile="ryuu-x00t.rc"
-	fi
-	elif [ "$CODENAME" == "X01BD" ];then
-	if [ "$branch" == "r5/hmp-s2" ];then
-	spectrumFile="ryuu-x01bd-sixtwo.rc"
-	elif [ "$FreqOC" == "1" ];then
-	spectrumFile="ryuu-x01bd-oc.rc"
-	else
-	spectrumFile="ryuu-x01bd.rc"
-	fi
-	fi
 fi
 elif [ "$KranulVer" = "419" ];then
 KranulLink="android_kernel_asus_sdm660-4.19"
 TypeBuildTag="EAS"
 AKbranch="4.19"
-	if [ "WithSpec" == "N" ];then
-	spectrumFile=""
-	elif [ ! -z "$CUSSPEC" ];then
-	spectrumFile="$CUSSPEC"
-	elif [ "$CODENAME" == "X00TD" ];then
-	if [ "$branch" == "r1/s-s2" ];then
-	spectrumFile="419-x00t-sixtwo.rc"
-	elif [ "$FreqOC" == "1" ];then
-	spectrumFile="419-x00t-oc.rc"
-	else
-	spectrumFile="419-x00t.rc"
-	fi
-	elif [ "$CODENAME" == "X01BD" ];then
-	if [ "$branch" == "r1/s-s2" ];then
-	spectrumFile="419-x01bd-sixtwo.rc"
-	elif [ "$FreqOC" == "1" ];then
-	spectrumFile="419-x01bd-oc.rc"
-	else
-	spectrumFile="419-x01bd.rc"
-	fi
-	fi
 fi
 
 . main.sh 'initial' 'full'
 
 getInfo ">> Building kernel . . . . <<"
 
+# NLV NFI / 4.19 / PureKernel Build
 CompileKernel
-# CompileKernel "65"
-# CompileKernel "68"
-# CompileKernel "71"
-# CompileKernel "72"
+GoForStock
+CompileKernel
 
-if [ "$KranulVer" = "44" ] && [ "$PureKernel" == "N" ];then
+if [ "$KranulVer" = "44" ] && [ "$TypeBuild" == "RELEASE" ] && [ "$PureKernel" == "N" ];then
 
+# LV NFI Build
+ResetKernel
+GoForLV
+CompileKernel
+GoForStock
+COmpileKernel
+
+# NLV OFI Build
+ResetKernel
 SwitchOFI
-
 CompileKernel
-# CompileKernel "65"
-# CompileKernel "68"
-# CompileKernel "71"
-# CompileKernel "72"
+GoForStock
+CompileKernel
 
+# LV OFI Build
+ResetKernel
+SwitchOFI
+GoForLV
+CompileKernel
+GoForStock
+CompileKernel
+
+if [ "$CODENAME" == "X01BD" ];then
+# X01BD Pie Custom ROM Build
+ResetKernel
 FixPieWifi
-
 CompileKernel
-# CompileKernel "65"
-# CompileKernel "68"
-# CompileKernel "71"
-# CompileKernel "72"
+GoForStock
+CompileKernel
+fi
 
 fi
