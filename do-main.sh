@@ -42,6 +42,16 @@ fi
 
 getInfo ">> Building kernel . . . . <<"
 
+# Notes :
+# GoForLV to LED Vibration
+# GoForStock to Stock Freq
+# SwitchOFI to Pie WiFi Driver
+# FixPieWifi to Build for X01BD Pie Custom ROMs
+# SwitchDevice to Switch Device
+# ResetKernel to Reset Kernel Source same like Origin
+# CompileKernel to Compile Kernel
+# FFRelease for 4.4 Release Build
+
 # NLV NFI / 4.19 / PureKernel Build
 CompileKernel
 GoForStock
