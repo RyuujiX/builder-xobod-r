@@ -316,10 +316,20 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	if [ "$PureKernel" == "N" ];then
 	if [ "$SixTwo" == "Y" ];then
 	CpuFreq="SiX2"
+	elif [ "$FreqOC" == "0" ];then
+	git revert 94d9e96fd152226183b48ac64aefcee3dc7d1393 --no-commit
+	git commit -s -m "Back to stock freq"
+	CpuFreq="Stock"
 	else
 	CpuFreq="OC"
 	fi
+	if [ "$LVibration" == "1" ];then
+	git revert e7ea2a83ab6c55e62148309eeb6fe9a54bbf8a20 --no-commit
+	git commit -s -m "Enable LED Vibration"
+	Vibrate="LV"
+	else
 	Vibrate="NLV"
+	fi
 	fi
 	elif [ "$KranulVer" = "419" ];then
 	export LLVM=1
@@ -328,6 +338,10 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	if [ "$PureKernel" == "N" ];then
 	if [ "$SixTwo" == "Y" ];then
 	CpuFreq="SiX2"
+	elif [ "$FreqOC" == "0" ];then
+	git revert 59e887a5fb7026e9ccb99365ffe5d91b6286307c --no-commit
+	git commit -s -m "Back to stock freq"
+	CpuFreq="Stock"
 	else
 	CpuFreq="OC"
 	fi
@@ -375,7 +389,7 @@ tg_send_files(){
 - <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s) </code>
 
 <b>Compiled at</b>
-- <code>$(date)</code>
+- <code>$GetDateTime</code>
 
 <b>MD5 Checksum</b>
 - <code>$MD5CHECK</code>
@@ -407,9 +421,6 @@ tg_send_files(){
 		
     # remove files after build done
     rm -rf $KernelFiles
-	rm -rf $kernelDir/arch/$ARCH/boot/Image.gz
-	rm -rf $kernelDir/arch/$ARCH/boot/Image.gz-dtb
-	rm -rf $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb
 }
 
 CompileKernel(){
@@ -644,6 +655,9 @@ CompileKernel(){
 MakeZip(){
     cd $AnykernelDir
 	git reset --hard origin/$AKbranch
+    if [ ! -z "$spectrumFile" ];then
+        cp -af $SpectrumDir/$spectrumFile spectrum/init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" spectrum/init.spectrum.rc
+    fi
     cp -af anykernel-real.sh anykernel.sh
 	if [ "$TypeBuild" = "RELEASE" ];then
 	cp -af $kernelDir/changelog META-INF/com/google/android/aroma/changelog.txt
@@ -673,7 +687,7 @@ MakeZip(){
 	sed -i "s/message.word=.*/message.word=The strongest among you is the one who controls his anger./g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$BDate/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
-	if [ "$PureKernel" == "N" ];then
+	if [ "$PureKernel" == "Y" ];then
 	if [ "$KernelFor" == "P" ];then
 	sed -i "s/supported.versions=.*/supported.versions=9/g" anykernel.sh
 	elif [ "$Vibrate" == "LV" ] || [ "$KranulVer" = "419" ];then
@@ -683,15 +697,12 @@ MakeZip(){
 	fi
 	fi
 	if [ "$CODENAME" == "X00TD" ];then
-	spectrumCD="x00t"
 	sed -i "s/device.name1=.*/device.name1=X00TD/g" anykernel.sh
 	sed -i "s/device.name2=.*/device.name2=X00T/g" anykernel.sh
 	sed -i "s/device.name3=.*/device.name3=Zenfone Max Pro M1 (X00TD)/g" anykernel.sh
 	sed -i "s/device.name4=.*/device.name4=ASUS_X00TD/g" anykernel.sh
 	sed -i "s/device.name5=.*/device.name5=ASUS_X00T/g" anykernel.sh
 	sed -i "s/X00TD=.*/X00TD=1/g" anykernel.sh
-	elif [ "$CODENAME" == "X01BD" ];then
-	spectrumCD="x01bd"
 	fi
 	cd $AnykernelDir/META-INF/com/google/android
 	sed -i "s/KNAME/$KName/g" aroma-config
@@ -711,31 +722,6 @@ MakeZip(){
 	fi
 	fi
 	cd $AnykernelDir
-	if [ "$SixTwo" == "Y" ];then
-	spectrumFreq="-sixtwo"
-	elif [ "$CpuFreq" == "OC" ];then
-	spectrumFreq="-oc"
-	else
-	spectrumFreq=""
-	fi
-	if [ "$TypeBuildTag" == "EAS" ] && [ "$KranulVer" = "44" ];then
-	spectrumVer="eas"
-	elif [ "$TypeBuildTag" == "HMP" ] && [ "$KranulVer" = "44" ];then
-	spectrumVer="ryuu"
-	elif [ "$KranulVer" = "419" ];then
-	spectrumVer="419"
-	fi
-	if [ "WithSpec" == "N" ];then
-	spectrumFile=""
-	elif [ ! -z "$CUSSPEC" ];then
-	spectrumFile="$CUSSPEC"
-	else
-	spectrumFile="$spectrumVer-$spectrumCD$spectrumFreq"
-	fi
-	
-	if [ ! -z "$spectrumFile" ];then
-        cp -af $SpectrumDir/$spectrumFile spectrum/init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" spectrum/init.spectrum.rc
-    fi
 
     zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
     if [ ! -z "$1" ];then
@@ -746,58 +732,16 @@ MakeZip(){
 
 }
 
-SwitchDevice()
-{
-	if [ "$1" == "X00TD" ];then
-	DEVICE="Asus Max Pro M1"
-	DEFFCONFIG="X00TD_defconfig"
-	elif [ "$1" == "X01BD" ];then
-	DEVICE="Asus Max Pro M2"
-	DEFFCONFIG="X01BD_defconfig"
-	fi
-	CODENAME="$1"
-}
-
-GoForStock()
-{
-	cd $kernelDir
-	if [ "$KranulVer" = "44" ];then
-	git revert 94d9e96fd152226183b48ac64aefcee3dc7d1393 --no-commit
-	elif [ "$KranulVer" = "419" ];then
-	git revert 59e887a5fb7026e9ccb99365ffe5d91b6286307c --no-commit
-	fi
-	git commit -s -m "Back to stock freq"
-	CpuFreq="Stock"
-	rm -rf out
-	cd $mainDir
-}
-
-GoForLV()
-{
-	cd $kernelDir
-	git revert e7ea2a83ab6c55e62148309eeb6fe9a54bbf8a20 --no-commit
-	git commit -s -m "Enable LED Vibration"
-	Vibrate="LV"
-	rm -rf out
-	cd $mainDir
-}
-
-ResetKernel()
-{
-	cd $kernelDir
-    git reset --hard origin/$branch
-	rm -rf out
-	cd $mainDir
-	CpuFreq="OC"
-	if [ "$KranulVer" = "44" ];then
-	Driver="NFI"
-	Vibrate="NLV"
-	fi
-}
-
 SwitchOFI()
 {
 	cd $kernelDir
+    git reset --hard origin/$branch
+	# if [ "$branch" == "injectorx-eas" ];then
+	# git revert e31cfbb028ff2d92af87e4f327bfca25da68aba4 --no-commit
+	# elif [ "$branch" == "injectorx" ];then
+	# git revert 226908e2c6ba8af243cd6ee4bc6d694043fc90e7 --no-commit
+	# fi
+	# git commit -s -m "Bringup OFI Edition"
     rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
     git commit -s -m "Remove R WLAN DRIVERS"
@@ -805,12 +749,32 @@ SwitchOFI()
 	git commit -s -m "Switch to OFI"
 	if [ "$SixTwo" == "Y" ];then
 	CpuFreq="SiX2"
+	elif [ "$FreqOC" == "0" ];then
+	git revert 94d9e96fd152226183b48ac64aefcee3dc7d1393 --no-commit
+	git commit -s -m "Back to stock freq"
+	CpuFreq="Stock"
+	else
+	CpuFreq="OC"
+	fi
+	if [ "$LVibration" == "1" ];then
+	git revert e7ea2a83ab6c55e62148309eeb6fe9a54bbf8a20 --no-commit
+	git commit -s -m "Enable LED Vibration"
+	Vibrate="LV"
+	else
+	Vibrate="NLV"
 	fi
     KVer=$(make kernelversion)
     HeadCommitId=$(git log --pretty=format:'%h' -n1)
     KernelFor='R'
     RefreshRate="60"
 	Driver="OFI"
+	if [ "$CODENAME" == "X00TD" ];then
+	DEVICE="Asus Max Pro M1"
+	DEFFCONFIG="X00TD_defconfig"
+	elif [ "$CODENAME" == "X01BD" ];then
+	DEVICE="Asus Max Pro M2"
+	DEFFCONFIG="X01BD_defconfig"
+	fi
 	
 	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
     rm -rf out
@@ -823,6 +787,10 @@ FixPieWifi()
     git reset --hard origin/$branch
     if [ "$SixTwo" == "Y" ];then
 	CpuFreq="SiX2"
+	elif [ "$FreqOC" == "0" ];then
+	git revert 94d9e96fd152226183b48ac64aefcee3dc7d1393 --no-commit
+	git commit -s -m "Back to stock freq"
+	CpuFreq="Stock"
 	else
 	CpuFreq="OC"
 	fi
@@ -840,43 +808,16 @@ FixPieWifi()
     RefreshRate="60"
 	Driver="Pie"
 	Vibrate=""
+	if [ "$CODENAME" == "X00TD" ];then
+	DEVICE="Asus Max Pro M1"
+	DEFFCONFIG="X00TD_defconfig"
+	elif [ "$CODENAME" == "X01BD" ];then
+	DEVICE="Asus Max Pro M2"
+	DEFFCONFIG="X01BD_defconfig"
+	fi
 	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
     rm -rf out
     cd $mainDir
-}
-
-FFRelease()
-{
-	# LV NFI Build
-	ResetKernel
-	GoForLV
-	CompileKernel
-	GoForStock
-	COmpileKernel
-
-	# NLV OFI Build
-	ResetKernel
-	SwitchOFI
-	CompileKernel
-	GoForStock
-	CompileKernel
-
-	# LV OFI Build
-	ResetKernel
-	SwitchOFI
-	GoForLV
-	CompileKernel
-	GoForStock
-	CompileKernel
-
-	if [ "$CODENAME" == "X01BD" ];then
-	# X01BD Pie Custom ROM Build
-	ResetKernel
-	FixPieWifi
-	CompileKernel
-	GoForStock
-	CompileKernel
-	fi
 }
 
 update_file() {
