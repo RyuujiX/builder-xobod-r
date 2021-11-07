@@ -746,6 +746,18 @@ MakeZip(){
 
 }
 
+SwitchDevice()
+{
+	if [ "$1" == "X00TD" ];then
+	DEVICE="Asus Max Pro M1"
+	DEFFCONFIG="X00TD_defconfig"
+	elif [ "$1" == "X01BD" ];then
+	DEVICE="Asus Max Pro M2"
+	DEFFCONFIG="X01BD_defconfig"
+	fi
+	CODENAME="$1"
+}
+
 GoForStock()
 {
 	cd $kernelDir
@@ -831,6 +843,40 @@ FixPieWifi()
 	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
     rm -rf out
     cd $mainDir
+}
+
+FFRelease()
+{
+	# LV NFI Build
+	ResetKernel
+	GoForLV
+	CompileKernel
+	GoForStock
+	COmpileKernel
+
+	# NLV OFI Build
+	ResetKernel
+	SwitchOFI
+	CompileKernel
+	GoForStock
+	CompileKernel
+
+	# LV OFI Build
+	ResetKernel
+	SwitchOFI
+	GoForLV
+	CompileKernel
+	GoForStock
+	CompileKernel
+
+	if [ "$CODENAME" == "X01BD" ];then
+	# X01BD Pie Custom ROM Build
+	ResetKernel
+	FixPieWifi
+	CompileKernel
+	GoForStock
+	CompileKernel
+	fi
 }
 
 update_file() {

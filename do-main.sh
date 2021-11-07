@@ -2,7 +2,8 @@
 KranulVer="44"
 branch="r5/hmp"
 WithSpec="Y"
-CODENAME="X01BD"
+MainCD="X01BD"
+# SecCD="X00TD"
 FolderUp=""
 PrivBuild="N"
 PureKernel="N"
@@ -11,6 +12,7 @@ CUSKERLINK=""
 CUSBUILDDATE=""
 CUSSPEC=""
 TypeBuild="RELEASE"
+CODENAME="$MainCD"
 BuilderKernel="00000"
 
 if [ "$KranulVer" = "419" ];then
@@ -45,37 +47,18 @@ CompileKernel
 GoForStock
 CompileKernel
 
-if [ "$KranulVer" = "44" ] && [ "$TypeBuild" == "RELEASE" ] && [ "$PureKernel" == "N" ];then
-
-# LV NFI Build
+if [ ! -z "$SecCD" ];then
 ResetKernel
-GoForLV
-CompileKernel
-GoForStock
-COmpileKernel
-
-# NLV OFI Build
-ResetKernel
-SwitchOFI
-CompileKernel
-GoForStock
-CompileKernel
-
-# LV OFI Build
-ResetKernel
-SwitchOFI
-GoForLV
-CompileKernel
-GoForStock
-CompileKernel
-
-if [ "$CODENAME" == "X01BD" ];then
-# X01BD Pie Custom ROM Build
-ResetKernel
-FixPieWifi
+SwitchDevice "$SecCD"
 CompileKernel
 GoForStock
 CompileKernel
 fi
+
+if [ "$KranulVer" = "44" ] && [ "$TypeBuild" == "RELEASE" ] && [ "$PureKernel" == "N" ];then
+
+FFRelease
+SwitchDevice "$SecCD"
+FFRelease
 
 fi
