@@ -278,7 +278,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
     SetLastTag="SDMxx0.0"
 	Driver="NFI"
 	elif [ "$KranulVer" = "419" ];then
-	SetTag="LA.UM.9.2.1.r1"
+	SetTag="LA.UM.10.2.1.r1"
     SetLastTag="sdm660.0"
 	DEFCONFIGPATH="asus/$DEFFCONFIG"
 	fi

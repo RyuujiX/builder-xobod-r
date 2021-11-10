@@ -16,7 +16,7 @@ TypeBuild="RELEASE"
 BuilderKernel="00000"
 
 if [ "$KranulVer" = "419" ];then
-CAFTAG="08700"
+CAFTAG="02700"
 fi
 
 if [ "$BuilderKernel" != "proton" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] && [ "$BuilderKernel" != "gcc12" ] && [ "$BuilderKernel" != "storm" ] && [ "$BuilderKernel" != "strix" ] && [ "$BuilderKernel" != "yuki" ] && [ "$BuilderKernel" != "sdclang" ] && [ "$BuilderKernel" != "aosp" ] && [ "$BuilderKernel" != "elas" ] && [ "$BuilderKernel" != "iris" ] && [ "$BuilderKernel" != "atom" ] && [ "$BuilderKernel" != "otaku" ];then
