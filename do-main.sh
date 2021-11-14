@@ -25,6 +25,7 @@ fi
 
 if [ "$KranulVer" = "44" ];then
 KranulLink="android_kernel_asus_sdm660"
+MESSAGEWORD="Ambition is the path to success. Persistence is the vehicle you arrive in."
 if [ "$branch" = "r5/eas" ] || [ "$branch" == "r5/eas-s2" ] || [ "$branch" = "eas-test" ];then
 TypeBuildTag="EAS"
 AKbranch="4.4-eas"
@@ -76,6 +77,7 @@ AKbranch="4.4-hmp"
 fi
 elif [ "$KranulVer" = "419" ];then
 KranulLink="android_kernel_asus_sdm660-4.19"
+MESSAGEWORD="Become addicted to constant and never-ending self-improvement."
 TypeBuildTag="EAS"
 AKbranch="4.19"
 	if [ "WithSpec" == "N" ];then

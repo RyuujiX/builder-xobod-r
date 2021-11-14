@@ -684,7 +684,7 @@ MakeZip(){
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
 	sed -i "s/kernel.made=.*/kernel.made=Ryuuji @ItsRyuujiX/g" anykernel.sh
 	sed -i "s/kernel.version=.*/kernel.version=$KVer/g" anykernel.sh
-	sed -i "s/message.word=.*/message.word=The strongest among you is the one who controls his anger./g" anykernel.sh
+	sed -i "s/message.word=.*/message.word=$MESSAGEWORD/g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$BDate/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	if [ "$PureKernel" == "Y" ];then
