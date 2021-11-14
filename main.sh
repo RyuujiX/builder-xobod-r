@@ -687,7 +687,7 @@ MakeZip(){
 	sed -i "s/message.word=.*/message.word=$MESSAGEWORD/g" anykernel.sh
 	sed -i "s/build.date=.*/build.date=$BDate/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
-	if [ "$PureKernel" == "Y" ];then
+	if [ "$PureKernel" == "N" ];then
 	if [ "$KernelFor" == "P" ];then
 	sed -i "s/supported.versions=.*/supported.versions=9/g" anykernel.sh
 	elif [ "$Vibrate" == "LV" ] || [ "$KranulVer" = "419" ];then
