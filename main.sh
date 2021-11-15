@@ -389,7 +389,7 @@ tg_send_files(){
 - <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s) </code>
 
 <b>Compiled at</b>
-- <code>$GetDateTime</code>
+- <code>$(date)</code>
 
 <b>MD5 Checksum</b>
 - <code>$MD5CHECK</code>
