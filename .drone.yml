@@ -16,10 +16,13 @@ steps:
         from_secret: GIT_SECRETB
       GIT_USERNAME:
         from_secret: GIT_USERNAME
-    image: archlinux:base-devel
+    image: ubuntu:jammy-20211029
     name: RyuujiX-Build
     commands: 
-      - curl -LO "https://repo.archlinuxcn.org/x86_64/glibc-linux4-2.33-4-x86_64.pkg.tar.zst" && bsdtar -C / -xvf "glibc-linux4-2.33-4-x86_64.pkg.tar.zst"
-      - pacman -Sy && pacman -S git bc inetutils python3 flex bison libc++ libxml2 python-pip zip wget cpio jdk-openjdk tzdata --noconfirm
-      - ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && date
+      - cp -af sources.list /etc/apt/
+      - cp -af 99own /etc/apt/apt.conf.d/
+      - apt-get autoremove -y && apt-get --purge remove -y && apt-get autoclean -y && apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y
+      - dpkg-reconfigure -a && dpkg --configure -a
+      - ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && date
+      - apt-get -y install -f gcc llvm lld g++-multilib python2 clang git libxml2 python3-pip gcc llvm lld g++-multilib clang default-jre git automake lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng bc libstdc++6 libncurses5 wget python3 python3-pip gcc clang libssl-dev rsync flex git-lfs libz3-dev libz3-4 axel tar bc binutils-dev bison build-essential ca-certificates ccache clang cmake curl file flex git libelf-dev libssl-dev lld make ninja-build python3-dev texinfo u-boot-tools xz-utils zlib1g-dev && python3 -m pip install networkx
       - "bash ./do-main.sh"
