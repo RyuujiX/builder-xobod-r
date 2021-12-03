@@ -163,13 +163,18 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 		export LD=ld.lld
         export LD_LIBRARY_PATH=$clangDir/lib
     fi
-	if [ "$BuilderKernel" == "otaku" ];then
-        getInfo ">> cloning Otaku clang 14 . . . <<"
-        git clone https://github.com/Sixzz9/Otaku-clang -b master $clangDir --depth=1
+	if [ "$BuilderKernel" == "zyc" ];then
+		mkdir "${clangDir}"
+		rm -rf $clangDir/*
+		if [ ! -e "${mainDir}/ZyC-Clang-14.tar.gz" ];then
+		getInfo ">> Downloading ZyC clang 14 . . . <<"
+        wget -q  $(curl https://raw.githubusercontent.com/ZyCromerZ/Clang/main/Clang-14-link.txt 2>/dev/null) -O "ZyC-Clang-14.tar.gz"
+		fi
+		tar -xf ZyC-Clang-14.tar.gz -C $clangDir
 		allFromClang="Y"
-		Compiler="Otaku Clang"
-		TypeBuilder="Otaku"
-		TypePrint="Otaku"
+		Compiler="ZyC Clang"
+		TypeBuilder="ZyC"
+		TypePrint="ZyC"
 		export LD=ld.lld
         export LD_LIBRARY_PATH=$clangDir/lib
     fi
