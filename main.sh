@@ -335,6 +335,7 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
 	elif [ "$KranulVer" = "419" ];then
 	export LLVM=1
 	export LLVM_IAS=1
+	export PYTHON=python3
 	CUSDEFPATH="arch/$ARCH/configs/$DEFCONFIGPATH"
 	if [ "$PureKernel" == "N" ];then
 	if [ "$SixTwo" == "Y" ];then
