@@ -534,9 +534,9 @@ CompileKernel(){
     fi
 	if [ ! -z "$TAGKENEL" ];then
 	if [ "$KranulVer" = "44" ];then
-        export KBUILD_BUILD_HOST="StaySafe-$Driver-$Vibrate-$TAGKENEL"
+        export KBUILD_BUILD_HOST="KereAktif-$Driver-$Vibrate-$TAGKENEL"
 	elif [ "$KranulVer" = "419" ];then
-		export KBUILD_BUILD_HOST="StaySafe-$TAGKENEL"
+		export KBUILD_BUILD_HOST="KereAktif-$TAGKENEL"
     fi
 	fi
 	if [ "$KranulVer" = "44" ];then
