@@ -442,6 +442,7 @@ CompileKernel(){
                 SUBARCH=$ARCH \
                 PATH=$clangDir/bin:${PATH} \
                 CC=clang \
+				PYTHON=python3 \
                 CROSS_COMPILE=$for64- \
                 CROSS_COMPILE_ARM32=$for32- \
                 AR=llvm-ar \
@@ -458,6 +459,7 @@ CompileKernel(){
                     SUBARCH=$ARCH \
                     PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
                     CC=clang \
+					PYTHON=python3 \
                     CROSS_COMPILE=$for64- \
                     CROSS_COMPILE_ARM32=$for32- \
                     AR=llvm-ar \
@@ -473,6 +475,7 @@ CompileKernel(){
 						SUBARCH=$ARCH \
 						PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
 						CC=clang \
+						PYTHON=python3 \
 						CROSS_COMPILE=$for64- \
 						CROSS_COMPILE_ARM32=$for32- \
 						AR=llvm-ar \
@@ -548,6 +551,7 @@ CompileKernel(){
 		CROSS_COMPILE=$for64- \
         CROSS_COMPILE_ARM32=$for32- \
 		CC=clang \
+		PYTHON=python3 \
 		LLVM=1
 	fi
 	
@@ -565,6 +569,7 @@ CompileKernel(){
                 SUBARCH=$ARCH \
                 PATH=$clangDir/bin:${PATH} \
                 CC=clang \
+				PYTHON=python3 \
                 CROSS_COMPILE=$for64- \
                 CROSS_COMPILE_ARM32=$for32- \
                 AR=llvm-ar \
@@ -580,6 +585,7 @@ CompileKernel(){
                     SUBARCH=$ARCH \
                     PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
                     CC=clang \
+					PYTHON=python3 \
                     CROSS_COMPILE=$for64- \
                     CROSS_COMPILE_ARM32=$for32- \
                     AR=llvm-ar \
@@ -594,6 +600,7 @@ CompileKernel(){
 					SUBARCH=$ARCH \
 					PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
 					CC=clang \
+					PYTHON=python3 \
 					CROSS_COMPILE=$for64- \
 					CROSS_COMPILE_ARM32=$for32- \
 					AR=llvm-ar \
