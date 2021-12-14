@@ -1,301 +1,117 @@
 #! /bin/bash
 
- # Script For Building Android Kernel
- #
- # Copyright (c) 2020 Zero-NEET-Alfa <danidaboy54@gmail.com>
- #
- # Licensed under the Apache License, Version 2.0 (the "License");
- # you may not use this file except in compliance with the License.
- # You may obtain a copy of the License at
- #
- #      http://www.apache.org/licenses/LICENSE-2.0
- #
- # Unless required by applicable law or agreed to in writing, software
- # distributed under the License is distributed on an "AS IS" BASIS,
- # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- # See the License for the specific language governing permissions and
- # limitations under the License.
- #
-
-# Function to show an informational message
-# need to defined
-# - branch
-# - spectrumFile
-# Then call CompileKernel and done
-
 getInfo() {
     echo -e "\e[1;32m$*\e[0m"
 }
-
 getInfoErr() {
     echo -e "\e[1;41m$*\e[0m"
 }
+update_file() {
+    if [ ! -z "$1" ] && [ ! -z "$2" ] && [ ! -z "$3" ];then
+        GetValue="$(cat $3 | grep "$1")"
+        GetPath=${3/"."/""}
+        ValOri="$(echo "$GetValue" | awk -F '\\=' '{print $2}')"
+        UpdateTo="$(echo "$2" | awk -F '\\=' '{print $2}')"
+        [ "$ValOri" != "$UpdateTo" ] && \
+        sed -i "s/$1.*/$2/g" "$3"
+        [ ! -z "$(git status | grep "modified" )" ] && \
+        git add "$3" && \
+        git commit -s -m "$GetPath: '$GetValue' update to '$2'"
+    fi
+}
+
+### Initial Script
+getInfo '>> Initializing Script... <<'
 
 mainDir=$PWD
-
 kernelDir=$mainDir/kernel
-
 clangDir=$mainDir/clang
-
 gcc64Dir=$mainDir/gcc64
-
 gcc32Dir=$mainDir/gcc32
-
 AnykernelDir=$mainDir/Anykernel3
-
 SpectrumDir=$mainDir/Spectrum
-
-GdriveDir=$mainDir/Gdrive-Uploader
-
-useGdrive='N'
 
 git config --global user.name "$GIT_USERNAME"
 git config --global user.email "$GIT_EMAIL"
 
+if [ "$KranulVer" = "44" ];then
+if [ "$branch" == "r5/eas" ] || [ "$branch" == "r5/eas-s2" ] || [ "$branch" == "eas-test" ];then
+AKbranch="4.4-eas"
+else
+AKbranch="4.4-hmp"
+fi
+KranulLink="android_kernel_asus_sdm660"
+MESSAGEWORD="Ambition is the path to success. Persistence is the vehicle you arrive in."
+elif [ "$KranulVer" = "419" ];then
+AKbranch="4.19"
+KranulLink="android_kernel_asus_sdm660-4.19"
+MESSAGEWORD="Become addicted to constant and never-ending self-improvement."
+TypeBuildTag="EAS"
+fi
+
+## Initial Clone
 if [ ! -z "$CUSKERLINK" ];then
+getInfo '>> Using Custom Kernel Link ! <<'
 KERNLINK="$CUSKERLINK"
 else
+getInfo '>> Using Default Kernel Link ! <<'
 KERNLINK="https://$GIT_SECRET@github.com/$GIT_USERNAME/$KranulLink"
 fi
 
-if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
-	
-    if [ ! -z "$2" ] && [ "$2" == 'full' ];then
-        getInfo ">> cloning kernel full . . . <<"
-        git clone $KERNLINK -b "$branch" $kernelDir
-    else
-        getInfo ">> cloning kernel . . . <<"
-        git clone $KERNLINK -b "$branch" $kernelDir --depth=1 
-    fi
-    [ -z "$BuilderKernel" ] && BuilderKernel="storm"
-    if [ "$BuilderKernel" == "proton" ];then
-        getInfo ">> cloning Proton clang 13 . . . <<"
-        git clone https://github.com/kdrag0n/proton-clang -b master $clangDir --depth=1
-		gcc10="Y"
-		Compiler="Proton Clang"
-		TypeBuilder="Proton"
-		TypePrint="Proton"
-	fi
-    if [ "$BuilderKernel" == "dtc" ];then
-        getInfo ">> cloning DragonTC clang 10 . . . <<"
-        git clone https://github.com/NusantaraDevs/DragonTC -b 10.0 $clangDir --depth=1
-		gcc10="Y"
-		Compiler="DragonTC Clang"
-		TypeBuilder="DTC"
-		TypePrint="DragonTC"
-		export LD=ld.lld
-        export LD_LIBRARY_PATH=$clangDir/lib64
-    fi
-	if [ "$BuilderKernel" == "storm" ];then
-        getInfo ">> cloning StormBreaker clang 11 . . . <<"
-        git clone https://github.com/stormbreaker-project/stormbreaker-clang -b 11.x $clangDir --depth=1
-		gcc10="Y"
-        SimpleClang="Y"
-		Compiler="StormBreaker Clang"
-		TypeBuilder="Storm"
-		TypePrint="StormBreaker"
-	fi
-	if [ "$BuilderKernel" == "strix" ];then
-        getInfo ">> cloning STRIX clang . . . <<"
-        git clone https://github.com/STRIX-Project/STRIX-clang -b main $clangDir --depth=1
-		gcc10="Y"
-		SimpleClang="Y"
-		Compiler="STRIX Clang"
-		TypeBuilder="STRIX"
-		TypePrint="STRIX"
-	fi
-	if [ "$BuilderKernel" == "yuki" ];then
-        getInfo ">> cloning Yuki clang . . . <<"
-        git clone https://github.com/Klozz/Yuki-clang -b main $clangDir --depth=1
-		gcc10="Y"
-		SimpleClang="Y"
-		Compiler="Yuki Clang"
-		TypeBuilder="Yuki"
-		TypePrint="Yuki"
-	fi
-	if [ "$BuilderKernel" == "sdclang" ];then
-        getInfo ">> cloning Snapdragon-LLVM clang 10.0.9 . . . <<"
-        git clone https://github.com/RyuujiX/snapdragon-llvm -b 10.0.9 $clangDir --depth=1
-		gcc10="Y"
-		SimpleClang="Y"
-		Compiler="Snapdragon-LLVM Clang"
-		TypeBuilder="SD"
-		TypePrint="Snapdragon-LLVM"
-	fi
-	if [ "$BuilderKernel" == "aosp" ];then
-        getInfo ">> cloning AOSP clang 12 . . . <<"
-        git clone https://github.com/RyuujiX/android-kernel-tools -b tools $clangDir --depth=1
-		gcc10="Y"
-		SimpleClang="Y"
-		Compiler="AOSP Clang"
-		TypeBuilder="AOSP"
-		TypePrint="AOSP"
-		clangDir=$mainDir/clang/clang/host/linux-x86/clang-r416183b
-		export LD=ld.lld
-		export LD_LIBRARY_PATH="$clangDir/lib64:$LD_LIBRARY_PATH"
-	fi
-	if [ "$BuilderKernel" == "elas" ];then
-        getInfo ">> cloning Elastics clang 13 . . . <<"
-        git clone https://github.com/cbendot/Elastics-Toolchain -b main $clangDir --depth=1
-		allFromClang="Y"
-		Compiler="Elastics Clang"
-		TypeBuilder="Elastics"
-		TypePrint="Elastics"
-		export LD=ld.lld
-        export LD_LIBRARY_PATH=$clangDir/lib
-    fi
-    if [ "$BuilderKernel" == "iris" ];then
-        getInfo ">> cloning iRISxe clang 13 . . . <<"
-        git clone https://github.com/ramadhannangga/iRISxe-Clang -b 13.0 $clangDir --depth=1
-		gcc10="Y"
-		SimpleClang="Y"
-		Compiler="iRISxe Clang"
-		TypeBuilder="iRISxe"
-		TypePrint="iRISxe"
-    fi
-	if [ "$BuilderKernel" == "atom" ];then
-        getInfo ">> cloning Atom-X clang 14 . . . <<"
-        git clone https://gitlab.com/RyuujiX/atom-x-clang -b atom-14 $clangDir --depth=1
-		allFromClang="Y"
-		Compiler="Atom-X Clang"
-		TypeBuilder="Atom-X"
-		TypePrint="Atom-X"
-		export LD=ld.lld
-        export LD_LIBRARY_PATH=$clangDir/lib
-    fi
-	if [ "$BuilderKernel" == "zyc" ];then
-		mkdir "${clangDir}"
-		rm -rf $clangDir/*
-		if [ ! -e "${mainDir}/ZyC-Clang-14.tar.gz" ];then
-		getInfo ">> Downloading ZyC clang 14 . . . <<"
-        wget -q  $(curl https://raw.githubusercontent.com/ZyCromerZ/Clang/main/Clang-14-link.txt 2>/dev/null) -O "ZyC-Clang-14.tar.gz"
-		fi
-		tar -xf ZyC-Clang-14.tar.gz -C $clangDir
-		allFromClang="Y"
-		Compiler="ZyC Clang"
-		TypeBuilder="ZyC"
-		TypePrint="ZyC"
-		export LD=ld.lld
-        export LD_LIBRARY_PATH=$clangDir/lib
-    fi
-    if [ "$BuilderKernel" == "gcc" ];then
-        getInfo ">> cloning gcc64 . . . <<"
-        git clone https://github.com/RyuujiX/aarch64-linux-android-4.9/ -b android-10.0.0_r47 $gcc64Dir --depth=1
-        getInfo ">> cloning gcc32 . . . <<"
-        git clone https://github.com/RyuujiX/arm-linux-androideabi-4.9/ -b android-10.0.0_r47 $gcc32Dir --depth=1
-        for64=aarch64-linux-android
-        for32=arm-linux-androideabi
-		Compiler="GCC"
-		TypeBuilder="GCC"
-		TypePrint="GCC"
-    elif [ "$BuilderKernel" == "gcc12" ] || [ "$gcc12" == "Y" ];then
-        [[ "$(pwd)" != "${mainDir}" ]] && cd "${mainDir}"
-		if [ -e "${gcc64Dir}/aarch64-linux-gnu" ] || [ -e "${gcc32Dir}/arm-linux-gnueabi" ];then
-		rm -rf ${gcc64Dir}/aarch64-linux-gnu ${gcc32Dir}/arm-linux-gnueabi
-		fi
-		mkdir "${gcc64Dir}"
-        mkdir "${gcc32Dir}"
-		if [ ! -e "${mainDir}/aarch64-zyc-linux-gnu-12.x-gnu-20210808.tar.gz" ];then
-		getInfo ">> Downloading aarch64-zyc-linux-gnu-12.x-gnu-20210808 (gcc64) . . . <<"
-        wget -q https://toolchain.lynxcloud.workers.dev/0:/ZyC%20GCC/GCC%2012/aarch64-zyc-linux-gnu-12.x-gnu-20210808.tar.gz
-        fi
-		if [ ! -e "${mainDir}/arm-zyc-linux-gnueabi-12.x-gnu-20210808.tar.gz" ];then
-        getInfo ">> Downloading arm-zyc-linux-gnueabi-12.x-gnu-20210808 (gcc32) . . . <<"
-        wget -q https://toolchain.lynxcloud.workers.dev/0:/ZyC%20GCC/GCC%2012/arm-zyc-linux-gnueabi-12.x-gnu-20210808.tar.gz
-        fi
-		getInfo ">> Extracting aarch64-zyc-linux-gnu-12.x-gnu-20210808 (gcc64) . . . <<"
-		tar -xf aarch64-zyc-linux-gnu-12.x-gnu-20210808.tar.gz -C $gcc64Dir
-		getInfo ">> Extracting arm-zyc-linux-gnueabi-12.x-gnu-20210808 (gcc32) . . . <<"
-		tar -xf arm-zyc-linux-gnueabi-12.x-gnu-20210808.tar.gz -C $gcc32Dir
-		gcc64Dir="${gcc64Dir}/aarch64-zyc-linux-gnu"
-		gcc32Dir="${gcc32Dir}/arm-zyc-linux-gnueabi"
-		if [ "$BuilderKernel" == "gcc12" ];then
-        for64=aarch64-zyc-linux-gnu
-        for32=arm-zyc-linux-gnueabi
-		Compiler="ZyC GCC"
-		TypeBuilder="ZyC GCC"
-		TypePrint="ZyC GCC"
-		fi
-    elif [ "$gcc10" == "Y" ];then
-	getInfo ">> cloning gcc64 10.2.0 . . . <<"
-        git clone https://github.com/RyuujiX/aarch64-linux-gnu -b stable-gcc $gcc64Dir --depth=1
-        getInfo ">> cloning gcc32 10.2.0 . . . <<"
-        git clone https://github.com/RyuujiX/arm-linux-gnueabi -b stable-gcc $gcc32Dir --depth=1
-		if [ "$BuilderKernel" == "aosp" ];then
-		for64=aarch64-linux-android
-        for32=arm-linux-androideabi
-		else
-        for64=aarch64-linux-gnu
-        for32=arm-linux-gnueabi
-		fi
-	else
-        gcc64Dir=$clangDir
-        gcc32Dir=$clangDir
-        for64=aarch64-linux-gnu
-        for32=arm-linux-gnueabi
-    fi
+source ${mainDir}/clone.sh
 
-    getInfo ">> cloning Anykernel . . . <<"
-    git clone https://github.com/RyuujiX/AnyKernel3 -b $AKbranch $AnykernelDir --depth=1
-    getInfo ">> cloning Spectrum . . . <<"
-    git clone https://github.com/RyuujiX/spectrum -b master $SpectrumDir --depth=1
-    if [ "$useGdrive" == "Y" ];then
-        getInfo ">> cloning Gdrive Uploader . . . <<"
-        git clone https://$GIT_SECRET@github.com/$GIT_USERNAME/gd-up -b master $GdriveDir --depth=1 
-    fi
-    
-	if [ "$TypeBuild" == "RELEASE" ];then
+## Chat ID  
+if [ "$TypeBuild" == "RELEASE" ];then
 	FileChatID="-1001538380925"
-	else
+else
     FileChatID="-1001756316778"
-	fi
-	if [ "$PrivBuild" == "Y" ];then
+fi
+if [ "$PrivBuild" == "Y" ];then
 	InfoChatID="-1001561722193"
-	else
+else
 	InfoChatID="-1001407005109"
-	fi
-	if [ "$branch" == "r1/s-s2" ] || [ "$branch" == "r5/eas-s2" ] || [ "$branch" == "r5/hmp-s2" ];then
+fi
+
+## Kernel Setup	
+if [ "$branch" == "r1/s-s2" ] || [ "$branch" == "r5/eas-s2" ] || [ "$branch" == "r5/hmp-s2" ];then
 	SixTwo="Y"
-	fi
+fi
     ARCH="arm64"
-	TZ="Asia/Jakarta"
     GetBD=$(date +"%m%d")
     GetCBD=$(date +"%Y-%m-%d")
 	GetTime=$(date "+%T")
 	GetDateTime=$(date)
     TotalCores=$(nproc --all)
-    KernelFor='R'
-    RefreshRate="60"
-	CpuFreq=""
+	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
+	HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
 	if [ "$CODENAME" == "X00TD" ];then
 	DEVICE="Asus Max Pro M1"
-	DEFFCONFIG="X00TD_defconfig"
+	DEFCONFIG="X00TD_defconfig"
 	elif [ "$CODENAME" == "X01BD" ];then
 	DEVICE="Asus Max Pro M2"
-	DEFFCONFIG="X01BD_defconfig"
+	DEFCONFIG="X01BD_defconfig"
 	fi
 	if [ "$KranulVer" = "44" ];then
-    SetTag="LA.UM.9.2.r1"
+	SetTag="LA.UM.9.2.r1"
     SetLastTag="SDMxx0.0"
-	Driver="NFI"
 	elif [ "$KranulVer" = "419" ];then
 	SetTag="LA.UM.10.2.1.r1"
     SetLastTag="sdm660.0"
-	DEFCONFIGPATH="asus/$DEFFCONFIG"
+	DEFCONFIG="asus/$DEFCONFIG"
 	fi
+	DEFCONFIGPATH="arch/$ARCH/configs"
+    HeadCommitId=$(git log --pretty=format:'%h' -n1)
+	CKName=""
+    cd $mainDir
 
-    export KBUILD_BUILD_USER="RyuujiX"
-    export KBUILD_BUILD_HOST="DirumahAja"
-    if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
-	# cd $kernelDir
-	# git revert 63f0ca0bd1751cbebb7e61b5a2a752395e864d9e --no-commit
-	# git commit -s -m "Swtich to OPTIMIZE_FOR_SIZE"
-	# cd $mainDir
+## Get Toolchain Version
+    if [ ! -z "CUSCLANGVER" ];then
+		ClangType="$CUSCLANGVER$CUSLLDVER"
+	elif [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
         ClangType="$($gcc64Dir/bin/$for64-gcc --version | head -n 1)"
     else
         ClangType=$("$clangDir"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
     fi
-    KBUILD_COMPILER_STRING="$ClangType"
     if [ -e $gcc64Dir/bin/$for64-gcc ];then
         gcc64Type="$($gcc64Dir/bin/$for64-gcc --version | head -n 1)"
     else
@@ -310,58 +126,11 @@ if [ ! -z "$1" ] && [ "$1" == 'initial' ];then
         gcc32Type=$(git log --pretty=format:'%h: %s' -n1)
         cd $mainDir
     fi
-    cd $kernelDir
-	HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
-	if [ "$KranulVer" = "44" ];then
-	CUSDEFPATH="arch/$ARCH/configs/$DEFFCONFIG"
-	if [ "$PureKernel" == "N" ];then
-	if [ "$SixTwo" == "Y" ];then
-	CpuFreq="SiX2"
-	elif [ "$FreqOC" == "0" ];then
-	git revert 94d9e96fd152226183b48ac64aefcee3dc7d1393 --no-commit
-	git commit -s -m "Back to stock freq"
-	CpuFreq="Stock"
-	else
-	CpuFreq="OC"
-	fi
-	if [ "$LVibration" == "1" ];then
-	git revert e7ea2a83ab6c55e62148309eeb6fe9a54bbf8a20 --no-commit
-	git commit -s -m "Enable LED Vibration"
-	Vibrate="LV"
-	else
-	Vibrate="NLV"
-	fi
-	fi
-	elif [ "$KranulVer" = "419" ];then
-	export LLVM=1
-	export LLVM_IAS=1
-	CUSDEFPATH="arch/$ARCH/configs/$DEFCONFIGPATH"
-	if [ "$PureKernel" == "N" ];then
-	if [ "$SixTwo" == "Y" ];then
-	CpuFreq="SiX2"
-	elif [ "$FreqOC" == "0" ];then
-	git revert 59e887a5fb7026e9ccb99365ffe5d91b6286307c --no-commit
-	git commit -s -m "Back to stock freq"
-	CpuFreq="Stock"
-	else
-	CpuFreq="OC"
-	fi
-	fi
-	fi
-	KVer=$(make kernelversion)
-    HeadCommitId=$(git log --pretty=format:'%h' -n1)
-	if [ ! -z "$CUSKERNAME" ];then
-	sed -i "s/CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION=-$CUSKERNAME/g" $CUSDEFPATH
-	git commit -a -s -m "Change Kernel Name"
-	fi
-	if [ "$KranulVer" = "44" ];then
-	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
-    elif [ "$KranulVer" = "419" ];then
-	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFCONFIGPATH" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
-	fi
-    cd $mainDir
-fi
-
+	export KBUILD_COMPILER_STRING="$ClangType"
+	export KBUILD_BUILD_USER="RyuujiX"
+	
+## Commands
+# Send Info
 tg_send_info(){
     if [ ! -z "$2" ];then
         curl -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" -d chat_id="$2" \
@@ -376,14 +145,16 @@ tg_send_info(){
     fi
 }
 
+# Send Sticker
 tg_send_sticker() {
     curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendSticker" \
         -d sticker="$1" \
         -d chat_id="$InfoChatID"
 }
 
+# Send Kernel Files
 tg_send_files(){
-    KernelFiles="$(pwd)/$RealZipName"
+    KernelFiles="$(pwd)/$ZipName"
 	MD5CHECK=$(md5sum "$KernelFiles" | cut -d' ' -f1)
 	SID="CAACAgUAAxkBAAIb0mBy2DMFsj1kyc5H-sxMRU4uGq4XAAJxAwACckHJVoQTT9R9yDxQHgQ"
     MSG="✅ <b>Kernel Compiled Succesfully</b> 
@@ -398,7 +169,8 @@ tg_send_files(){
 <b>Zip Name</b> 
 - <code>$ZipName</code>"
 	
-        curl --progress-bar -F document=@"$KernelFiles" "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
+        getInfo ">> Sending "$ZipName" . . . . <<"
+		curl --progress-bar -F document=@"$KernelFiles" "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" \
         -F chat_id="$FileChatID"  \
         -F "disable_web_page_preview=true" \
         -F "parse_mode=html" \
@@ -406,43 +178,153 @@ tg_send_files(){
 		
 			tg_send_info "$MSG"
 			tg_send_sticker "$SID"
+			getInfo ">> File Sent ! <<"
 		
-	if [ "$useGdrive" == "Y" ];then
-        currentFolder="$(pwd)"
-        cd $GdriveDir
-        chmod +x run.sh
-        . run.sh "$KernelFiles" "x01bd" "$(date +"%m-%d-%Y")" "$FolderUp"
-        cd $currentFolder
-		if [ ! -z "$1" ];then
-            tg_send_info "$MSG" "$1"
-        else
-            tg_send_info "$MSG"
-        fi
-    fi
-		
-    # remove files after build done
+    # remove files after send done
     rm -rf $KernelFiles
 }
 
+# Switch Device
+SwitchDevice(){
+	getInfo ">> Switching Device . . . . <<"
+	if [ "$1" == "M1" ];then
+		CODENAME="X00TD"
+		DEVICE="Asus Max Pro M1"
+		DEFCONFIG="X00TD_defconfig"
+	elif [ "$1" == "M2" ];then
+		CODENAME="X01BD"
+		DEVICE="Asus Max Pro M2"
+		DEFCONFIG="X01BD_defconfig"
+	fi
+	if [ "$KranulVer" = "419" ];then
+		DEFCONFIG="asus/$DEFCONFIG"
+	fi
+	getInfo ">> Device Switched to "$DEVICE-$CODENAME" ! <<"
+}
+
+# Get Kernel Info
+GetKernelInfo(){
+	KName=$(cat "$(pwd)/$DEFCONFIGPATH/$DEFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
+	KVer=$(make kernelversion)
+}
+	
+# Change Kernel Name
+ChangeKName(){
+	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
+	 sed -i "s/CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION=\"-$1\"/g" $DEFCONFIGPATH/$DEFCONFIG
+	 git add .
+	GetKernelInfo
+	CKName="$1"
+	getInfo ">> Kernel Name Changed to "$KName" ! <<"
+}
+
+# Reset Kernel Source
+ResetBranch(){
+	getInfo ">> Resetting Kernel . . . . <<"
+	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
+    git reset --hard origin/$branch
+	if [ ! -z "$CKName" ];then
+		ChangeKName "$CKName"
+	fi
+	if [ "$SixTwo" == "Y" ];then
+		CpuFreq="SiX2"
+	else
+		CpuFreq="OC"
+	fi
+	Vibrate="NLV"
+	Driver="NFI"
+	cd $mainDir
+	getInfo ">> Kernel Source Has Been Reset ! <<"
+}
+
+# Revert Back to Stock CPU & GPU Freq
+StockFreq(){
+	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
+	if [ "$KranulVer" = "419" ];then
+		git revert 59e887a5fb7026e9ccb99365ffe5d91b6286307c -n
+	elif [ "$KranulVer" = "44" ];then
+		git revert 94d9e96fd152226183b48ac64aefcee3dc7d1393 -n
+	fi
+	CpuFreq="Stock"
+	cd $mainDir
+	getInfo ">> Reverted to Stock Freq ! <<"
+}
+
+# Enable LV
+LEDVib(){
+	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
+	git revert e7ea2a83ab6c55e62148309eeb6fe9a54bbf8a20 -n
+	Vibrate="LV"
+	cd $mainDir
+	getInfo ">> LED Vibration Used ! <<"
+}
+
+# Switch to Old Wi-Fi Driver
+SwitchOFI(){
+	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
+    rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
+    git add .
+    git revert ec8656af53d9ee2eb544cc56654ca40f24934e67 -n
+    Driver="OFI"
+    cd $mainDir
+	getInfo ">> Switched to Old Wi-Fi Driver ! <<"
+}
+
+# Fix Wi-Fi for Custom ROM Pie X01BD
+FixPieWifi(){
+	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
+	git revert be578e2def2d7a67d6643335d016008f7bee8da8 -n
+	git revert 5c27bb6d8547112a8b815742c5dbcaae520b4497 -n
+	Driver="Pie"
+	Vibrate=""
+    cd $mainDir
+	getInfo ">> Wi-Fi for Custom ROM Pie ($CODENAME) Fixed ! <<"
+}
+
+# CompileKernel
 CompileKernel(){
-    cd $kernelDir
-    export KBUILD_COMPILER_STRING
-    if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
-        MAKE+=(
+	getInfo ">> Compiling kernel . . . . <<"
+    [[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
+	GetKernelInfo
+	if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
+		MAKE+=(
                 ARCH=$ARCH \
                 SUBARCH=$ARCH \
                 PATH=$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
                 CROSS_COMPILE=$for64- \
                 CROSS_COMPILE_ARM32=$for32-
         )
-    else
-        if [ "$allFromClang" == "Y" ];then
-            MAKE+=(
+	elif [ "$BuilderKernel" == "sdclang" ];then
+		MAKE+=(
+				ARCH=$ARCH \
+				SUBARCH=$ARCH \
+				PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+				LD_LIBRARY_PATH="$clangDir/lib" \
+				CC=clang \
+				CROSS_COMPILE=$for64- \
+				CROSS_COMPILE_ARM32=$for32- \
+				CLANG_TRIPLE=aarch64-linux-gnu- \
+				LLVM=1 \
+				LD=ld.lld \
+				AR=llvm-ar \
+				NM=llvm-nm \
+				AS=llvm-as \
+				STRIP=llvm-strip \
+				OBJCOPY=llvm-objcopy \
+				OBJDUMP=llvm-objdump \
+				READELF=llvm-readelf \
+				HOSTCC=gcc \
+				HOSTCXX=g++ \
+				HOSTAR=llvm-ar \
+				HOSTAS=llvm-as \
+				HOSTLD=ld.lld
+			)
+	elif [ "$allFromClang" == "Y" ];then
+		MAKE+=(
                 ARCH=$ARCH \
                 SUBARCH=$ARCH \
                 PATH=$clangDir/bin:${PATH} \
                 CC=clang \
-				PYTHON=python3 \
                 CROSS_COMPILE=$for64- \
                 CROSS_COMPILE_ARM32=$for32- \
                 AR=llvm-ar \
@@ -452,14 +334,12 @@ CompileKernel(){
                 STRIP=llvm-strip \
                 CLANG_TRIPLE=aarch64-linux-gnu-
             )
-        else
-            if [ "$SimpleClang" == "Y" ];then
-                MAKE+=(
+	elif [ "$SimpleClang" == "Y" ];then
+		MAKE+=(
                     ARCH=$ARCH \
                     SUBARCH=$ARCH \
                     PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
                     CC=clang \
-					PYTHON=python3 \
                     CROSS_COMPILE=$for64- \
                     CROSS_COMPILE_ARM32=$for32- \
                     AR=llvm-ar \
@@ -469,32 +349,29 @@ CompileKernel(){
                     STRIP=llvm-strip \
                     CLANG_TRIPLE=aarch64-linux-gnu-
                 )
-			else
-				MAKE+=(
-						ARCH=$ARCH \
-						SUBARCH=$ARCH \
-						PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
-						CC=clang \
-						PYTHON=python3 \
-						CROSS_COMPILE=$for64- \
-						CROSS_COMPILE_ARM32=$for32- \
-						AR=llvm-ar \
-						AS=llvm-as \
-						NM=llvm-nm \
-						STRIP=llvm-strip \
-						OBJCOPY=llvm-objcopy \
-						OBJDUMP=llvm-objdump \
-						OBJSIZE=llvm-size \
-						READELF=llvm-readelf \
-						HOSTCC=clang \
-						HOSTCXX=clang++ \
-						HOSTAR=llvm-ar \
-						CLANG_TRIPLE=aarch64-linux-gnu-
-					)
-			fi
-		fi
+	else
+		MAKE+=(
+				ARCH=$ARCH \
+				SUBARCH=$ARCH \
+				PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+				CC=clang \
+				CROSS_COMPILE=$for64- \
+				CROSS_COMPILE_ARM32=$for32- \
+				AR=llvm-ar \
+				AS=llvm-as \
+				NM=llvm-nm \
+				STRIP=llvm-strip \
+				OBJCOPY=llvm-objcopy \
+				OBJDUMP=llvm-objdump \
+				OBJSIZE=llvm-size \
+				READELF=llvm-readelf \
+				HOSTCC=clang \
+				HOSTCXX=clang++ \
+				HOSTAR=llvm-ar \
+				CLANG_TRIPLE=aarch64-linux-gnu-
+			)
     fi
-    # rm -rf out # always remove out directory :V
+    rm -rf out
     BUILD_START=$(date +"%s")
 		if [ ! -z "${CIRCLE_BRANCH}" ];then
             BuildNumber="${CIRCLE_BUILD_NUM}"
@@ -504,13 +381,13 @@ CompileKernel(){
             ProgLink="https://cloud.drone.io/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/1/2"
         fi
 		if [ "$KranulVer" = "44" ];then
-		if [ "$KernelFor" == "P" ];then
-		VibDrivTag="#$Driver"
-		else
-		VibDrivTag="#$Vibrate #$Driver"
+			if [ "$KernelFor" == "P" ];then
+				VibDrivTag="#$Driver"
+			else
+				VibDrivTag="#$Vibrate #$Driver"
+			fi
 		fi
-		fi
-        if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
+        if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ] || [ "$BuilderKernel" == "gcc49" ];then
             MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Total Cores: $TotalCores</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$CpuFreq $VibDrivTag"
         else
             MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Total Cores: $TotalCores</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $ClangType </code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A #$TypeBuildTag #$TypeBuild #$CpuFreq $VibDrivTag"
@@ -520,41 +397,18 @@ CompileKernel(){
         else
             tg_send_info "$MSG" 
         fi
-    git reset --hard $HeadCommitId
-    if [ ! -z "$1" ] && [ $1 != "60" ];then
-        update_file "qcom,mdss-dsi-panel-framerate = " "qcom,mdss-dsi-panel-framerate = <$1>;" "./arch/arm/boot/dts/qcom/X01BD/dsi-panel-hx83112a-1080p-video-tm.dtsi" && \
-        update_file "qcom,mdss-dsi-panel-framerate = " "qcom,mdss-dsi-panel-framerate = <$1>;" "./arch/arm/boot/dts/qcom/X01BD/dsi-panel-nt36672ah-1080p-video-kd.dtsi" && \
-		update_file "qcom,mdss-dsi-panel-framerate = " "qcom,mdss-dsi-panel-framerate = <$1>;" "./arch/arm/boot/dts/qcom/X00TD/dsi-panel-nt36672-1080p-video-txd.dtsi" && \
-		update_file "qcom,mdss-dsi-panel-framerate = " "qcom,mdss-dsi-panel-framerate = <$1>;" "./arch/arm/boot/dts/qcom/X00TD/dsi-panel-nt36672-1080p-video.dtsi" && \
-		update_file "qcom,mdss-dsi-panel-framerate = " "qcom,mdss-dsi-panel-framerate = <$1>;" "./arch/arm/boot/dts/qcom/X00TD/dsi-panel-td4310-1080p-video-txd.dtsi"
-        RefreshRate="$1"
-    fi
-    LastHeadCommitId=$(git log --pretty=format:'%h' -n1)
 	if [ ! -z "$CAFTAG" ];then
 	TAGKENEL="$SetTag-$CAFTAG-$SetLastTag"
 	else
     TAGKENEL="$(git log | grep "${SetTag}" | head -n 1 | awk -F '\\'${SetLastTag}'' '{print $1"'${SetLastTag}'"}' | awk -F '\\'${SetTag}'' '{print "'${SetTag}'"$2}')"
     fi
-	if [ ! -z "$TAGKENEL" ];then
 	if [ "$KranulVer" = "44" ];then
         export KBUILD_BUILD_HOST="KereAktif-$Driver-$Vibrate-$TAGKENEL"
 	elif [ "$KranulVer" = "419" ];then
 		export KBUILD_BUILD_HOST="KereAktif-$TAGKENEL"
-    fi
+		export LLVM_IAS=1
 	fi
-	if [ "$KranulVer" = "44" ];then
-    make -j${TotalCores}  O=out ARCH="$ARCH" "$DEFFCONFIG"
-	elif [ "$KranulVer" = "419" ];then
-	make -j${TotalCores}  O=out "$DEFCONFIGPATH" \
-		ARCH=$ARCH \
-		PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
-		CROSS_COMPILE=$for64- \
-        CROSS_COMPILE_ARM32=$for32- \
-		CC=clang \
-		PYTHON=python3 \
-		LLVM=1
-	fi
-	
+		make -j${TotalCores}  O=out ARCH="$ARCH" "$DEFCONFIG"
     if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
         make -j${TotalCores}  O=out \
             ARCH=$ARCH \
@@ -562,73 +416,93 @@ CompileKernel(){
             PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
             CROSS_COMPILE=$for64- \
             CROSS_COMPILE_ARM32=$for32-
+	elif [ "$BuilderKernel" == "sdclang" ];then
+		make -j${TotalCores}  O=out \
+			ARCH=$ARCH \
+			SUBARCH=$ARCH \
+			PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+			LD_LIBRARY_PATH="$clangDir/lib" \
+			CC=clang \
+			CROSS_COMPILE=$for64- \
+			CROSS_COMPILE_ARM32=$for32- \
+			CLANG_TRIPLE=aarch64-linux-gnu- \
+			LLVM=1 \
+			LD=ld.lld \
+			AR=llvm-ar \
+			NM=llvm-nm \
+			AS=llvm-as \
+			STRIP=llvm-strip \
+			OBJCOPY=llvm-objcopy \
+			OBJDUMP=llvm-objdump \
+			READELF=llvm-readelf \
+			HOSTCC=gcc \
+			HOSTCXX=g++ \
+			HOSTAR=llvm-ar \
+			HOSTAS=llvm-as \
+			HOSTLD=ld.lld
+	elif [ "$allFromClang" == "Y" ];then
+		make -j${TotalCores}  O=out \
+			ARCH=$ARCH \
+			SUBARCH=$ARCH \
+			PATH=$clangDir/bin:${PATH} \
+			CC=clang \
+			CROSS_COMPILE=$for64- \
+			CROSS_COMPILE_ARM32=$for32- \
+			AR=llvm-ar \
+			NM=llvm-nm \
+			OBJCOPY=llvm-objcopy \
+			OBJDUMP=llvm-objdump \
+			STRIP=llvm-strip \
+			CLANG_TRIPLE=aarch64-linux-gnu-
+	elif [ "$SimpleClang" == "Y" ];then
+		make -j${TotalCores}  O=out \
+			ARCH=$ARCH \
+			SUBARCH=$ARCH \
+			PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+			CC=clang \
+			CROSS_COMPILE=$for64- \
+			CROSS_COMPILE_ARM32=$for32- \
+			AR=llvm-ar \
+			NM=llvm-nm \
+			OBJCOPY=llvm-objcopy \
+			OBJDUMP=llvm-objdump \
+			STRIP=llvm-strip \
+			CLANG_TRIPLE=aarch64-linux-gnu-
 	else
-        if [ "$allFromClang" == "Y" ];then
-            make -j${TotalCores}  O=out \
-                ARCH=$ARCH \
-                SUBARCH=$ARCH \
-                PATH=$clangDir/bin:${PATH} \
-                CC=clang \
-				PYTHON=python3 \
-                CROSS_COMPILE=$for64- \
-                CROSS_COMPILE_ARM32=$for32- \
-                AR=llvm-ar \
-                NM=llvm-nm \
-                OBJCOPY=llvm-objcopy \
-                OBJDUMP=llvm-objdump \
-                STRIP=llvm-strip \
-                CLANG_TRIPLE=aarch64-linux-gnu-
-        else
-            if [ "$SimpleClang" == "Y" ];then
-                make -j${TotalCores}  O=out \
-                    ARCH=$ARCH \
-                    SUBARCH=$ARCH \
-                    PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
-                    CC=clang \
-					PYTHON=python3 \
-                    CROSS_COMPILE=$for64- \
-                    CROSS_COMPILE_ARM32=$for32- \
-                    AR=llvm-ar \
-                    NM=llvm-nm \
-                    OBJCOPY=llvm-objcopy \
-                    OBJDUMP=llvm-objdump \
-                    STRIP=llvm-strip \
-                    CLANG_TRIPLE=aarch64-linux-gnu-
-			else
-				make -j${TotalCores}  O=out \
-					ARCH=$ARCH \
-					SUBARCH=$ARCH \
-					PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
-					CC=clang \
-					PYTHON=python3 \
-					CROSS_COMPILE=$for64- \
-					CROSS_COMPILE_ARM32=$for32- \
-					AR=llvm-ar \
-					AS=llvm-as \
-					NM=llvm-nm \
-					STRIP=llvm-strip \
-					OBJCOPY=llvm-objcopy \
-					OBJDUMP=llvm-objdump \
-					OBJSIZE=llvm-size \
-					READELF=llvm-readelf \
-					HOSTCC=clang \
-					HOSTCXX=clang++ \
-					HOSTAR=llvm-ar \
-					CLANG_TRIPLE=aarch64-linux-gnu-
-			fi
-		fi
+		make -j${TotalCores}  O=out \
+			ARCH=$ARCH \
+			SUBARCH=$ARCH \
+			PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+			CC=clang \
+			CROSS_COMPILE=$for64- \
+			CROSS_COMPILE_ARM32=$for32- \
+			AR=llvm-ar \
+			AS=llvm-as \
+			NM=llvm-nm \
+			STRIP=llvm-strip \
+			OBJCOPY=llvm-objcopy \
+			OBJDUMP=llvm-objdump \
+			OBJSIZE=llvm-size \
+			READELF=llvm-readelf \
+			HOSTCC=clang \
+			HOSTCXX=clang++ \
+			HOSTAR=llvm-ar \
+			CLANG_TRIPLE=aarch64-linux-gnu-
     fi
     BUILD_END=$(date +"%s")
     DIFF=$((BUILD_END - BUILD_START))
 	if [[ ! -e $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb ]];then
+		getInfoErr ">> Compile Failed ! Aborting . . . . <<"
 		SID="CAACAgUAAxkBAAIb12By2GpymhVy7G9g1Y5D2FcgvYr7AALZAQAC4dzJVslZcFisbk9nHgQ"
         MSG="<b>❌ Compile failed</b>%0AKernel Name : <b>${KName}</b>%0A- <code>$((DIFF / 60)) minute(s) $((DIFF % 60)) second(s)</code>%0A%0ASad Boy"
 		
         tg_send_info "$MSG" 
 		tg_send_sticker "$SID"
         exit -1
-	fi
+	else
+		getInfo ">> Compiled Succesfully ! <<"
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
+	fi
 		
         if [ "$KernelFor" == "P" ] || [ "$KranulVer" = "419" ];then
 		FilenameVC="[$CpuFreq]"
@@ -650,19 +524,94 @@ CompileKernel(){
             ZipName="$FilenameVC$KName-$TypeBuild-$KVer-$CODENAME.zip"
          fi
 	fi
-        # RealZipName="[$GetBD]$KVer-$HeadCommitId.zip"
-        RealZipName="$ZipName"
-        if [ ! -z "$2" ];then
-            MakeZip "$2"
-        else
-            MakeZip
-        fi
+
+    ModAnyKernel
+	MakeZip
 }
 
+# Spectrum Configuration
+SpectrumConf(){
+if [ "$KranulVer" = "44" ];then
+	if [ "$branch" = "r5/eas" ] || [ "$branch" == "r5/eas-s2" ] || [ "$branch" = "eas-test" ];then
+		TypeBuildTag="EAS"
+		AKbranch="4.4-eas"
+		if [ "WithSpec" == "N" ];then
+			spectrumFile=""
+		elif [ ! -z "$CUSSPEC" ];then
+			spectrumFile="$CUSSPEC"
+		elif [ "$CODENAME" == "X00TD" ];then
+		if [ "$branch" == "r5/eas-s2" ];then
+			spectrumFile="eas-x00t-sixtwo.rc"
+		elif [ "$CpuFreq" == "OC" ];then
+			spectrumFile="eas-x00t-oc.rc"
+		elif [ "$CpuFreq" == "Stock" ];then
+			spectrumFile="eas-x00t.rc"
+		fi
+		elif [ "$CODENAME" == "X01BD" ];then
+		if [ "$branch" == "r5/eas-s2" ];then
+			spectrumFile="eas-x01bd-sixtwo.rc"
+		elif [ "$CpuFreq" == "OC" ];then
+			spectrumFile="eas-x01bd-oc.rc"
+		elif [ "$CpuFreq" == "Stock" ];then
+			spectrumFile="eas-x01bd.rc"
+		fi
+		fi
+	else
+		TypeBuildTag="HMP"
+		AKbranch="4.4-hmp"
+		if [ "WithSpec" == "N" ];then
+			spectrumFile=""
+		elif [ ! -z "$CUSSPEC" ];then
+			spectrumFile="$CUSSPEC"
+		elif [ "$CODENAME" == "X00TD" ];then
+		if [ "$branch" == "r5/hmp-s2" ];then
+			spectrumFile="ryuu-x00t-sixtwo.rc"
+		elif [ "$CpuFreq" == "OC" ];then
+			spectrumFile="ryuu-x00t-oc.rc"
+		elif [ "$CpuFreq" == "Stock" ];then
+			spectrumFile="ryuu-x00t.rc"
+		fi
+		elif [ "$CODENAME" == "X01BD" ];then
+		if [ "$branch" == "r5/hmp-s2" ];then
+			spectrumFile="ryuu-x01bd-sixtwo.rc"
+		elif [ "$CpuFreq" == "OC" ];then
+			spectrumFile="ryuu-x01bd-oc.rc"
+		elif [ "$CpuFreq" == "Stock" ];then
+			spectrumFile="ryuu-x01bd.rc"
+		fi
+		fi
+	fi
+elif [ "$KranulVer" = "419" ];then
+	if [ "WithSpec" == "N" ];then
+		spectrumFile=""
+	elif [ ! -z "$CUSSPEC" ];then
+		spectrumFile="$CUSSPEC"
+	elif [ "$CODENAME" == "X00TD" ];then
+	if [ "$branch" == "r1/s-s2" ];then
+		spectrumFile="419-x00t-sixtwo.rc"
+	elif [ "$CpuFreq" == "OC" ];then
+		spectrumFile="419-x00t-oc.rc"
+	elif [ "$CpuFreq" == "Stock" ];then
+		spectrumFile="419-x00t.rc"
+	fi
+	elif [ "$CODENAME" == "X01BD" ];then
+	if [ "$branch" == "r1/s-s2" ];then
+		spectrumFile="419-x01bd-sixtwo.rc"
+	elif [ "$CpuFreq" == "OC" ];then
+		spectrumFile="419-x01bd-oc.rc"
+	elif [ "$CpuFreq" == "Stock" ];then
+		spectrumFile="419-x01bd.rc"
+	fi
+	fi
+fi
+}
 
-MakeZip(){
-    cd $AnykernelDir
+# Modify AnyKernel
+ModAnyKernel(){
+	getInfo ">> Modifying info . . . . <<"
+	cd $AnykernelDir
 	git reset --hard origin/$AKbranch
+	SpectrumConf
     if [ ! -z "$spectrumFile" ];then
         cp -af $SpectrumDir/$spectrumFile spectrum/init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" spectrum/init.spectrum.rc
     fi
@@ -730,116 +679,83 @@ MakeZip(){
 	fi
 	fi
 	cd $AnykernelDir
-
-    zip -r9 "$RealZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
-    if [ ! -z "$1" ];then
-        tg_send_files "$1"
-    else
-        tg_send_files
-    fi
-
 }
 
-SwitchOFI()
-{
-	cd $kernelDir
-    git reset --hard origin/$branch
-	# if [ "$branch" == "injectorx-eas" ];then
-	# git revert e31cfbb028ff2d92af87e4f327bfca25da68aba4 --no-commit
-	# elif [ "$branch" == "injectorx" ];then
-	# git revert 226908e2c6ba8af243cd6ee4bc6d694043fc90e7 --no-commit
-	# fi
-	# git commit -s -m "Bringup OFI Edition"
-    rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
-    git add .
-    git commit -s -m "Remove R WLAN DRIVERS"
-    git revert ec8656af53d9ee2eb544cc56654ca40f24934e67 --no-commit
-	git commit -s -m "Switch to OFI"
-	if [ "$SixTwo" == "Y" ];then
-	CpuFreq="SiX2"
-	elif [ "$FreqOC" == "0" ];then
-	git revert 94d9e96fd152226183b48ac64aefcee3dc7d1393 --no-commit
-	git commit -s -m "Back to stock freq"
-	CpuFreq="Stock"
-	else
-	CpuFreq="OC"
-	fi
-	if [ "$LVibration" == "1" ];then
-	git revert e7ea2a83ab6c55e62148309eeb6fe9a54bbf8a20 --no-commit
-	git commit -s -m "Enable LED Vibration"
-	Vibrate="LV"
-	else
-	Vibrate="NLV"
-	fi
-    KVer=$(make kernelversion)
-    HeadCommitId=$(git log --pretty=format:'%h' -n1)
-    KernelFor='R'
-    RefreshRate="60"
-	Driver="OFI"
-	if [ "$CODENAME" == "X00TD" ];then
-	DEVICE="Asus Max Pro M1"
-	DEFFCONFIG="X00TD_defconfig"
-	elif [ "$CODENAME" == "X01BD" ];then
-	DEVICE="Asus Max Pro M2"
-	DEFFCONFIG="X01BD_defconfig"
-	fi
-	
-	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
-    rm -rf out
-    cd $mainDir
+# Packing kernel
+MakeZip(){
+	getInfo ">> Packing Kernel . . . . <<"
+    zip -r9 "$ZipName" * -x .git README.md anykernel-real.sh .gitignore *.zip
+    tg_send_files
 }
 
-FixPieWifi()
-{
-	cd $kernelDir
-    git reset --hard origin/$branch
-    if [ "$SixTwo" == "Y" ];then
-	CpuFreq="SiX2"
-	elif [ "$FreqOC" == "0" ];then
-	git revert 94d9e96fd152226183b48ac64aefcee3dc7d1393 --no-commit
-	git commit -s -m "Back to stock freq"
-	CpuFreq="Stock"
-	else
-	CpuFreq="OC"
+# Build for RELEASE
+BuildAll(){
+	if [ "$KranulVer" = "419" ];then
+	ResetBranch
+	CompileKernel
+	StockFreq
+	CompileKernel
+	SwitchDevice "M1"
+	ResetBranch
+	CompileKernel
+	StockFreq
+	CompileKernel
+	elif [ "$KranulVer" = "44" ];then
+	# LV OC
+	ResetBranch
+	LEDVib
+	CompileKernel
+	SwitchOFI
+	CompileKernel
+	# LV Stock
+	ResetBranch
+	LEDVib
+	StockFreq
+	CompileKernel
+	SwitchOFI
+	CompileKernel
+	# NLV OC
+	ResetBranch
+	CompileKernel
+	SwitchOFI
+	CompileKernel
+	FixPieWifi
+	CompileKernel
+	# NLV Stock
+	ResetBranch
+	StockFreq
+	CompileKernel
+	SwitchOFI
+	CompileKernel
+	FixPieWifi
+	CompileKernel
+	# Switch to X00TD
+	SwitchDevice "M1"
+	# LV OC
+	ResetBranch
+	LEDVib
+	CompileKernel
+	SwitchOFI
+	CompileKernel
+	# LV Stock
+	ResetBranch
+	LEDVib
+	StockFreq
+	CompileKernel
+	SwitchOFI
+	CompileKernel
+	# NLV OC
+	ResetBranch
+	CompileKernel
+	SwitchOFI
+	CompileKernel
+	# NLV Stock
+	ResetBranch
+	StockFreq
+	CompileKernel
+	SwitchOFI
+	CompileKernel
 	fi
-	rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
-    git add .
-    git commit -s -m "Remove R WLAN DRIVERS"
-    git revert ec8656af53d9ee2eb544cc56654ca40f24934e67 --no-commit
-	git commit -s -m "Switch to OFI"
-	git revert be578e2def2d7a67d6643335d016008f7bee8da8 --no-commit
-	git revert 5c27bb6d8547112a8b815742c5dbcaae520b4497 --no-commit
-	git commit -s -m "Building for Android Pie"
-    KVer=$(make kernelversion)
-    HeadCommitId=$(git log --pretty=format:'%h' -n1)
-    KernelFor='P'
-    RefreshRate="60"
-	Driver="Pie"
-	Vibrate=""
-	if [ "$CODENAME" == "X00TD" ];then
-	DEVICE="Asus Max Pro M1"
-	DEFFCONFIG="X00TD_defconfig"
-	elif [ "$CODENAME" == "X01BD" ];then
-	DEVICE="Asus Max Pro M2"
-	DEFFCONFIG="X01BD_defconfig"
-	fi
-	KName=$(cat "$(pwd)/arch/$ARCH/configs/$DEFFCONFIG" | grep "CONFIG_LOCALVERSION=" | sed 's/CONFIG_LOCALVERSION="-*//g' | sed 's/"*//g' )
-    rm -rf out
-    cd $mainDir
 }
 
-update_file() {
-    if [ ! -z "$1" ] && [ ! -z "$2" ] && [ ! -z "$3" ];then
-        GetValue="$(cat $3 | grep "$1")"
-        GetPath=${3/"."/""}
-        ValOri="$(echo "$GetValue" | awk -F '\\=' '{print $2}')"
-        UpdateTo="$(echo "$2" | awk -F '\\=' '{print $2}')"
-        [ "$ValOri" != "$UpdateTo" ] && \
-        sed -i "s/$1.*/$2/g" "$3"
-        [ ! -z "$(git status | grep "modified" )" ] && \
-        git add "$3" && \
-        git commit -s -m "$GetPath: '$GetValue' update to '$2'"
-    fi
-}
-
-getInfo 'include main.sh success'
+getInfo '>> Script Initialized ! <<'
