@@ -223,7 +223,7 @@ ResetBranch(){
 	getInfo ">> Resetting Kernel . . . . <<"
 	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
     git reset --hard origin/$branch
-	if [ ! -z "$CKName" ];then
+	if [ ! -z "$CKName" ] && [ "$1" != "DCKN" ];then
 		ChangeKName "$CKName"
 	fi
 	if [ "$SixTwo" == "Y" ];then
