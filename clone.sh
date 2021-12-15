@@ -45,11 +45,14 @@ elif [ "$BuilderKernel" == "sdclang" ];then
 	getInfo ">> Extracting Snapdragon Clang 14 . . . <<"
 	unzip -P ${SDCLANGPASS} SDClang.zip -d $clangDir
 	gcc="Y"
-	Compiler="Snapdragon Clang"
-	TypeBuilder="Snapdragon LLVM"
-	TypePrint="Snapdragon LLVM"
-	CUSCLANGVER="Snapdragon LLVM clang version 14.0.0"
+	if [ "$KranulVer" = "419" ];then
+	LLVMON=" LLVM"
 	CUSLLDVER=", LLD 14.0.0"
+	fi
+	Compiler="Snapdragon Clang"
+	TypeBuilder="Snapdragon$LLVMON"
+	TypePrint="Snapdragon$LLVMON"
+	CUSCLANGVER="Snapdragon$LLVMON clang version 14.0.0"
 elif [ "$BuilderKernel" == "atom" ];then
     getInfo ">> Cloning Atom-X clang 14 . . . <<"
     git clone https://gitlab.com/RyuujiX/atom-x-clang -b atom-14 $clangDir --depth=1
