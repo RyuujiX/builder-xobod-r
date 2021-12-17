@@ -35,7 +35,7 @@ git config --global user.name "$GIT_USERNAME"
 git config --global user.email "$GIT_EMAIL"
 
 if [ "$KranulVer" = "44" ];then
-if [ "$branch" == "r5/eas" ] || [ "$branch" == "r5/eas-s2" ] || [ "$branch" == "eas-test" ];then
+if [ "$branch" == "r6/eas" ] || [ "$branch" == "r6/eas-s2" ] || [ "$branch" == "eas-test" ];then
 AKbranch="4.4-eas"
 else
 AKbranch="4.4-hmp"
@@ -73,7 +73,7 @@ else
 fi
 
 ## Kernel Setup	
-if [ "$branch" == "r1/s-s2" ] || [ "$branch" == "r5/eas-s2" ] || [ "$branch" == "r5/hmp-s2" ];then
+if [ "$branch" == "r1/s-s2" ] || [ "$branch" == "r6/eas-s2" ] || [ "$branch" == "r6/hmp-s2" ];then
 	SixTwo="Y"
 fi
     ARCH="arm64"
@@ -243,9 +243,9 @@ ResetBranch(){
 StockFreq(){
 	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
 	if [ "$KranulVer" = "419" ];then
-		git revert 59e887a5fb7026e9ccb99365ffe5d91b6286307c -n
+		git revert 18848d6a864bbc70fcd46001a01127c3cbd70ded -n
 	elif [ "$KranulVer" = "44" ];then
-		git revert 94d9e96fd152226183b48ac64aefcee3dc7d1393 -n
+		git revert 542000eb0f463ae4995c144991964456e4aa0c10 -n
 	fi
 	CpuFreq="Stock"
 	cd $mainDir
@@ -255,7 +255,7 @@ StockFreq(){
 # Enable LV
 LEDVib(){
 	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
-	git revert e7ea2a83ab6c55e62148309eeb6fe9a54bbf8a20 -n
+	git revert c6979baa65fd7e940ea1cefbf17d67bfbe727ce1 -n
 	Vibrate="LV"
 	cd $mainDir
 	getInfo ">> LED Vibration Used ! <<"
@@ -266,7 +266,7 @@ SwitchOFI(){
 	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
     rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
-    git revert ec8656af53d9ee2eb544cc56654ca40f24934e67 -n
+    git revert 1d6e1bb682f0f280a758eba771890f926492296f -n
     Driver="OFI"
     cd $mainDir
 	getInfo ">> Switched to Old Wi-Fi Driver ! <<"
@@ -514,7 +514,7 @@ CompileKernel(){
 # Spectrum Configuration
 SpectrumConf(){
 if [ "$KranulVer" = "44" ];then
-	if [ "$branch" = "r5/eas" ] || [ "$branch" == "r5/eas-s2" ] || [ "$branch" = "eas-test" ];then
+	if [ "$branch" = "r6/eas" ] || [ "$branch" == "r6/eas-s2" ] || [ "$branch" = "eas-test" ];then
 		TypeBuildTag="EAS"
 		AKbranch="4.4-eas"
 		if [ "WithSpec" == "N" ];then
@@ -522,7 +522,7 @@ if [ "$KranulVer" = "44" ];then
 		elif [ ! -z "$CUSSPEC" ];then
 			spectrumFile="$CUSSPEC"
 		elif [ "$CODENAME" == "X00TD" ];then
-		if [ "$branch" == "r5/eas-s2" ];then
+		if [ "$branch" == "r6/eas-s2" ];then
 			spectrumFile="eas-x00t-sixtwo.rc"
 		elif [ "$CpuFreq" == "OC" ];then
 			spectrumFile="eas-x00t-oc.rc"
@@ -530,7 +530,7 @@ if [ "$KranulVer" = "44" ];then
 			spectrumFile="eas-x00t.rc"
 		fi
 		elif [ "$CODENAME" == "X01BD" ];then
-		if [ "$branch" == "r5/eas-s2" ];then
+		if [ "$branch" == "r6/eas-s2" ];then
 			spectrumFile="eas-x01bd-sixtwo.rc"
 		elif [ "$CpuFreq" == "OC" ];then
 			spectrumFile="eas-x01bd-oc.rc"
@@ -546,7 +546,7 @@ if [ "$KranulVer" = "44" ];then
 		elif [ ! -z "$CUSSPEC" ];then
 			spectrumFile="$CUSSPEC"
 		elif [ "$CODENAME" == "X00TD" ];then
-		if [ "$branch" == "r5/hmp-s2" ];then
+		if [ "$branch" == "r6/hmp-s2" ];then
 			spectrumFile="ryuu-x00t-sixtwo.rc"
 		elif [ "$CpuFreq" == "OC" ];then
 			spectrumFile="ryuu-x00t-oc.rc"
@@ -554,7 +554,7 @@ if [ "$KranulVer" = "44" ];then
 			spectrumFile="ryuu-x00t.rc"
 		fi
 		elif [ "$CODENAME" == "X01BD" ];then
-		if [ "$branch" == "r5/hmp-s2" ];then
+		if [ "$branch" == "r6/hmp-s2" ];then
 			spectrumFile="ryuu-x01bd-sixtwo.rc"
 		elif [ "$CpuFreq" == "OC" ];then
 			spectrumFile="ryuu-x01bd-oc.rc"
