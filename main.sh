@@ -37,8 +37,10 @@ git config --global user.email "$GIT_EMAIL"
 if [ "$KranulVer" = "44" ];then
 if [ "$branch" == "r6/eas" ] || [ "$branch" == "r6/eas-s2" ] || [ "$branch" == "eas-test" ];then
 AKbranch="4.4-eas"
+TypeBuildTag="EAS"
 else
 AKbranch="4.4-hmp"
+TypeBuildTag="HMP"
 fi
 KranulLink="android_kernel_asus_sdm660"
 MESSAGEWORD="Ambition is the path to success. Persistence is the vehicle you arrive in."
@@ -515,8 +517,6 @@ CompileKernel(){
 SpectrumConf(){
 if [ "$KranulVer" = "44" ];then
 	if [ "$branch" = "r6/eas" ] || [ "$branch" == "r6/eas-s2" ] || [ "$branch" = "eas-test" ];then
-		TypeBuildTag="EAS"
-		AKbranch="4.4-eas"
 		if [ "WithSpec" == "N" ];then
 			spectrumFile=""
 		elif [ ! -z "$CUSSPEC" ];then
@@ -539,8 +539,6 @@ if [ "$KranulVer" = "44" ];then
 		fi
 		fi
 	else
-		TypeBuildTag="HMP"
-		AKbranch="4.4-hmp"
 		if [ "WithSpec" == "N" ];then
 			spectrumFile=""
 		elif [ ! -z "$CUSSPEC" ];then
