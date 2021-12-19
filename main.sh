@@ -20,117 +20,6 @@ update_file() {
     fi
 }
 
-### Initial Script
-getInfo '>> Initializing Script... <<'
-
-mainDir=$PWD
-kernelDir=$mainDir/kernel
-clangDir=$mainDir/clang
-gcc64Dir=$mainDir/gcc64
-gcc32Dir=$mainDir/gcc32
-AnykernelDir=$mainDir/Anykernel3
-SpectrumDir=$mainDir/Spectrum
-
-git config --global user.name "$GIT_USERNAME"
-git config --global user.email "$GIT_EMAIL"
-
-if [ "$KranulVer" = "44" ];then
-if [ "$branch" == "r6/eas" ] || [ "$branch" == "r6/eas-s2" ] || [ "$branch" == "eas-test" ];then
-AKbranch="4.4-eas"
-TypeBuildTag="EAS"
-else
-AKbranch="4.4-hmp"
-TypeBuildTag="HMP"
-fi
-KranulLink="android_kernel_asus_sdm660"
-MESSAGEWORD="Ambition is the path to success. Persistence is the vehicle you arrive in."
-elif [ "$KranulVer" = "419" ];then
-AKbranch="4.19"
-KranulLink="android_kernel_asus_sdm660-4.19"
-MESSAGEWORD="Become addicted to constant and never-ending self-improvement."
-TypeBuildTag="EAS"
-fi
-
-## Initial Clone
-if [ ! -z "$CUSKERLINK" ];then
-getInfo '>> Using Custom Kernel Link ! <<'
-KERNLINK="$CUSKERLINK"
-else
-getInfo '>> Using Default Kernel Link ! <<'
-KERNLINK="https://$GIT_SECRET@github.com/$GIT_USERNAME/$KranulLink"
-fi
-
-source ${mainDir}/clone.sh
-
-## Chat ID  
-if [ "$TypeBuild" == "RELEASE" ];then
-	FileChatID="-1001538380925"
-else
-    FileChatID="-1001756316778"
-fi
-if [ "$PrivBuild" == "Y" ];then
-	InfoChatID="-1001561722193"
-else
-	InfoChatID="-1001407005109"
-fi
-
-## Kernel Setup	
-if [ "$branch" == "r1/s-s2" ] || [ "$branch" == "r6/eas-s2" ] || [ "$branch" == "r6/hmp-s2" ];then
-	SixTwo="Y"
-fi
-    ARCH="arm64"
-    GetBD=$(date +"%m%d")
-    GetCBD=$(date +"%Y-%m-%d")
-	GetTime=$(date "+%T")
-	GetDateTime=$(date)
-    TotalCores=$(nproc --all)
-	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
-	HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
-	if [ "$CODENAME" == "X00TD" ];then
-	DEVICE="Asus Max Pro M1"
-	DEFCONFIG="X00TD_defconfig"
-	elif [ "$CODENAME" == "X01BD" ];then
-	DEVICE="Asus Max Pro M2"
-	DEFCONFIG="X01BD_defconfig"
-	fi
-	if [ "$KranulVer" = "44" ];then
-	SetTag="LA.UM.9.2.r1"
-    SetLastTag="SDMxx0.0"
-	elif [ "$KranulVer" = "419" ];then
-	SetTag="LA.UM.10.2.1.r1"
-    SetLastTag="sdm660.0"
-	DEFCONFIG="asus/$DEFCONFIG"
-	fi
-	DEFCONFIGPATH="arch/$ARCH/configs"
-    HeadCommitId=$(git log --pretty=format:'%h' -n1)
-	CKName=""
-    cd $mainDir
-
-## Get Toolchain Version
-    if [ ! -z "CUSCLANGVER" ];then
-		ClangType="$CUSCLANGVER$CUSLLDVER"
-	elif [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
-        ClangType="$($gcc64Dir/bin/$for64-gcc --version | head -n 1)"
-    else
-        ClangType=$("$clangDir"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
-    fi
-    if [ -e $gcc64Dir/bin/$for64-gcc ];then
-        gcc64Type="$($gcc64Dir/bin/$for64-gcc --version | head -n 1)"
-    else
-        cd $gcc64Dir
-        gcc64Type=$(git log --pretty=format:'%h: %s' -n1)
-        cd $mainDir
-    fi
-    if [ -e $gcc32Dir/bin/$for32-gcc ];then
-        gcc32Type="$($gcc32Dir/bin/$for32-gcc --version | head -n 1)"
-    else
-        cd $gcc32Dir
-        gcc32Type=$(git log --pretty=format:'%h: %s' -n1)
-        cd $mainDir
-    fi
-	export KBUILD_COMPILER_STRING="$ClangType"
-	export KBUILD_BUILD_USER="RyuujiX"
-	
 ## Commands
 # Send Info
 tg_send_info(){
@@ -737,5 +626,116 @@ BuildAll(){
 	CompileKernel
 	fi
 }
+
+### Initial Script
+getInfo '>> Initializing Script... <<'
+
+mainDir=$PWD
+kernelDir=$mainDir/kernel
+clangDir=$mainDir/clang
+gcc64Dir=$mainDir/gcc64
+gcc32Dir=$mainDir/gcc32
+AnykernelDir=$mainDir/Anykernel3
+SpectrumDir=$mainDir/Spectrum
+
+git config --global user.name "$GIT_USERNAME"
+git config --global user.email "$GIT_EMAIL"
+
+if [ "$KranulVer" = "44" ];then
+if [ "$branch" == "r6/eas" ] || [ "$branch" == "r6/eas-s2" ] || [ "$branch" == "eas-test" ];then
+AKbranch="4.4-eas"
+TypeBuildTag="EAS"
+else
+AKbranch="4.4-hmp"
+TypeBuildTag="HMP"
+fi
+KranulLink="android_kernel_asus_sdm660"
+MESSAGEWORD="Ambition is the path to success. Persistence is the vehicle you arrive in."
+elif [ "$KranulVer" = "419" ];then
+AKbranch="4.19"
+KranulLink="android_kernel_asus_sdm660-4.19"
+MESSAGEWORD="Become addicted to constant and never-ending self-improvement."
+TypeBuildTag="EAS"
+fi
+
+## Initial Clone
+if [ ! -z "$CUSKERLINK" ];then
+getInfo '>> Using Custom Kernel Link ! <<'
+KERNLINK="$CUSKERLINK"
+else
+getInfo '>> Using Default Kernel Link ! <<'
+KERNLINK="https://$GIT_SECRET@github.com/$GIT_USERNAME/$KranulLink"
+fi
+
+source ${mainDir}/clone.sh
+
+## Chat ID  
+if [ "$TypeBuild" == "RELEASE" ];then
+	FileChatID="-1001538380925"
+else
+    FileChatID="-1001756316778"
+fi
+if [ "$PrivBuild" == "Y" ];then
+	InfoChatID="-1001561722193"
+else
+	InfoChatID="-1001407005109"
+fi
+
+## Kernel Setup	
+if [ "$branch" == "r1/s-s2" ] || [ "$branch" == "r6/eas-s2" ] || [ "$branch" == "r6/hmp-s2" ];then
+	SixTwo="Y"
+fi
+    ARCH="arm64"
+    GetBD=$(date +"%m%d")
+    GetCBD=$(date +"%Y-%m-%d")
+	GetTime=$(date "+%T")
+	GetDateTime=$(date)
+    TotalCores=$(nproc --all)
+	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
+	HeadCommitMsg=$(git log --pretty=format:'%s' -n1)
+	if [ "$CODENAME" == "X00TD" ];then
+	DEVICE="Asus Max Pro M1"
+	DEFCONFIG="X00TD_defconfig"
+	elif [ "$CODENAME" == "X01BD" ];then
+	DEVICE="Asus Max Pro M2"
+	DEFCONFIG="X01BD_defconfig"
+	fi
+	if [ "$KranulVer" = "44" ];then
+	SetTag="LA.UM.9.2.r1"
+    SetLastTag="SDMxx0.0"
+	elif [ "$KranulVer" = "419" ];then
+	SetTag="LA.UM.10.2.1.r1"
+    SetLastTag="sdm660.0"
+	DEFCONFIG="asus/$DEFCONFIG"
+	fi
+	DEFCONFIGPATH="arch/$ARCH/configs"
+    HeadCommitId=$(git log --pretty=format:'%h' -n1)
+	CKName=""
+    cd $mainDir
+
+## Get Toolchain Version
+    if [ ! -z "CUSCLANGVER" ];then
+		ClangType="$CUSCLANGVER$CUSLLDVER"
+	elif [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
+        ClangType="$($gcc64Dir/bin/$for64-gcc --version | head -n 1)"
+    else
+        ClangType=$("$clangDir"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
+    fi
+    if [ -e $gcc64Dir/bin/$for64-gcc ];then
+        gcc64Type="$($gcc64Dir/bin/$for64-gcc --version | head -n 1)"
+    else
+        cd $gcc64Dir
+        gcc64Type=$(git log --pretty=format:'%h: %s' -n1)
+        cd $mainDir
+    fi
+    if [ -e $gcc32Dir/bin/$for32-gcc ];then
+        gcc32Type="$($gcc32Dir/bin/$for32-gcc --version | head -n 1)"
+    else
+        cd $gcc32Dir
+        gcc32Type=$(git log --pretty=format:'%h: %s' -n1)
+        cd $mainDir
+    fi
+	export KBUILD_COMPILER_STRING="$ClangType"
+	export KBUILD_BUILD_USER="RyuujiX"
 
 getInfo '>> Script Initialized ! <<'
