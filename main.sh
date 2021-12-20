@@ -270,6 +270,9 @@ CompileKernel(){
         elif [ ! -z "${DRONE_BRANCH}" ];then
             BuildNumber="${DRONE_BUILD_NUMBER}"
             ProgLink="https://cloud.drone.io/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/1/2"
+		elif [ ! -z "${GITHUB_REF}" ];then
+            BuildNumber="${GITHUB_RUN_NUMBER}"
+            ProgLink="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
         fi
 		if [ "$KranulVer" = "44" ];then
 			if [ "$KernelFor" == "P" ];then
