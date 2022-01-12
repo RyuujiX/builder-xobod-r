@@ -653,7 +653,7 @@ AKbranch="4.4-hmp"
 TypeBuildTag="HMP"
 fi
 KranulLink="android_kernel_asus_sdm660"
-MESSAGEWORD="Ambition is the path to success. Persistence is the vehicle you arrive in."
+MESSAGEWORD="Optimism is the faith that leads to achievement. Nothing can be done without hope and confidence."
 elif [ "$KranulVer" = "419" ];then
 AKbranch="4.19"
 KranulLink="android_kernel_asus_sdm660-4.19"
