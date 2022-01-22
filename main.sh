@@ -297,7 +297,17 @@ CompileKernel(){
         else
             tg_send_info "$MSG" 
         fi
+		if [ "$KranulVer" = "44" ];then
 		make -j${TotalCores}  O=out ARCH="$ARCH" "$DEFCONFIG"
+		elif [ "$KranulVer" = "419" ];then
+		make -j${TotalCores}  O=out "$DEFCONFIG" \
+		ARCH=$ARCH \
+		PATH=$clangDir/bin:$gcc64Dir/bin:$gcc32Dir/bin:/usr/bin:${PATH} \
+		CROSS_COMPILE=$for64- \
+        CROSS_COMPILE_ARM32=$for32- \
+		CC=clang \
+		LLVM=1
+		fi
     if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
         make -j${TotalCores}  O=out \
             ARCH=$ARCH \
