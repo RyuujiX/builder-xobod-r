@@ -77,7 +77,19 @@ elif [ "$BuilderKernel" == "zyc" ];then
 	TypePrint="ZyC"
 	export LD=ld.lld
 	export LD_LIBRARY_PATH=$clangDir/lib
-    fi
+elif [ "$BuilderKernel" == "aosp" ];then
+    getInfo ">> Cloning AOSP clang 12 . . . <<"
+    git clone https://github.com/ThankYouMario/proprietary_vendor_qcom_sdclang -b sapphire $clangDir --depth=1
+	allFromClang="Y"
+	Compiler="AOSP Clang"
+	TypeBuilder="AOSP"
+	TypePrint="AOSP"
+	for64=aarch64-linux-gnu
+	for32=armv7-linux-gnueabi
+	clangDir=$clangDir/compiler
+	export LD=ld.lld
+    export LD_LIBRARY_PATH=$clangDir/lib
+fi
     
 # GCC	
 if [ "$BuilderKernel" == "gcc" ] || [ "$gcc" == "Y" ];then
@@ -137,8 +149,10 @@ elif [ "$gcc10" == "Y" ];then
 else
 	gcc64Dir=$clangDir
 	gcc32Dir=$clangDir
+	if [ -z "for64" ] && [ -z "for32" ];then
 	for64=aarch64-linux-gnu
 	for32=arm-linux-gnueabi
+	fi
 fi
 
 # Misc
