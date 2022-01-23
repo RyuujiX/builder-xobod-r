@@ -1,21 +1,21 @@
 #! /bin/bash
-KranulVer="44"
-branch="r6/hmp"
+KranulVer="419"
+branch="main-12"
 CODENAME="X01BD"
-WithSpec="Y"
+WithSpec="N"
 PrivBuild="N"
-PureKernel="N"
-CUSKERNAME="" # Add "DCKN" on ResetBranch if u don't want Kernel Name Changed again
+PureKernel="Y"
+CUSKERNAME="Chunmun-Is-Gae-XD" # Add "DCKN" on ResetBranch if u don't want Kernel Name Changed again
 CUSKERLINK=""
 CUSBUILDDATE=""
 CUSSPEC=""
 CUSCLANGVER=""
 CUSLLDVER=""
-TypeBuild="RELEASE"
-BuilderKernel="00000"
+TypeBuild="TEST"
+BuilderKernel="aosp"
 
 if [ "$KranulVer" = "419" ];then
-CAFTAG="02700"
+CAFTAG="03200"
 fi
 
 if [ "$BuilderKernel" != "proton" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] && [ "$BuilderKernel" != "gcc12" ] && [ "$BuilderKernel" != "storm" ] && [ "$BuilderKernel" != "strix" ] && [ "$BuilderKernel" != "sdclang" ] && [ "$BuilderKernel" != "atom" ] && [ "$BuilderKernel" != "zyc" ] && [ "$BuilderKernel" != "aosp" ];then
@@ -31,15 +31,8 @@ fi
 
 if [ $TypeBuild = "TEST" ];then
 ResetBranch
-LEDVib
-StockFreq
-SwitchOFI
 CompileKernel
 SwitchDevice "M1"
-ResetBranch
-LEDVib
-StockFreq
-SwitchOFI
 CompileKernel
 elif [ "$PureKernel" == "N" ] && [ $TypeBuild = "RELEASE" ];then
 BuildAll
