@@ -185,8 +185,10 @@ CompileKernel(){
 		TAGKENEL="$(git log | grep "${SetTag}" | head -n 1 | awk -F '\\'${SetLastTag}'' '{print $1"'${SetLastTag}'"}' | awk -F '\\'${SetTag}'' '{print "'${SetTag}'"$2}')"
     fi
 	if [ "$KranulVer" = "419" ];then
-		ClangMoreStrings="AR=llvm-ar NM=llvm-nm AS=llvm-as STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf HOSTAR=llvm-ar HOSTAS=llvm-as LD_LIBRARY_PATH=$clangDir/lib LLVM=1 LLVM_IAS=1 LD=ld.lld HOSTLD=ld.lld"
+		ClangMoreStrings="AR=llvm-ar NM=llvm-nm AS=llvm-as STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf HOSTAR=llvm-ar HOSTAS=llvm-as LD_LIBRARY_PATH=$clangDir/lib LD=ld.lld HOSTLD=ld.lld"
 		export KBUILD_BUILD_HOST="KereAktif-$TAGKENEL"
+		export LLVM=1
+		export LLVM_IAS=1
 	elif [ "$KranulVer" = "44" ];then
         export KBUILD_BUILD_HOST="KereAktif-$Driver-$Vibrate-$TAGKENEL"
 	fi
