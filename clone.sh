@@ -55,7 +55,7 @@ elif [ "$BuilderKernel" == "sdclang" ];then
 	CUSCLANGVER="Snapdragon$LLVMON clang version 14.0.0"
 elif [ "$BuilderKernel" == "atom" ];then
     getInfo ">> Cloning Atom-X clang 14 . . . <<"
-    git clone https://gitlab.com/RyuujiX/atom-x-clang -b atom-14 $clangDir --depth=1
+    git clone https://gitlab.com/ElectroPerf/atom-x-clang -b atom-14 $clangDir --depth=1
 	allFromClang="Y"
 	Compiler="Atom-X Clang"
 	TypeBuilder="Atom-X"
