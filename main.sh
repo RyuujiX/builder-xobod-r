@@ -123,7 +123,6 @@ ResetBranch(){
 	else
 		CpuFreq="OC"
 	fi
-	Vibrate="NLV"
 	Driver="NFI"
 	fi
 	cd $mainDir
@@ -143,15 +142,6 @@ StockFreq(){
 	getInfo ">> Reverted to Stock Freq ! <<"
 }
 
-# Enable LV
-LEDVib(){
-	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
-	git revert c6979baa65fd7e940ea1cefbf17d67bfbe727ce1 -n
-	Vibrate="LV"
-	cd $mainDir
-	getInfo ">> LED Vibration Used ! <<"
-}
-
 # Switch to Old Wi-Fi Driver
 SwitchOFI(){
 	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
@@ -169,7 +159,6 @@ FixPieWifi(){
 	git revert be578e2def2d7a67d6643335d016008f7bee8da8 -n
 	git revert 5c27bb6d8547112a8b815742c5dbcaae520b4497 -n
 	Driver="Pie"
-	Vibrate=""
     cd $mainDir
 	getInfo ">> Wi-Fi for Custom ROM Pie ($CODENAME) Fixed ! <<"
 }
@@ -190,7 +179,7 @@ CompileKernel(){
 		export LLVM=1
 		export LLVM_IAS=1
 	elif [ "$KranulVer" = "44" ];then
-        export KBUILD_BUILD_HOST="KereAktif-$Driver-$Vibrate-$TAGKENEL"
+        export KBUILD_BUILD_HOST="KereAktif-$Driver-$TAGKENEL"
 	fi
 	if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
 		MAKE+=(
@@ -276,18 +265,11 @@ CompileKernel(){
             BuildNumber="${GITHUB_RUN_NUMBER}"
             ProgLink="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
         fi
-		if [ "$KranulVer" = "44" ];then
-			if [ "$KernelFor" == "P" ];then
-				VibDrivTag="#$Driver"
-			else
-				VibDrivTag="#$Vibrate #$Driver"
-			fi
-		fi
 		
         if [ "$PureKernel" == "Y" ];then
 		MessageTag="#$TypeBuild"
 		else
-		MessageTag="#$TypeBuildTag #$TypeBuild #$CpuFreq $VibDrivTag"
+		MessageTag="#$TypeBuildTag #$TypeBuild #$CpuFreq #$Driver"
 		fi
 		if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ] || [ "$BuilderKernel" == "gcc49" ];then
             MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Total Cores: $TotalCores</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A $MessageTag"
@@ -382,24 +364,19 @@ CompileKernel(){
         cp -af $kernelDir/out/arch/$ARCH/boot/Image.gz-dtb $AnykernelDir
 	fi
 		
-        if [ "$KernelFor" == "P" ] || [ "$KranulVer" = "419" ];then
-		FilenameVC="[$CpuFreq]"
-		else
-		FilenameVC="[$Vibrate-$CpuFreq]"
-		fi
 	if [ "$PureKernel" == "Y" ];then
 			ZipName="$KName-$KVer-$CODENAME.zip"
 	elif [ "$KranulVer" = "44" ];then
 		 if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="$FilenameVC$KName-$Driver-$KVer-$CODENAME.zip"
+            ZipName="[$CpuFreq]$KName-$Driver-$KVer-$CODENAME.zip"
          else
-            ZipName="$FilenameVC$KName-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
+            ZipName="[$CpuFreq]$KName-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
          fi
 	elif [ "$KranulVer" = "419" ];then
 		 if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="$FilenameVC$KName-$KVer-$CODENAME.zip"
+            ZipName="[$CpuFreq]$KName-$KVer-$CODENAME.zip"
          else
-            ZipName="$FilenameVC$KName-$TypeBuild-$KVer-$CODENAME.zip"
+            ZipName="[$CpuFreq]$KName-$TypeBuild-$KVer-$CODENAME.zip"
          fi
 	fi
 
@@ -498,18 +475,13 @@ ModAnyKernel(){
 	else
 	BDate="$GetCBD"
 	fi
-	CpuFrag="-$CpuFreq"
 	sed -i "s/kernel.string=.*/kernel.string=$KName/g" anykernel.sh
 	if [ "$PureKernel" == "N" ];then
 	if [ "$KranulVer" = "44" ];then
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
-	if [ "$KernelFor" == "P" ];then
 	sed -i "s/kernel.for=.*/kernel.for=$CpuFreq-$Driver/g" anykernel.sh
-	else
-	sed -i "s/kernel.for=.*/kernel.for=$Vibrate$CpuFrag-$Driver/g" anykernel.sh
-	fi
 	elif [ "$KranulVer" = "419" ];then
-	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag$CpuFrag/g" anykernel.sh
+	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag-$CpuFreq/g" anykernel.sh
 	fi
 	fi
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
@@ -519,11 +491,11 @@ ModAnyKernel(){
 	sed -i "s/build.date=.*/build.date=$BDate/g" anykernel.sh
 	sed -i "s/build.type=.*/build.type=$TypeBuild/g" anykernel.sh
 	if [ "$PureKernel" == "N" ];then
-	if [ "$KernelFor" == "P" ];then
+	if [ "$Driver" == "Pie" ];then
 	sed -i "s/supported.versions=.*/supported.versions=9/g" anykernel.sh
-	elif [ "$Vibrate" == "LV" ] || [ "$KranulVer" = "419" ];then
+	elif [ "$KranulVer" = "419" ];then
 	sed -i "s/supported.versions=.*/supported.versions=11-12/g" anykernel.sh
-	elif [ "$Vibrate" == "NLV" ];then
+	else
 	sed -i "s/supported.versions=.*/supported.versions=9-12/g" anykernel.sh
 	fi
 	fi
@@ -543,13 +515,9 @@ ModAnyKernel(){
 	sed -i "s/KBDATE/$BDate/g" aroma-config
 	if [ "$PureKernel" == "N" ];then
 	if [ "$KranulVer" = "44" ];then
-	if [ "$KernelFor" == "P" ];then
 	sed -i "s/KVARIANT/$CpuFreq-$Driver/g" aroma-config
-	else
-	sed -i "s/KVARIANT/$Vibrate$CpuFrag-$Driver/g" aroma-config
-	fi
 	elif [ "$KranulVer" = "419" ];then
-	sed -i "s/KVARIANT/$TypeBuildTag$CpuFrag/g" aroma-config
+	sed -i "s/KVARIANT/$TypeBuildTag-$CpuFreq/g" aroma-config
 	fi
 	fi
 	cd $AnykernelDir
@@ -575,27 +543,14 @@ BuildAll(){
 	StockFreq
 	CompileKernel
 	elif [ "$KranulVer" = "44" ];then
-	# LV OC
-	ResetBranch
-	LEDVib
-	CompileKernel
-	SwitchOFI
-	CompileKernel
-	# LV Stock
-	ResetBranch
-	LEDVib
-	StockFreq
-	CompileKernel
-	SwitchOFI
-	CompileKernel
-	# NLV OC
+	# OC
 	ResetBranch
 	CompileKernel
 	SwitchOFI
 	CompileKernel
 	FixPieWifi
 	CompileKernel
-	# NLV Stock
+	# Stock
 	ResetBranch
 	StockFreq
 	CompileKernel
@@ -605,25 +560,12 @@ BuildAll(){
 	CompileKernel
 	# Switch to X00TD
 	SwitchDevice "M1"
-	# LV OC
-	ResetBranch
-	LEDVib
-	CompileKernel
-	SwitchOFI
-	CompileKernel
-	# LV Stock
-	ResetBranch
-	LEDVib
-	StockFreq
-	CompileKernel
-	SwitchOFI
-	CompileKernel
-	# NLV OC
+	# OC
 	ResetBranch
 	CompileKernel
 	SwitchOFI
 	CompileKernel
-	# NLV Stock
+	# Stock
 	ResetBranch
 	StockFreq
 	CompileKernel

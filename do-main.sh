@@ -31,13 +31,11 @@ fi
 
 if [ $TypeBuild = "TEST" ];then
 ResetBranch
-LEDVib
 StockFreq
 SwitchOFI
 CompileKernel
 SwitchDevice "M1"
 ResetBranch
-LEDVib
 StockFreq
 SwitchOFI
 CompileKernel
