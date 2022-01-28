@@ -597,7 +597,7 @@ AKbranch="4.4-hmp"
 TypeBuildTag="HMP"
 fi
 KranulLink="android_kernel_asus_sdm660"
-MESSAGEWORD="Optimism is the faith that leads to achievement. Nothing can be done without hope and confidence."
+MESSAGEWORD="Dare to dream, but even more importantly, dare to put action behind your dreams."
 elif [ "$KranulVer" = "419" ];then
 AKbranch="4.19"
 KranulLink="android_kernel_asus_sdm660-4.19"
