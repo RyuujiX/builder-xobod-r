@@ -135,7 +135,7 @@ StockFreq(){
 	if [ "$KranulVer" = "419" ];then
 		git revert 18848d6a864bbc70fcd46001a01127c3cbd70ded -n
 	elif [ "$KranulVer" = "44" ];then
-		git revert 542000eb0f463ae4995c144991964456e4aa0c10 -n
+		git revert b4c53eccaf2789943433865c194292d63b66a401 -n
 	fi
 	CpuFreq="Stock"
 	cd $mainDir
@@ -147,7 +147,7 @@ SwitchOFI(){
 	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
     rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
     git add .
-    git revert 1d6e1bb682f0f280a758eba771890f926492296f -n
+    git revert 4603511b4c4cbc125a03969a7bf5cdd91015ed88 -n
     Driver="OFI"
     cd $mainDir
 	getInfo ">> Switched to Old Wi-Fi Driver ! <<"
@@ -387,7 +387,7 @@ CompileKernel(){
 # Spectrum Configuration
 SpectrumConf(){
 if [ "$KranulVer" = "44" ];then
-	if [ "$branch" = "r6/eas" ] || [ "$branch" == "r6/eas-s2" ] || [ "$branch" = "eas-test" ];then
+	if [ "$branch" = "r7/eas" ] || [ "$branch" == "r6/eas-s2" ] || [ "$branch" = "eas-test" ];then
 		if [ "WithSpec" == "N" ];then
 			spectrumFile=""
 		elif [ ! -z "$CUSSPEC" ];then
@@ -589,7 +589,7 @@ git config --global user.name "$GIT_USERNAME"
 git config --global user.email "$GIT_EMAIL"
 
 if [ "$KranulVer" = "44" ];then
-if [ "$branch" == "r6/eas" ] || [ "$branch" == "r6/eas-s2" ] || [ "$branch" == "eas-test" ];then
+if [ "$branch" == "r7/eas" ] || [ "$branch" == "r6/eas-s2" ] || [ "$branch" == "eas-test" ];then
 AKbranch="4.4-eas"
 TypeBuildTag="EAS"
 else

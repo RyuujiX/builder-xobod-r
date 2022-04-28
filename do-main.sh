@@ -1,6 +1,6 @@
 #! /bin/bash
 KranulVer="44"
-branch="r6/hmp"
+branch="r7/hmp"
 CODENAME="X01BD"
 WithSpec="Y"
 PrivBuild="N"
