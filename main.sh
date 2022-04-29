@@ -90,6 +90,9 @@ SwitchDevice(){
 	if [ "$KranulVer" = "419" ];then
 		DEFCONFIG="asus/$DEFCONFIG"
 	fi
+	if [ ! -z "$CKName" ] && [ "$1" != "DCKN" ];then
+		ChangeKName "$CKName"
+	fi
 	getInfo ">> Device Switched to "$DEVICE-$CODENAME" ! <<"
 }
 
