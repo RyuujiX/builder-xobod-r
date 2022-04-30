@@ -126,7 +126,7 @@ ResetBranch(){
 	else
 		CpuFreq="OC"
 	fi
-	Driver="NFI"
+	Driver="OFI"
 	fi
 	cd $mainDir
 	getInfo ">> Kernel Source Has Been Reset ! <<"
@@ -145,15 +145,17 @@ StockFreq(){
 	getInfo ">> Reverted to Stock Freq ! <<"
 }
 
-# Switch to Old Wi-Fi Driver
-SwitchOFI(){
+# Switch to New Wi-Fi Driver
+SwitchNFI(){
 	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
     rm -rf drivers/staging/qcacld-3.0 drivers/staging/fw-api drivers/staging/qca-wifi-host-cmn
-    git add .
-    git revert 4603511b4c4cbc125a03969a7bf5cdd91015ed88 -n
-    Driver="OFI"
+    cp $NFIDir/drivers/staging/qcacld-3.0 drivers/staging/qcacld-3.0 -rf
+	cp $NFIDir/drivers/staging/fw-api drivers/staging/fw-api -rf
+	cp $NFIDir/drivers/staging/qca-wifi-host-cmn drivers/staging/qca-wifi-host-cmn -rf
+	git add .
+    Driver="NFI"
     cd $mainDir
-	getInfo ">> Switched to Old Wi-Fi Driver ! <<"
+	getInfo ">> Switched to New Wi-Fi Driver ! <<"
 }
 
 # Fix Wi-Fi for Custom ROM Pie X01BD
@@ -549,7 +551,7 @@ BuildAll(){
 	# OC
 	ResetBranch
 	CompileKernel
-	SwitchOFI
+	SwitchNFI
 	CompileKernel
 	FixPieWifi
 	CompileKernel
@@ -557,7 +559,7 @@ BuildAll(){
 	ResetBranch
 	StockFreq
 	CompileKernel
-	SwitchOFI
+	SwitchNFI
 	CompileKernel
 	FixPieWifi
 	CompileKernel
@@ -566,13 +568,13 @@ BuildAll(){
 	# OC
 	ResetBranch
 	CompileKernel
-	SwitchOFI
+	SwitchNFI
 	CompileKernel
 	# Stock
 	ResetBranch
 	StockFreq
 	CompileKernel
-	SwitchOFI
+	SwitchNFI
 	CompileKernel
 	fi
 }
@@ -582,6 +584,7 @@ getInfo '>> Initializing Script... <<'
 
 mainDir=$PWD
 kernelDir=$mainDir/kernel
+NFIDir=$mainDir/NFIDriver
 clangDir=$mainDir/clang
 gcc64Dir=$mainDir/gcc64
 gcc32Dir=$mainDir/gcc32

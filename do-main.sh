@@ -32,12 +32,12 @@ fi
 if [ $TypeBuild = "TEST" ];then
 ResetBranch
 StockFreq
-SwitchOFI
+SwitchNFI
 CompileKernel
 SwitchDevice "M1"
 ResetBranch
 StockFreq
-SwitchOFI
+SwitchNFI
 CompileKernel
 elif [ "$PureKernel" == "N" ] && [ $TypeBuild = "RELEASE" ];then
 BuildAll
