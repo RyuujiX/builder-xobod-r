@@ -551,17 +551,17 @@ BuildAll(){
 	# OC
 	ResetBranch
 	CompileKernel
-	SwitchNFI
-	CompileKernel
 	FixPieWifi
+	CompileKernel
+	SwitchNFI
 	CompileKernel
 	# Stock
 	ResetBranch
 	StockFreq
 	CompileKernel
-	SwitchNFI
-	CompileKernel
 	FixPieWifi
+	CompileKernel
+	SwitchNFI
 	CompileKernel
 	# Switch to X00TD
 	SwitchDevice "M1"
