@@ -603,7 +603,7 @@ AKbranch="4.4-hmp"
 TypeBuildTag="HMP"
 fi
 KranulLink="android_kernel_asus_sdm660"
-MESSAGEWORD="Dare to dream, but even more importantly, dare to put action behind your dreams."
+MESSAGEWORD="The greatest day in your life and mine is when we take total responsibility for our attitudes. That is the day we truly grow up."
 elif [ "$KranulVer" = "419" ];then
 AKbranch="4.19"
 KranulLink="android_kernel_asus_sdm660-4.19"
