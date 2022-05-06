@@ -5,8 +5,10 @@ getInfo ">> Cloning Kernel Source . . . <<"
 git clone $KERNLINK -b "$branch" $kernelDir
 
 # LA.UM.9.2.r1-XXXXX-SDMxx0.0 (NFI) WiFi Driver
+if [ "$KranulVer" = "44" ];then
 getInfo ">> Cloning NFI WiFi Driver . . . <<"
 git clone https://github.com/RyuujiX/NFI_SkyWalker -b NFI $NFIDir
+fi
 
 # Clang
 if [ "$BuilderKernel" == "proton" ];then

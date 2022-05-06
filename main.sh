@@ -90,7 +90,7 @@ SwitchDevice(){
 	if [ "$KranulVer" = "419" ];then
 		DEFCONFIG="asus/$DEFCONFIG"
 	fi
-	if [ ! -z "$CKName" ] && [ "$1" != "DCKN" ];then
+	if [ ! -z "$CKName" ] && [ "$2" != "DCKN" ];then
 		ChangeKName "$CKName"
 	fi
 	getInfo ">> Device Switched to "$DEVICE-$CODENAME" ! <<"
@@ -126,7 +126,9 @@ ResetBranch(){
 	else
 		CpuFreq="OC"
 	fi
-	Driver="OFI"
+	if [ "$KranulVer" = "44" ];then
+		Driver="OFI"
+	fi
 	fi
 	cd $mainDir
 	getInfo ">> Kernel Source Has Been Reset ! <<"
