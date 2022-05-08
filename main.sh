@@ -70,6 +70,11 @@ tg_send_files(){
 			tg_send_info "$MSG"
 			tg_send_sticker "$SID"
 			getInfo ">> File Sent ! <<"
+			
+		## Upload to GDrive
+		getInfo ">> Uploading "$ZipName" to Google Drive . . . . <<"
+		gupload $ZipName --to $GDriveID
+		getInfo ">> File Uploaded ! <<"
 		
     # remove files after send done
     rm -rf $KernelFiles
@@ -627,14 +632,21 @@ source ${mainDir}/clone.sh
 ## Chat ID  
 if [ "$TypeBuild" == "RELEASE" ];then
 	FileChatID="-1001538380925"
+	GDriveID="17LhofRjkTzWNyWhhjymSj8Uei52JIfU7"
 else
     FileChatID="-1001756316778"
+	GDriveID="17MlaWefcioMOZrqF_fR6BElRH_J90t-c"
 fi
 if [ "$PrivBuild" == "Y" ];then
 	InfoChatID="-1001561722193"
 else
 	InfoChatID="-1001407005109"
 fi
+
+## Google Drive Uploader Setup
+[[ "$(pwd)" != "${mainDir}" ]] && cd "${mainDir}"
+unzip -P ${GDRIVEKEYPASS} key.zip
+export GOOGLE_APPLICATION_CREDENTIALS=$mainDir/key.json
 
 ## Kernel Setup	
 if [ "$branch" == "r1/s-s2" ] || [ "$branch" == "r6/eas-s2" ] || [ "$branch" == "r6/hmp-s2" ];then
