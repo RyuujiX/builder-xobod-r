@@ -29,7 +29,9 @@ if [ ! -z "$CUSKERNAME" ];then
 ChangeKName "$CUSKERNAME"
 fi
 
-if [ $TypeBuild = "TEST" ];then
+if [ "$PureKernel" == "N" ] && [ $TypeBuild = "RELEASE" ];then
+BuildAll
+else
 ResetBranch
 StockFreq
 SwitchNFI
@@ -39,6 +41,4 @@ ResetBranch
 StockFreq
 SwitchNFI
 CompileKernel
-elif [ "$PureKernel" == "N" ] && [ $TypeBuild = "RELEASE" ];then
-BuildAll
-fi
+fi;
