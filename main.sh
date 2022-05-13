@@ -143,7 +143,7 @@ ResetBranch(){
 StockFreq(){
 	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
 	if [ "$KranulVer" = "419" ];then
-		git revert 18848d6a864bbc70fcd46001a01127c3cbd70ded -n
+		git revert 4a7f851662030e753edcbb26bbafbad0ae698bb5 -n
 	elif [ "$KranulVer" = "44" ];then
 		git revert b4c53eccaf2789943433865c194292d63b66a401 -n
 	fi
@@ -610,11 +610,11 @@ AKbranch="4.4-hmp"
 TypeBuildTag="HMP"
 fi
 KranulLink="android_kernel_asus_sdm660"
-MESSAGEWORD="The greatest day in your life and mine is when we take total responsibility for our attitudes. That is the day we truly grow up."
+MESSAGEWORD="Being honest may not get you a lot of friends, but it will always get you the right ones."
 elif [ "$KranulVer" = "419" ];then
 AKbranch="4.19"
 KranulLink="android_kernel_asus_sdm660-4.19"
-MESSAGEWORD="Become addicted to constant and never-ending self-improvement."
+MESSAGEWORD="Forgiveness does not make the other person right, it makes you free."
 TypeBuildTag="EAS"
 fi
 
