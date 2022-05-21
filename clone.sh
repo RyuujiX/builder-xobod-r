@@ -42,23 +42,17 @@ elif [ "$BuilderKernel" == "strix" ];then
 	TypeBuilder="STRIX"
 	TypePrint="STRIX"
 elif [ "$BuilderKernel" == "sdclang" ];then
-    mkdir "${clangDir}"
-	rm -rf $clangDir/*
-	if [ ! -e "${mainDir}/SDClang.zip" ];then
-	getInfo ">> Downloading Snapdragon Clang 14 . . . <<"
-    wget -q  https://github.com/ZyCromerZ/Clang/releases/download/sdclang-14-release/SDClang-14.0.0.zip -O "SDClang.zip"
-	fi
-	getInfo ">> Extracting Snapdragon Clang 14 . . . <<"
-	unzip -P ${SDCLANGPASS} SDClang.zip -d $clangDir
+    getInfo ">> Cloning Snapdragon Clang 14 . . . <<"
+    git clone https://github.com/RyuujiX/SDClang -b 14 $clangDir --depth=1
 	gcc="Y"
 	if [ "$KranulVer" = "419" ];then
 	LLVMON=" LLVM"
-	CUSLLDVER=", LLD 14.0.0"
+	CUSLLDVER=", LLD 14.1.2"
 	fi
 	Compiler="Snapdragon Clang"
 	TypeBuilder="Snapdragon$LLVMON"
 	TypePrint="Snapdragon$LLVMON"
-	CUSCLANGVER="Snapdragon$LLVMON clang version 14.0.0"
+	CUSCLANGVER="Snapdragon$LLVMON clang version 14.1.2"
 elif [ "$BuilderKernel" == "atom" ];then
     getInfo ">> Cloning Atom-X clang 14 . . . <<"
     git clone https://gitlab.com/ElectroPerf/atom-x-clang -b atom-14 $clangDir --depth=1
