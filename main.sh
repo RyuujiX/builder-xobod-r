@@ -610,11 +610,9 @@ AKbranch="4.4-hmp"
 TypeBuildTag="HMP"
 fi
 KranulLink="android_kernel_asus_sdm660"
-MESSAGEWORD="Being honest may not get you a lot of friends, but it will always get you the right ones."
 elif [ "$KranulVer" = "419" ];then
 AKbranch="4.19"
 KranulLink="android_kernel_asus_sdm660-4.19"
-MESSAGEWORD="Forgiveness does not make the other person right, it makes you free."
 TypeBuildTag="EAS"
 fi
 
@@ -628,6 +626,12 @@ KERNLINK="https://$GIT_SECRET@github.com/$GIT_USERNAME/$KranulLink"
 fi
 
 source ${mainDir}/clone.sh
+
+if [ ! -z "$CUSMSGWORD" ];then
+export MESSAGEWORD="$CUSMSGWORD"
+else
+source ${kernelDir}/msgword
+fi
 
 ## Chat ID  
 if [ "$TypeBuild" == "RELEASE" ];then
