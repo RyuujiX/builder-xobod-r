@@ -1,6 +1,6 @@
 #! /bin/bash
-KranulVer="44"
-branch="r7/hmp"
+KranulVer="419"
+branch="r2/s"
 CODENAME="X01BD"
 WithSpec="Y"
 PrivBuild="N"
@@ -16,7 +16,7 @@ TypeBuild="RELEASE"
 BuilderKernel="00000"
 
 if [ "$KranulVer" = "419" ];then
-CAFTAG="03600"
+CAFTAG="03800"
 fi
 
 if [ "$BuilderKernel" != "proton" ] && [ "$BuilderKernel" != "dtc" ] && [ "$BuilderKernel" != "gcc" ] && [ "$BuilderKernel" != "gcc12" ] && [ "$BuilderKernel" != "storm" ] && [ "$BuilderKernel" != "strix" ] && [ "$BuilderKernel" != "sdclang" ] && [ "$BuilderKernel" != "atom" ] && [ "$BuilderKernel" != "zyc" ];then
@@ -35,11 +35,9 @@ BuildAll
 else
 ResetBranch
 StockFreq
-SwitchNFI
 CompileKernel
 SwitchDevice "M1"
 ResetBranch
 StockFreq
-SwitchNFI
 CompileKernel
 fi;

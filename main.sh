@@ -143,7 +143,7 @@ ResetBranch(){
 StockFreq(){
 	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
 	if [ "$KranulVer" = "419" ];then
-		git revert 4a7f851662030e753edcbb26bbafbad0ae698bb5 -n
+		git revert 349b1fb219865bb0552d86b2172fd9372105bd2f -n
 	elif [ "$KranulVer" = "44" ];then
 		git revert b4c53eccaf2789943433865c194292d63b66a401 -n
 	fi
