@@ -715,7 +715,7 @@ fi
 	elif [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
         ClangType="$($gcc64Dir/bin/$for64-gcc --version | head -n 1)"
     else
-        ClangType=$("$clangDir"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
+        ClangType="$($clangDir/bin/clang --version 2>/dev/null | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
     fi
     if [ -e $gcc64Dir/bin/$for64-gcc ];then
         gcc64Type="$($gcc64Dir/bin/$for64-gcc --version | head -n 1)"
