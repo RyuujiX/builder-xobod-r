@@ -213,6 +213,16 @@ CompileKernel(){
 				HOSTCC=gcc \
 				HOSTCXX=g++ ${ClangMoreStrings}
 			)
+	elif [ "$BuilderKernel" == "neutron" ];then
+		MAKE+=(
+				ARCH=$ARCH \
+				SUBARCH=$ARCH \
+				PATH=$clangDir/bin:${PATH} \
+				CC=clang \
+				CROSS_COMPILE=aarch64-linux-gnu- \
+				HOSTCC=clang \
+				HOSTCXX=clang++ ${ClangMoreStrings}
+			)
 	elif [ "$allFromClang" == "Y" ];then
 		MAKE+=(
                 ARCH=$ARCH \
@@ -312,6 +322,15 @@ CompileKernel(){
 			CLANG_TRIPLE=aarch64-linux-gnu- \
 			HOSTCC=gcc \
 			HOSTCXX=g++ ${ClangMoreStrings}
+	elif [ "$BuilderKernel" == "neutron" ];then
+		make -j${TotalCores}  O=out \
+			ARCH=$ARCH \
+			SUBARCH=$ARCH \
+			PATH=$clangDir/bin:${PATH} \
+			CC=clang \
+			CROSS_COMPILE=aarch64-linux-gnu- \
+			HOSTCC=clang \
+			HOSTCXX=clang++ ${ClangMoreStrings}
 	elif [ "$allFromClang" == "Y" ];then
 		make -j${TotalCores}  O=out \
 			ARCH=$ARCH \

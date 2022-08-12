@@ -77,7 +77,15 @@ elif [ "$BuilderKernel" == "zyc" ];then
 	TypePrint="ZyC"
 	export LD=ld.lld
 	export LD_LIBRARY_PATH=$clangDir/lib
-    fi
+elif [ "$BuilderKernel" == "neutron" ];then
+    getInfo ">> Cloning Neutron clang 16 . . . <<"
+    git clone https://gitlab.com/RyuujiX/neutron-clang -b Neutron-16 $clangDir --depth=1
+	Compiler="Neutron Clang"
+	TypeBuilder="Neutron"
+	TypePrint="Neutron"
+	export LD=ld.lld
+    export LD_LIBRARY_PATH=$clangDir/lib
+fi
     
 # GCC	
 if [ "$BuilderKernel" == "gcc" ] || [ "$gcc" == "Y" ];then
