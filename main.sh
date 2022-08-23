@@ -525,9 +525,9 @@ ModAnyKernel(){
 	if [ "$Driver" == "Pie" ];then
 	sed -i "s/supported.versions=.*/supported.versions=9/g" anykernel.sh
 	elif [ "$KranulVer" = "419" ];then
-	sed -i "s/supported.versions=.*/supported.versions=11-12/g" anykernel.sh
+	sed -i "s/supported.versions=.*/supported.versions=11-13/g" anykernel.sh
 	else
-	sed -i "s/supported.versions=.*/supported.versions=9-12/g" anykernel.sh
+	sed -i "s/supported.versions=.*/supported.versions=9-13/g" anykernel.sh
 	fi
 	fi
 	if [ "$CODENAME" == "X00TD" ];then
