@@ -328,7 +328,8 @@ CompileKernel(){
 			SUBARCH=$ARCH \
 			PATH=$clangDir/bin:${PATH} \
 			CC=clang \
-			CROSS_COMPILE=aarch64-linux-gnu- \
+			CROSS_COMPILE=$for64- \
+			CROSS_COMPILE_ARM32=$for32- \
 			HOSTCC=clang \
 			HOSTCXX=clang++ ${ClangMoreStrings}
 	elif [ "$allFromClang" == "Y" ];then
