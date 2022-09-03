@@ -4,6 +4,11 @@ if [ ! -z "$1" ];then
 else
     TAGS=""
 fi
+if [ "$TAGS" == "neutron" ] || [ "$2" == "archlinux" ];then
+	YAML="archlinux.yml"
+else
+	YAML="ubjammy.yml"
+fi
 function update_file() {
     if [ ! -z "$1" ] && [ ! -z "$2" ] && [ ! -z "$3" ];then
         GetValue="$(cat "$3" | grep "$1")"
@@ -28,7 +33,11 @@ function update_fileB() {
 }
 function make_changes() {
     git checkout master && git checkout -b $1-$2
-    git checkout $1-$2 && update_fileB "00000" "$2" "./$1.sh" && update_file 'do-main.sh' "$1.sh" './.circleci/config.yml'
+    git checkout $1-$2
+	mkdir -p .github/workflows
+	cp -af GHYML/$YAML .github/workflows/build.yml
+	git add .
+	update_fileB "00000" "$2" "./$1.sh" && update_file 'do-main.sh' "$1.sh" './.circleci/config.yml'
 }
 
 ListBranch=""
@@ -56,8 +65,4 @@ do
     fi
 done
 
-if [ "$2" == "drone" ];then
-git push -f rmt2 $ListBranch
-else
 git push -f origin $ListBranch
-fi
