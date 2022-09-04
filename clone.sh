@@ -47,12 +47,12 @@ elif [ "$BuilderKernel" == "sdclang" ];then
 	gcc="Y"
 	if [ "$KranulVer" = "419" ];then
 	LLVMON=" LLVM"
-	CUSLLDVER=", LLD 14.1.2"
+	CUSLLDVER=", LLD 14.1.4"
 	fi
 	Compiler="Snapdragon Clang"
 	TypeBuilder="Snapdragon$LLVMON"
 	TypePrint="Snapdragon$LLVMON"
-	CUSCLANGVER="Snapdragon$LLVMON clang version 14.1.2"
+	CUSCLANGVER="Snapdragon$LLVMON clang version 14.1.4"
 elif [ "$BuilderKernel" == "atom" ];then
     getInfo ">> Cloning Atom-X clang 14 . . . <<"
     git clone https://gitlab.com/ElectroPerf/atom-x-clang -b atom-14 $clangDir --depth=1
