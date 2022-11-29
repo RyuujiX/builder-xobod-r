@@ -705,7 +705,7 @@ fi
 	SetTag="LA.UM.9.2.r1"
     SetLastTag="SDMxx0.0"
 	elif [ "$KranulVer" = "419" ];then
-	SetTag="LA.UM.10.2.1.r1"
+	SetTag="LA.UM.11.2.1.r1"
     SetLastTag="sdm660.0"
 	DEFCONFIG="asus/$DEFCONFIG"
 	fi
