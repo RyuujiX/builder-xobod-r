@@ -1,19 +1,19 @@
 #! /bin/bash
 KranulVer="419"
-branch="r2/s"
+branch="r3/s"
 CODENAME="X01BD"
 WithSpec="Y"
 PrivBuild="N"
-PureKernel="N"
-CUSKERNAME="" # Add "DCKN" on ResetBranch if u don't want Kernel Name Changed again
+PureKernel="Y"
+CUSKERNAME="LA.UM.11.2.1.r1-02500-sdm660.0" # Add "DCKN" on ResetBranch if u don't want Kernel Name Changed again
 CUSKERLINK=""
 CUSBUILDDATE=""
 CUSSPEC=""
 CUSCLANGVER=""
 CUSLLDVER=""
 CUSMSGWORD=""
-TypeBuild="RELEASE"
-BuilderKernel="00000"
+TypeBuild="TEST"
+BuilderKernel="neutron"
 
 if [ "$KranulVer" = "419" ];then
 CAFTAG="02500"
@@ -34,10 +34,7 @@ if [ "$PureKernel" == "N" ] && [ $TypeBuild = "RELEASE" ];then
 BuildAll
 else
 ResetBranch
-StockFreq
 CompileKernel
 SwitchDevice "M1"
-ResetBranch
-StockFreq
 CompileKernel
 fi;
