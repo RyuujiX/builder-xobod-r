@@ -85,8 +85,16 @@ elif [ "$BuilderKernel" == "neutron" ];then
 	TypePrint="Neutron"
 	export LD=ld.lld
     export LD_LIBRARY_PATH=$clangDir/lib
+elif [ "$BuilderKernel" == "trb" ];then
+    getInfo ">> Cloning TRB clang 17 . . . <<"
+    git clone https://gitlab.com/varunhardgamer/trb_clang -b 17 $clangDir --depth=1
+	Compiler="TRB Clang"
+	TypeBuilder="TheRagingBeast"
+	TypePrint="TheRagingBeast"
+	export LD=ld.lld
+    export LD_LIBRARY_PATH=$clangDir/lib
 fi
-    
+
 # GCC	
 if [ "$BuilderKernel" == "gcc" ] || [ "$gcc" == "Y" ];then
 	getInfo ">> Cloning gcc64 . . . <<"

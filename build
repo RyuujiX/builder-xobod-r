@@ -45,7 +45,7 @@ for Files in do-main
 do
     if [ "$TAGS" == "all" ];then
         if [[ -e ${Files}.sh ]];then
-            for Types in proton dtc gcc gcc12 storm strix sdclang atom zyc neutron
+            for Types in proton dtc gcc gcc12 storm strix sdclang atom zyc neutron trb
             do
                 git branch -D $Files-$Types
                 make_changes $Files $Types
@@ -55,7 +55,7 @@ do
         fi
     else
         if [[ -e ${Files}.sh ]];then
-            if [ "$TAGS" == "gcc" ] || [ "$TAGS" == "gcc12" ] || [ "$TAGS" == "proton" ] || [ "$TAGS" == "dtc" ] || [ "$TAGS" == "storm" ] || [ "$TAGS" == "strix" ] || [ "$TAGS" == "sdclang" ] || [ "$TAGS" == "atom" ] || [ "$TAGS" == "zyc" ] || [ "$TAGS" == "neutron" ];then
+            if [ "$TAGS" == "gcc" ] || [ "$TAGS" == "gcc12" ] || [ "$TAGS" == "proton" ] || [ "$TAGS" == "dtc" ] || [ "$TAGS" == "storm" ] || [ "$TAGS" == "strix" ] || [ "$TAGS" == "sdclang" ] || [ "$TAGS" == "atom" ] || [ "$TAGS" == "zyc" ] || [ "$TAGS" == "neutron" ] || [ "$TAGS" == "trb" ];then
                 git branch -D $Files-$TAGS
                 make_changes $Files $TAGS
                 ListBranch="$ListBranch $Files-$TAGS"
