@@ -635,7 +635,7 @@ TypeBuildTag="HMP"
 fi
 KranulLink="android_kernel_asus_sdm660"
 elif [ "$KranulVer" = "419" ];then
-AKbranch="4.19"
+AKbranch="4.19-std"
 KranulLink="android_kernel_asus_sdm660-4.19"
 TypeBuildTag="EAS"
 fi
