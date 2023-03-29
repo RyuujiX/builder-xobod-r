@@ -543,6 +543,7 @@ ModAnyKernel(){
 	sed -i "s/device.name5=.*/device.name5=ASUS_X00T/g" anykernel.sh
 	sed -i "s/X00TD=.*/X00TD=1/g" anykernel.sh
 	fi
+	if [ "$KranulVer" = "44" ];then
 	cd $AnykernelDir/META-INF/com/google/android
 	sed -i "s/KNAME/$KName/g" aroma-config
 	sed -i "s/KVER/$KVer/g" aroma-config
@@ -550,13 +551,10 @@ ModAnyKernel(){
 	sed -i "s/KDEVICE/$DEVICE - $CODENAME/g" aroma-config
 	sed -i "s/KBDATE/$BDate/g" aroma-config
 	if [ "$PureKernel" == "N" ];then
-	if [ "$KranulVer" = "44" ];then
 	sed -i "s/KVARIANT/$CpuFreq-$Driver/g" aroma-config
-	elif [ "$KranulVer" = "419" ];then
-	sed -i "s/KVARIANT/$TypeBuildTag-$CpuFreq/g" aroma-config
-	fi
 	fi
 	cd $AnykernelDir
+	fi
 }
 
 # Packing kernel
