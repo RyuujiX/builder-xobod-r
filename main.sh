@@ -133,6 +133,8 @@ ResetBranch(){
 	fi
 	if [ "$KranulVer" = "44" ];then
 		Driver="OFI"
+	elif [ "$KranulVer" = "419" ];then
+		NVTDriver="OTC"
 	fi
 	fi
 	cd $mainDir
@@ -193,6 +195,20 @@ FixPieWifi(){
 	getInfo ">> Wi-Fi for Custom ROM Pie ($CODENAME) Fixed ! <<"
 }
 
+# Switch to New NVT Driver
+SwitchNewNVT(){
+	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
+	if [ "$1" = "revert" ];then
+		git revert 9cf0464c281016ee2d97598c532fdb7002d11981 -n
+		NVTDriver="OTC"
+	else
+		git cherry-pick 9cf0464c281016ee2d97598c532fdb7002d11981 -n
+		NVTDriver="NTC"
+	fi
+    cd $mainDir
+	getInfo ">> Switched to New NVT Driver ! <<"
+}
+
 # CompileKernel
 CompileKernel(){
 	getInfo ">> Compiling kernel . . . . <<"
@@ -205,7 +221,7 @@ CompileKernel(){
     fi
 	if [ "$KranulVer" = "419" ];then
 		ClangMoreStrings="AR=llvm-ar NM=llvm-nm AS=llvm-as STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf HOSTAR=llvm-ar HOSTAS=llvm-as LD_LIBRARY_PATH=$clangDir/lib LD=ld.lld HOSTLD=ld.lld"
-		export KBUILD_BUILD_HOST="KereAktif-$TAGKENEL"
+		export KBUILD_BUILD_HOST="KereAktif-$NVTDriver-$TAGKENEL"
 		export LLVM=1
 		export LLVM_IAS=1
 	elif [ "$KranulVer" = "44" ];then
@@ -424,9 +440,9 @@ CompileKernel(){
          fi
 	elif [ "$KranulVer" = "419" ];then
 		 if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="[$CpuFreq]$KName-$KVer-$CODENAME.zip"
+            ZipName="[$CpuFreq]$KName-$KVer-$CODENAME-$NVTDriver.zip"
          else
-            ZipName="[$CpuFreq]$KName-$TypeBuild-$KVer-$CODENAME.zip"
+            ZipName="[$CpuFreq]$KName-$TypeBuild-$KVer-$CODENAME-$NVTDriver.zip"
          fi
 	fi
 
@@ -531,7 +547,7 @@ ModAnyKernel(){
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
 	sed -i "s/kernel.for=.*/kernel.for=$CpuFreq-$Driver/g" anykernel.sh
 	elif [ "$KranulVer" = "419" ];then
-	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag-$CpuFreq/g" anykernel.sh
+	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag-$CpuFreq-$NVTDriver/g" anykernel.sh
 	fi
 	fi
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
@@ -581,14 +597,31 @@ MakeZip(){
 # Build for RELEASE
 BuildAll(){
 	if [ "$KranulVer" = "419" ];then
+	# OC
 	ResetBranch
 	CompileKernel
+	# Stock
 	StockFreq
 	CompileKernel
+	# Switch to New NVT Driver and Still on Stock
+	SwitchNewNVT
+	CompileKernel
+	# Back to OC
+	StockFreq "revert"
+	CompileKernel
+	# Switch to X00TD
 	SwitchDevice "M1"
 	ResetBranch
+	# OC
 	CompileKernel
+	# Stock
 	StockFreq
+	CompileKernel
+	# Switch to New NVT Driver and Still on Stock
+	SwitchNewNVT
+	CompileKernel
+	# Back to OC
+	StockFreq "revert"
 	CompileKernel
 	elif [ "$KranulVer" = "44" ];then
 	# OC
