@@ -142,16 +142,30 @@ ResetBranch(){
 # Revert Back to Stock CPU & GPU Freq
 StockFreq(){
 	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
-	if [ "$KranulVer" = "419" ];then
-		git revert 349b1fb219865bb0552d86b2172fd9372105bd2f -n
-	elif [ "$KranulVer" = "44" ];then
-		if [ "$branch" == "eas-test" ] || [ "$branch" == "r7/eas" ];then
-			git revert 636637918b2bf09de2d7e54d08f3c23c8932e6ef -n
-		else
-			git revert e2194a0d2d4aa4abbb0e7215ca5fe1cc889d5f78 -n
+	
+	if [ "$1" = "revert" ];then
+		if [ "$KranulVer" = "419" ];then
+			git cherry-pick 349b1fb219865bb0552d86b2172fd9372105bd2f -n
+		elif [ "$KranulVer" = "44" ];then
+			if [ "$branch" == "eas-test" ] || [ "$branch" == "r7/eas" ];then
+				git cherry-pick 636637918b2bf09de2d7e54d08f3c23c8932e6ef -n
+			else
+				git cherry-pick e2194a0d2d4aa4abbb0e7215ca5fe1cc889d5f78 -n
+			fi
 		fi
+		CpuFreq="OC"
+	else
+		if [ "$KranulVer" = "419" ];then
+			git revert 349b1fb219865bb0552d86b2172fd9372105bd2f -n
+		elif [ "$KranulVer" = "44" ];then
+			if [ "$branch" == "eas-test" ] || [ "$branch" == "r7/eas" ];then
+				git revert 636637918b2bf09de2d7e54d08f3c23c8932e6ef -n
+			else
+				git revert e2194a0d2d4aa4abbb0e7215ca5fe1cc889d5f78 -n
+			fi
+		fi
+		CpuFreq="Stock"
 	fi
-	CpuFreq="Stock"
 	cd $mainDir
 	getInfo ">> Reverted to Stock Freq ! <<"
 }
