@@ -4,7 +4,7 @@ if [ ! -z "$1" ];then
 else
     TAGS=""
 fi
-if [ "$TAGS" == "neutron" ] || [ "$2" == "archlinux" ];then
+if [ "$TAGS" == "neutron" ] || [ "$TAGS" == "trb" ] || [ "$2" == "archlinux" ];then
 	YAML="archlinux.yml"
 else
 	YAML="ubjammy.yml"
