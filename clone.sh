@@ -2,7 +2,7 @@
 
 # Kernel
 getInfo ">> Cloning Kernel Source . . . <<"
-git clone $KERNLINK -b "$branch" $kernelDir
+git clone --recursive $KERNLINK -b "$branch" $kernelDir
 
 # LA.UM.9.2.r1-XXXXX-SDMxx0.0 (NFI) WiFi Driver
 if [ "$KranulVer" = "44" ];then
