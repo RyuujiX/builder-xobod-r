@@ -147,7 +147,7 @@ StockFreq(){
 	
 	if [ "$1" = "revert" ];then
 		if [ "$KranulVer" = "419" ];then
-			git cherry-pick 349b1fb219865bb0552d86b2172fd9372105bd2f -n
+			git cherry-pick 01b73c4a2e6e5118a5045adcbcc9380a485585b0 -n
 		elif [ "$KranulVer" = "44" ];then
 			if [ "$branch" == "eas-test" ] || [ "$branch" == "r7/eas" ];then
 				git cherry-pick 636637918b2bf09de2d7e54d08f3c23c8932e6ef -n
@@ -156,9 +156,10 @@ StockFreq(){
 			fi
 		fi
 		CpuFreq="OC"
+		getInfo ">> OC Freq has been set ! <<"
 	else
 		if [ "$KranulVer" = "419" ];then
-			git revert 349b1fb219865bb0552d86b2172fd9372105bd2f -n
+			git revert 01b73c4a2e6e5118a5045adcbcc9380a485585b0 -n
 		elif [ "$KranulVer" = "44" ];then
 			if [ "$branch" == "eas-test" ] || [ "$branch" == "r7/eas" ];then
 				git revert 636637918b2bf09de2d7e54d08f3c23c8932e6ef -n
@@ -167,9 +168,9 @@ StockFreq(){
 			fi
 		fi
 		CpuFreq="Stock"
+		getInfo ">> Stock Freq has been set ! <<"
 	fi
 	cd $mainDir
-	getInfo ">> Reverted to Stock Freq ! <<"
 }
 
 # Switch to New Wi-Fi Driver
@@ -201,12 +202,13 @@ SwitchNewNVT(){
 	if [ "$1" = "revert" ];then
 		git revert 9cf0464c281016ee2d97598c532fdb7002d11981 -n
 		NVTDriver="OTC"
+		getInfo ">> Switched to Original NVT Driver ! <<"
 	else
 		git cherry-pick 9cf0464c281016ee2d97598c532fdb7002d11981 -n
 		NVTDriver="NTC"
+		getInfo ">> Switched to New NVT Driver ! <<"
 	fi
     cd $mainDir
-	getInfo ">> Switched to New NVT Driver ! <<"
 }
 
 # CompileKernel
@@ -224,8 +226,10 @@ CompileKernel(){
 		export KBUILD_BUILD_HOST="KereAktif-$NVTDriver-$TAGKENEL"
 		export LLVM=1
 		export LLVM_IAS=1
+		FourthMsgTag="$NVTDriver"
 	elif [ "$KranulVer" = "44" ];then
         export KBUILD_BUILD_HOST="KereAktif-$Driver-$TAGKENEL"
+		FourthMsgTag="$Driver"
 	fi
 	if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
 		MAKE+=(
@@ -325,7 +329,7 @@ CompileKernel(){
         if [ "$PureKernel" == "Y" ];then
 		MessageTag="#$TypeBuild"
 		else
-		MessageTag="#$TypeBuildTag #$TypeBuild #$CpuFreq #$Driver"
+		MessageTag="#$TypeBuildTag #$TypeBuild #$CpuFreq #$FourthMsgTag"
 		fi
 		if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ] || [ "$BuilderKernel" == "gcc49" ];then
             MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Total Cores: $TotalCores</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A $MessageTag"
