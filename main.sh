@@ -226,10 +226,10 @@ CompileKernel(){
 		export KBUILD_BUILD_HOST="KereAktif-$NVTDriver-$TAGKENEL"
 		export LLVM=1
 		export LLVM_IAS=1
-		FourthMsgTag="$NVTDriver"
+		FourthMsgTag="#$NVTDriver"
 	elif [ "$KranulVer" = "44" ];then
         export KBUILD_BUILD_HOST="KereAktif-$Driver-$TAGKENEL"
-		FourthMsgTag="$Driver"
+		FourthMsgTag="#$Driver"
 	fi
 	if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
 		MAKE+=(
@@ -329,7 +329,7 @@ CompileKernel(){
         if [ "$PureKernel" == "Y" ];then
 		MessageTag="#$TypeBuild"
 		else
-		MessageTag="#$TypeBuildTag #$TypeBuild #$CpuFreq #$FourthMsgTag"
+		MessageTag="#$TypeBuildTag #$TypeBuild #$CpuFreq $FourthMsgTag"
 		fi
 		if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ] || [ "$BuilderKernel" == "gcc49" ];then
             MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Total Cores: $TotalCores</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A $MessageTag"
