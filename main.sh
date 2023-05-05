@@ -209,10 +209,12 @@ CompileKernel(){
 		export KBUILD_BUILD_HOST="KereAktif-$TAGKENEL"
 		export LLVM=1
 		export LLVM_IAS=1
+		FirstMsgTag=""
 		FourthMsgTag=""
 	elif [ "$KranulVer" = "44" ];then
         export KBUILD_BUILD_HOST="KereAktif-$Driver-$TAGKENEL"
 		FourthMsgTag="#$Driver"
+		FirstMsgTag="#$TypeBuildTag"
 	fi
 	if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
 		MAKE+=(
@@ -312,7 +314,7 @@ CompileKernel(){
         if [ "$PureKernel" == "Y" ];then
 		MessageTag="#$TypeBuild"
 		else
-		MessageTag="#$TypeBuildTag #$TypeBuild #$CpuFreq $FourthMsgTag"
+		MessageTag="$FirstMsgTag #$TypeBuild #$CpuFreq $FourthMsgTag"
 		fi
 		if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ] || [ "$BuilderKernel" == "gcc49" ];then
             MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Total Cores: $TotalCores</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A $MessageTag"
@@ -534,7 +536,7 @@ ModAnyKernel(){
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
 	sed -i "s/kernel.for=.*/kernel.for=$CpuFreq-$Driver/g" anykernel.sh
 	elif [ "$KranulVer" = "419" ];then
-	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag-$CpuFreq/g" anykernel.sh
+	sed -i "s/kernel.type=.*/kernel.type=$CpuFreq/g" anykernel.sh
 	fi
 	fi
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
@@ -657,7 +659,7 @@ KranulLink="android_kernel_asus_sdm660"
 elif [ "$KranulVer" = "419" ];then
 AKbranch="4.19-std"
 KranulLink="android_kernel_asus_sdm660-4.19"
-TypeBuildTag="EAS"
+TypeBuildTag=""
 fi
 
 ## Initial Clone
