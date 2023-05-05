@@ -226,7 +226,7 @@ CompileKernel(){
 		export KBUILD_BUILD_HOST="KereAktif-$NVTDriver-$TAGKENEL"
 		export LLVM=1
 		export LLVM_IAS=1
-		FourthMsgTag="#$NVTDriver"
+		FourthMsgTag=""
 	elif [ "$KranulVer" = "44" ];then
         export KBUILD_BUILD_HOST="KereAktif-$Driver-$TAGKENEL"
 		FourthMsgTag="#$Driver"
