@@ -520,7 +520,7 @@ ModAnyKernel(){
         cp -af $SpectrumDir/$spectrumFile spectrum/init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" spectrum/init.spectrum.rc
     fi
 	if [ ! -z "$spectrumFiles" ];then
-		cp -af $SpectrumDir/$spectrumFiles spectrum/init.spectrum-oc.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" spectrum/init.spectrum-oc.rc
+		cp -af $SpectrumDir/$spectrumFiles spectrum/init.spectrum-oc.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName-OC/g" spectrum/init.spectrum-oc.rc
 	fi
     cp -af anykernel-real.sh anykernel.sh
 	if [ "$KranulVer" = "44" ] && [ "$TypeBuild" = "RELEASE" ];then
