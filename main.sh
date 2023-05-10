@@ -128,7 +128,7 @@ ResetBranch(){
 	if [ "$PureKernel" == "N" ];then
 	if [ "$SixTwo" == "Y" ];then
 		CpuFreq="SiX2"
-	else
+	elif [ "$KranulVer" = "44" ];then
 		CpuFreq="OC"
 	fi
 	if [ "$KranulVer" = "44" ];then
@@ -144,9 +144,7 @@ StockFreq(){
 	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
 	
 	if [ "$1" = "revert" ];then
-		if [ "$KranulVer" = "419" ];then
-			git cherry-pick 01b73c4a2e6e5118a5045adcbcc9380a485585b0 -n
-		elif [ "$KranulVer" = "44" ];then
+		if [ "$KranulVer" = "44" ];then
 			if [ "$branch" == "eas-test" ] || [ "$branch" == "r7/eas" ];then
 				git cherry-pick 636637918b2bf09de2d7e54d08f3c23c8932e6ef -n
 			else
@@ -156,9 +154,7 @@ StockFreq(){
 		CpuFreq="OC"
 		getInfo ">> OC Freq has been set ! <<"
 	else
-		if [ "$KranulVer" = "419" ];then
-			git revert 01b73c4a2e6e5118a5045adcbcc9380a485585b0 -n
-		elif [ "$KranulVer" = "44" ];then
+		if [ "$KranulVer" = "44" ];then
 			if [ "$branch" == "eas-test" ] || [ "$branch" == "r7/eas" ];then
 				git revert 636637918b2bf09de2d7e54d08f3c23c8932e6ef -n
 			else
@@ -211,10 +207,12 @@ CompileKernel(){
 		export LLVM_IAS=1
 		FirstMsgTag=""
 		FourthMsgTag=""
+		ThirdMsgTag=""
 	elif [ "$KranulVer" = "44" ];then
         export KBUILD_BUILD_HOST="KereAktif-$Driver-$TAGKENEL"
 		FourthMsgTag="#$Driver"
 		FirstMsgTag="#$TypeBuildTag"
+		ThirdMsgTag="#$CpuFreq"
 	fi
 	if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
 		MAKE+=(
@@ -314,7 +312,7 @@ CompileKernel(){
         if [ "$PureKernel" == "Y" ];then
 		MessageTag="#$TypeBuild"
 		else
-		MessageTag="$FirstMsgTag #$TypeBuild #$CpuFreq $FourthMsgTag"
+		MessageTag="$FirstMsgTag #$TypeBuild $ThirdMsgTag $FourthMsgTag"
 		fi
 		if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ] || [ "$BuilderKernel" == "gcc49" ];then
             MSG="<b>🔨 Compiling Kernel....</b>%0A<b>Device: $DEVICE</b>%0A<b>Codename: $CODENAME</b>%0A<b>Compile Date: $GetCBD </b>%0A<b>Branch: $branch</b>%0A<b>Kernel Name: $KName</b>%0A<b>Kernel Version: $KVer</b>%0A<b>Total Cores: $TotalCores</b>%0A<b>Last Commit-Message: $HeadCommitMsg </b>%0A<b>Compile Link Progress:</b><a href='$ProgLink'> Check Here </a>%0A<b>Compiler Info: </b>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A<code>- $gcc64Type </code>%0A<code>- $gcc32Type </code>%0A<code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code>%0A%0A $MessageTag"
@@ -429,9 +427,9 @@ CompileKernel(){
          fi
 	elif [ "$KranulVer" = "419" ];then
 		 if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="[$CpuFreq]$KName-$KVer-$CODENAME.zip"
+            ZipName="$KName-$KVer-$CODENAME.zip"
          else
-            ZipName="[$CpuFreq]$KName-$TypeBuild-$KVer-$CODENAME.zip"
+            ZipName="$KName-$TypeBuild-$KVer-$CODENAME.zip"
          fi
 	fi
 
@@ -490,22 +488,22 @@ if [ "$KranulVer" = "44" ];then
 elif [ "$KranulVer" = "419" ];then
 	if [ "WithSpec" == "N" ];then
 		spectrumFile=""
-	elif [ ! -z "$CUSSPEC" ];then
+		spectrumFiles=""
+	elif [ ! -z "$CUSSPEC" ] || [ ! -z "$CUSSPECS" ];then
 		spectrumFile="$CUSSPEC"
+		spectrumFiles="$CUSSPECS"
 	elif [ "$CODENAME" == "X00TD" ];then
 	if [ "$branch" == "r1/s-s2" ];then
 		spectrumFile="419-x00t-sixtwo.rc"
-	elif [ "$CpuFreq" == "OC" ];then
-		spectrumFile="419-x00t-oc.rc"
-	elif [ "$CpuFreq" == "Stock" ];then
+	else
+		spectrumFiles="419-x00t-oc.rc"
 		spectrumFile="419-x00t.rc"
 	fi
 	elif [ "$CODENAME" == "X01BD" ];then
 	if [ "$branch" == "r1/s-s2" ];then
 		spectrumFile="419-x01bd-sixtwo.rc"
-	elif [ "$CpuFreq" == "OC" ];then
-		spectrumFile="419-x01bd-oc.rc"
-	elif [ "$CpuFreq" == "Stock" ];then
+	else
+		spectrumFiles="419-x01bd-oc.rc"
 		spectrumFile="419-x01bd.rc"
 	fi
 	fi
@@ -521,8 +519,11 @@ ModAnyKernel(){
     if [ ! -z "$spectrumFile" ];then
         cp -af $SpectrumDir/$spectrumFile spectrum/init.spectrum.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" spectrum/init.spectrum.rc
     fi
+	if [ ! -z "$spectrumFiles" ];then
+		cp -af $SpectrumDir/$spectrumFiles spectrum/init.spectrum-oc.rc && sed -i "s/persist.spectrum.kernel.*/persist.spectrum.kernel $KName/g" spectrum/init.spectrum-oc.rc
+	fi
     cp -af anykernel-real.sh anykernel.sh
-	if [ "$TypeBuild" = "RELEASE" ];then
+	if [ "$KranulVer" = "44" ] && [ "$TypeBuild" = "RELEASE" ];then
 	cp -af $kernelDir/changelog META-INF/com/google/android/aroma/changelog.txt
 	fi
 	if [ ! -z "$CUSBUILDDATE" ];then
@@ -535,8 +536,6 @@ ModAnyKernel(){
 	if [ "$KranulVer" = "44" ];then
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
 	sed -i "s/kernel.for=.*/kernel.for=$CpuFreq-$Driver/g" anykernel.sh
-	elif [ "$KranulVer" = "419" ];then
-	sed -i "s/kernel.type=.*/kernel.type=$CpuFreq/g" anykernel.sh
 	fi
 	fi
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
@@ -586,19 +585,11 @@ MakeZip(){
 # Build for RELEASE
 BuildAll(){
 	if [ "$KranulVer" = "419" ];then
-	# OC
+	# Start Build
 	ResetBranch
-	CompileKernel
-	# Stock
-	StockFreq
 	CompileKernel
 	# Switch to X00TD
 	SwitchDevice "M1"
-	ResetBranch
-	# OC
-	CompileKernel
-	# Stock
-	StockFreq
 	CompileKernel
 	elif [ "$KranulVer" = "44" ];then
 	# OC
