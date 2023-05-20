@@ -11,7 +11,7 @@ update_file() {
         ValOri="$(echo "$GetValue" | awk -F '\\=' '{print $2}')"
         UpdateTo="$(echo "$2" | awk -F '\\=' '{print $2}')"
         [ "$ValOri" != "$UpdateTo" ] && \
-        sed -i "s/$1.*/$2/g" "$3"
+        sed -i "$4s/$1.*/$2/g" "$3"
         [ ! -z "$(git status | grep "modified" )" ] && \
         git add "$3"
     fi
