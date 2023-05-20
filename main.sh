@@ -130,6 +130,9 @@ ResetBranch(){
 	fi
 	if [ "$KranulVer" = "44" ];then
 		Driver="OFI"
+	elif [ "$KranulVer" = "419" ];then
+		DTSIEROFS=N
+		PARTITION="EXT4"
 	fi
 	fi
 	cd $mainDir
@@ -198,11 +201,42 @@ CompileKernel(){
 		TAGKENEL="$(git log | grep "${SetTag}" | head -n 1 | awk -F '\\'${SetLastTag}'' '{print $1"'${SetLastTag}'"}' | awk -F '\\'${SetTag}'' '{print "'${SetTag}'"$2}')"
     fi
 	if [ "$KranulVer" = "419" ];then
+		if [ "$1" == "EROFS" ];then
+		PARTITION="EROFS"
+		ORIGINALKName="$KName"
+		else
+		PARTITION="EXT4"
+		fi
+		
+		if [ "$PARTITION" == "EROFS" ];then
+			update_file "type" 'type = "erofs";' "arch/arm64/boot/dts/vendor/qcom/X00TD/sdm660-overlay.dtsi" "45"
+			update_file "type" 'type = "erofs";' "arch/arm64/boot/dts/vendor/qcom/X00TD/sdm660-overlay.dtsi" "53"
+			update_file "type" 'type = "erofs";' "arch/arm64/boot/dts/vendor/qcom/X01BD/sdm660-overlay.dtsi" "35"
+			update_file "type" 'type = "erofs";' "arch/arm64/boot/dts/vendor/qcom/X01BD/sdm660-overlay.dtsi" "44"
+			update_file "mnt" 'mnt_flags = "ro";' "arch/arm64/boot/dts/vendor/qcom/X00TD/sdm660-overlay.dtsi" "46"
+			update_file "mnt" 'mnt_flags = "ro";' "arch/arm64/boot/dts/vendor/qcom/X00TD/sdm660-overlay.dtsi" "54"
+			update_file "mnt" 'mnt_flags = "ro";' "arch/arm64/boot/dts/vendor/qcom/X01BD/sdm660-overlay.dtsi" "36"
+			update_file "mnt" 'mnt_flags = "ro";' "arch/arm64/boot/dts/vendor/qcom/X01BD/sdm660-overlay.dtsi" "45"
+			DTSIEROFS=Y
+			ChangeKName "$KName-$PARTITION"
+		elif [ "$PARTITION" == "EXT4" ] && [ "$DTSIEROFS" == "Y" ];then
+			update_file "type" 'type = "ext4";' "arch/arm64/boot/dts/vendor/qcom/X00TD/sdm660-overlay.dtsi" "45"
+			update_file "type" 'type = "ext4";' "arch/arm64/boot/dts/vendor/qcom/X00TD/sdm660-overlay.dtsi" "53"
+			update_file "type" 'type = "ext4";' "arch/arm64/boot/dts/vendor/qcom/X01BD/sdm660-overlay.dtsi" "35"
+			update_file "type" 'type = "ext4";' "arch/arm64/boot/dts/vendor/qcom/X01BD/sdm660-overlay.dtsi" "44"
+			update_file "mnt" 'mnt_flags = "ro,barrier=1,discard";' "arch/arm64/boot/dts/vendor/qcom/X00TD/sdm660-overlay.dtsi" "46"
+			update_file "mnt" 'mnt_flags = "ro,barrier=1,discard";' "arch/arm64/boot/dts/vendor/qcom/X00TD/sdm660-overlay.dtsi" "54"
+			update_file "mnt" 'mnt_flags = "ro,barrier=1,discard";' "arch/arm64/boot/dts/vendor/qcom/X01BD/sdm660-overlay.dtsi" "36"
+			update_file "mnt" 'mnt_flags = "ro,barrier=1,discard";' "arch/arm64/boot/dts/vendor/qcom/X01BD/sdm660-overlay.dtsi" "45"
+			DTSIEROFS=N
+			ChangeKName "$ORIGINALKName"
+		fi
+		
 		ClangMoreStrings="AR=llvm-ar NM=llvm-nm AS=llvm-as STRIP=llvm-strip OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf HOSTAR=llvm-ar HOSTAS=llvm-as LD_LIBRARY_PATH=$clangDir/lib LD=ld.lld HOSTLD=ld.lld"
-		export KBUILD_BUILD_HOST="KereAktif-$TAGKENEL"
+		export KBUILD_BUILD_HOST="KereAktif-$PARTITION-$TAGKENEL"
 		export LLVM=1
 		export LLVM_IAS=1
-		FirstMsgTag=""
+		FirstMsgTag="#$PARTITION"
 		FourthMsgTag=""
 		ThirdMsgTag=""
 	elif [ "$KranulVer" = "44" ];then
@@ -585,9 +619,11 @@ BuildAll(){
 	# Start Build
 	ResetBranch
 	CompileKernel
+	CompileKernel "EROFS"
 	# Switch to X00TD
 	SwitchDevice "M1"
 	CompileKernel
+	CompileKernel "EROFS"
 	elif [ "$KranulVer" = "44" ];then
 	# OC
 	ResetBranch
