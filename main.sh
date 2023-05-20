@@ -701,22 +701,22 @@ fi
 
 ## Chat ID  
 if [ "$TypeBuild" == "RELEASE" ];then
-	FileChatID="-1001538380925"
+	export FileChatID="-1001538380925"
 	if [ "$KranulVer" = "419" ];then
-		GDriveID="18BlCc3z39iNYa1ySp1V_Zdjieh8LNDnZ"
+		export GDriveID="18BlCc3z39iNYa1ySp1V_Zdjieh8LNDnZ"
 	elif [ "$KranulVer" = "44" ] && [ "$TypeBuildTag" = "EAS" ];then
-		GDriveID="18AE6swjz3HaITop0wARHTI4-NVS0VuZU"
+		export GDriveID="18AE6swjz3HaITop0wARHTI4-NVS0VuZU"
 	elif [ "$KranulVer" = "44" ] && [ "$TypeBuildTag" = "HMP" ];then
-		GDriveID="18BCc5a7nJVwsGhF0rjz1YgMogH6kiLE0"
+		export GDriveID="18BCc5a7nJVwsGhF0rjz1YgMogH6kiLE0"
 	fi
 else
-    FileChatID="-1001756316778"
-	GDriveID="17MlaWefcioMOZrqF_fR6BElRH_J90t-c"
+    export FileChatID="-1001756316778"
+	export GDriveID="17MlaWefcioMOZrqF_fR6BElRH_J90t-c"
 fi
 if [ "$PrivBuild" == "Y" ];then
-	InfoChatID="-1001561722193"
+	export InfoChatID="-1001561722193"
 else
-	InfoChatID="-1001407005109"
+	export InfoChatID="-1001407005109"
 fi
 
 ## Google Drive Uploader Setup
