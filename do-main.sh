@@ -1,6 +1,6 @@
 #! /bin/bash
 KranulVer="419"
-branch="r2/s"
+branch="test"
 CODENAME="X01BD"
 WithSpec="Y"
 PrivBuild="N"
@@ -12,8 +12,8 @@ CUSSPEC=""
 CUSCLANGVER=""
 CUSLLDVER=""
 CUSMSGWORD=""
-TypeBuild="RELEASE"
-BuilderKernel="00000"
+TypeBuild="TEST"
+BuilderKernel="trb"
 
 if [ "$KranulVer" = "419" ];then
 CAFTAG="04900"
@@ -33,11 +33,5 @@ fi
 if [ "$PureKernel" == "N" ] && [ $TypeBuild = "RELEASE" ];then
 BuildAll
 else
-ResetBranch
-StockFreq
-CompileKernel
-SwitchDevice "M1"
-ResetBranch
-StockFreq
-CompileKernel
+BuildAll
 fi;

@@ -1,0 +1,25 @@
+name: RyuujiX Build
+
+env:
+      BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+      GIT_SECRET: ${{ secrets.GIT_SECRET }}
+      GIT_SECRETB: ${{ secrets.GIT_SECRETB }}
+      GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+      SDCLANGPASS: ${{ secrets.SDCLANGPASS }}
+      GDRIVEKEYPASS: ${{ secrets.GDRIVEKEYPASS }}
+      
+on: [push]
+
+jobs:
+  kernel-build:
+    runs-on: ubuntu-latest
+    container:
+      image: panchajanya1999/archlinux:latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup CI
+      run: |
+        sudo ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && date
+        sudo pacman -Sy --noconfirm git bc inetutils python3 flex bison libc++ libxml2 python-pipx zip wget cpio jdk-openjdk tzdata && sudo pipx install networkx gupload
+    - name: Setup and Build Kernel
+      run: bash do-main.sh
