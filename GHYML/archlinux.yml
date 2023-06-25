@@ -20,6 +20,6 @@ jobs:
     - name: Setup CI
       run: |
         ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && date
-        pacman -Sy --noconfirm git bc inetutils python3 flex bison libc++ libxml2 python-pip zip wget cpio jdk-openjdk tzdata && python3 -m pip install networkx && pip3 install --upgrade gupload
+        pacman -Sy --noconfirm git bc inetutils python-xyz python3 flex bison libc++ libxml2 python-pip zip wget cpio jdk-openjdk tzdata && python3 -m pip install networkx && pip3 install --upgrade gupload
     - name: Setup and Build Kernel
       run: bash do-main.sh
