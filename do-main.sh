@@ -34,10 +34,8 @@ if [ "$PureKernel" == "N" ] && [ $TypeBuild = "RELEASE" ];then
 BuildAll
 else
 ResetBranch
-StockFreq
 CompileKernel
 SwitchDevice "M1"
 ResetBranch
-StockFreq
 CompileKernel
 fi;

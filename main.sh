@@ -119,11 +119,6 @@ ResetBranch(){
 		ChangeKName "$CKName"
 	fi
 	if [ "$PureKernel" == "N" ];then
-	if [ "$SixTwo" == "Y" ];then
-		CpuFreq="SiX2"
-	elif [ "$KranulVer" = "44" ];then
-		CpuFreq="OC"
-	fi
 	if [ "$KranulVer" = "44" ];then
 		Driver="OFI"
 	elif [ "$KranulVer" = "419" ];then
@@ -133,34 +128,6 @@ ResetBranch(){
 	fi
 	cd $mainDir
 	getInfo ">> Kernel Source Has Been Reset ! <<"
-}
-
-# Revert Back to Stock CPU & GPU Freq
-StockFreq(){
-	[[ "$(pwd)" != "${kernelDir}" ]] && cd "${kernelDir}"
-	
-	if [ "$1" = "revert" ];then
-		if [ "$KranulVer" = "44" ];then
-			if [ "$branch" == "eas-test" ] || [ "$branch" == "r7/eas" ];then
-				git cherry-pick 636637918b2bf09de2d7e54d08f3c23c8932e6ef -n
-			else
-				git cherry-pick e2194a0d2d4aa4abbb0e7215ca5fe1cc889d5f78 -n
-			fi
-		fi
-		CpuFreq="OC"
-		getInfo ">> OC Freq has been set ! <<"
-	else
-		if [ "$KranulVer" = "44" ];then
-			if [ "$branch" == "eas-test" ] || [ "$branch" == "r7/eas" ];then
-				git revert 636637918b2bf09de2d7e54d08f3c23c8932e6ef -n
-			else
-				git revert e2194a0d2d4aa4abbb0e7215ca5fe1cc889d5f78 -n
-			fi
-		fi
-		CpuFreq="Stock"
-		getInfo ">> Stock Freq has been set ! <<"
-	fi
-	cd $mainDir
 }
 
 # Switch to New Wi-Fi Driver
@@ -239,7 +206,7 @@ CompileKernel(){
         export KBUILD_BUILD_HOST="KereAktif-$Driver-$TAGKENEL"
 		FourthMsgTag="#$Driver"
 		FirstMsgTag="#$TypeBuildTag"
-		ThirdMsgTag="#$CpuFreq"
+		ThirdMsgTag=""
 	fi
 	if [ "$BuilderKernel" == "gcc" ] || [ "$BuilderKernel" == "gcc12" ];then
 		MAKE+=(
@@ -448,9 +415,9 @@ CompileKernel(){
 			ZipName="$KName-$KVer-$CODENAME.zip"
 	elif [ "$KranulVer" = "44" ];then
 		 if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
-            ZipName="[$CpuFreq]$KName-$Driver-$KVer-$CODENAME.zip"
+            ZipName="$KName-$Driver-$KVer-$CODENAME.zip"
          else
-            ZipName="[$CpuFreq]$KName-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
+            ZipName="$KName-$Driver-$TypeBuild-$KVer-$CODENAME.zip"
          fi
 	elif [ "$KranulVer" = "419" ];then
 		 if [ $TypeBuild = "STABLE" ] || [ $TypeBuild = "RELEASE" ];then
@@ -475,17 +442,15 @@ if [ "$KranulVer" = "44" ];then
 		elif [ "$CODENAME" == "X00TD" ];then
 		if [ "$branch" == "r6/eas-s2" ];then
 			spectrumFile="eas-x00t-sixtwo.rc"
-		elif [ "$CpuFreq" == "OC" ];then
-			spectrumFile="eas-x00t-oc.rc"
-		elif [ "$CpuFreq" == "Stock" ];then
+		else
+			spectrumFiles="eas-x00t-oc.rc"
 			spectrumFile="eas-x00t.rc"
 		fi
 		elif [ "$CODENAME" == "X01BD" ];then
 		if [ "$branch" == "r6/eas-s2" ];then
 			spectrumFile="eas-x01bd-sixtwo.rc"
-		elif [ "$CpuFreq" == "OC" ];then
-			spectrumFile="eas-x01bd-oc.rc"
-		elif [ "$CpuFreq" == "Stock" ];then
+		else
+			spectrumFiles="eas-x01bd-oc.rc"
 			spectrumFile="eas-x01bd.rc"
 		fi
 		fi
@@ -497,17 +462,15 @@ if [ "$KranulVer" = "44" ];then
 		elif [ "$CODENAME" == "X00TD" ];then
 		if [ "$branch" == "r6/hmp-s2" ];then
 			spectrumFile="ryuu-x00t-sixtwo.rc"
-		elif [ "$CpuFreq" == "OC" ];then
-			spectrumFile="ryuu-x00t-oc.rc"
-		elif [ "$CpuFreq" == "Stock" ];then
+		else
+			spectrumFiles="ryuu-x00t-oc.rc"
 			spectrumFile="ryuu-x00t.rc"
 		fi
 		elif [ "$CODENAME" == "X01BD" ];then
 		if [ "$branch" == "r6/hmp-s2" ];then
 			spectrumFile="ryuu-x01bd-sixtwo.rc"
-		elif [ "$CpuFreq" == "OC" ];then
-			spectrumFile="ryuu-x01bd-oc.rc"
-		elif [ "$CpuFreq" == "Stock" ];then
+		else
+			spectrumFiles="ryuu-x01bd-oc.rc"
 			spectrumFile="ryuu-x01bd.rc"
 		fi
 		fi
@@ -562,7 +525,7 @@ ModAnyKernel(){
 	if [ "$PureKernel" == "N" ];then
 	if [ "$KranulVer" = "44" ];then
 	sed -i "s/kernel.type=.*/kernel.type=$TypeBuildTag/g" anykernel.sh
-	sed -i "s/kernel.for=.*/kernel.for=$CpuFreq-$Driver/g" anykernel.sh
+	sed -i "s/kernel.for=.*/kernel.for=$Driver/g" anykernel.sh
 	fi
 	fi
 	sed -i "s/kernel.compiler=.*/kernel.compiler=$TypePrint/g" anykernel.sh
@@ -596,7 +559,7 @@ ModAnyKernel(){
 	sed -i "s/KDEVICE/$DEVICE - $CODENAME/g" aroma-config
 	sed -i "s/KBDATE/$BDate/g" aroma-config
 	if [ "$PureKernel" == "N" ];then
-	sed -i "s/KVARIANT/$CpuFreq-$Driver/g" aroma-config
+	sed -i "s/KVARIANT/$Driver/g" aroma-config
 	fi
 	cd $AnykernelDir
 	fi
@@ -621,16 +584,8 @@ BuildAll(){
 	CompileKernel
 	CompileKernel "EROFS"
 	elif [ "$KranulVer" = "44" ];then
-	# OC
+	# Start Build
 	ResetBranch
-	CompileKernel
-	FixPieWifi
-	CompileKernel
-	SwitchNFI
-	CompileKernel
-	# Stock
-	ResetBranch
-	StockFreq
 	CompileKernel
 	FixPieWifi
 	CompileKernel
@@ -638,14 +593,7 @@ BuildAll(){
 	CompileKernel
 	# Switch to X00TD
 	SwitchDevice "M1"
-	# OC
 	ResetBranch
-	CompileKernel
-	SwitchNFI
-	CompileKernel
-	# Stock
-	ResetBranch
-	StockFreq
 	CompileKernel
 	SwitchNFI
 	CompileKernel
