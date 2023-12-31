@@ -1,6 +1,6 @@
 #! /bin/bash
-KranulVer="419"
-branch="r2/s"
+KranulVer="44"
+branch="eas-test"
 CODENAME="X01BD"
 WithSpec="Y"
 PrivBuild="N"
@@ -13,7 +13,7 @@ CUSCLANGVER=""
 CUSLLDVER=""
 CUSMSGWORD=""
 TypeBuild="RELEASE"
-BuilderKernel="00000"
+BuilderKernel="sdclang"
 
 if [ "$KranulVer" = "419" ];then
 CAFTAG="04900"
